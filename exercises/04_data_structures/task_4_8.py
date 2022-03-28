@@ -27,9 +27,6 @@
 
 ip = "192.168.3.1"
 ipoktet = ip.split(".")
-ouput ="""
-{0:<10}{1:<10}{2:<10}{3:<10}
-{0:08b}  {1:08b}  {2:08b}  {3:08b}"""
-
-print(ouput.format(int(ipoktet[0]), int(ipoktet[1]), int(ipoktet[2]), int(ipoktet[3])))
+output ="""{0:<10}{1:<10}{2:<10}{3:<10} \n{0:08b}  {1:08b}  {2:08b}  {3:08b}"""
+print(output.format(int(ipoktet[0]), int(ipoktet[1]), int(ipoktet[2]), int(ipoktet[3])))
 
