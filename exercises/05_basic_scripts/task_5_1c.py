@@ -52,4 +52,4 @@ london_co = {
 device = input("Введите имя устройства: ")
 nead_key =  (','.join(london_co[device].keys()))
 parametr = input (("Введите имя параметра ({}): ").format(nead_key))
-print ((london_co[device].get(parametr, 'Такого параметра нет'))
+print (london_co[device].get(parametr, 'Такого параметра нет'))
