@@ -49,7 +49,9 @@ switchport trunk encapsulation dot1q
 switchport mode trunk
 switchport trunk allowed vlan 2,3,4,5
 """
-
+type_interf = input("Введите режим работы интерфейса (access/trunk):")
+numb_interf = input("Введите тип и номер интерфейса: ")
+numb_vlans = input("Введите номер влан(ов):")
 access_template = [
     "switchport mode access",
     "switchport access vlan {}",
@@ -63,3 +65,10 @@ trunk_template = [
     "switchport mode trunk",
     "switchport trunk allowed vlan {}",
 ]
+
+oba_reghima = {
+"access":access_template,
+"trunk":trunk_template
+}
+print("interface {}".format(numb_interf))
+print ("\n".join(oba_reghima[type_interf]).format(numb_vlans))
