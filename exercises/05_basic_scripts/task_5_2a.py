@@ -49,3 +49,35 @@ bin_ip = "00001010000000010000000111000011"
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+net= input ("ввод IP/mask: ")
+
+ip, mask = net.split('/')
+
+ip = ip.split('.')
+output_ip = """
+{0:<10}{1:<10}{2:<10}{3:<10}
+{0:08b}  {1:08b}  {2:08b}  {3:08b}"""
+
+output_mask = """
+/{0}
+{1:<10}{2:<10}{3:<10}{4:<10}
+{1:08b}  {2:08b}  {3:08b}  {4:08b}"""
+
+mask = int(mask)
+bin_mask = "1" * mask + "0" * (32 - mask)
+mask_o1 = int(bin_mask[0:8],2)
+mask_o2 = int(bin_mask[8:16],2)
+mask_o3 = int(bin_mask[16:24],2)
+mask_o4 = int(bin_mask[24:32],2)
+ipnet_o1 =  int(ip[0])
+ipnet_o2 =  int(ip[1])
+ipnet_o3 =  int(ip[2])
+ipnet_o4 =  int(ip[3])
+bin_ip_str = "{:08b}{:08b}{:08b}{:08b}".format(ipnet_o1,ipnet_o2,ipnet_o3,ipnet_o4)
+bin_net_str= bin_ip_str[:mask]+"0"*(32-mask) # ot bin_ip_str otrezali hostov chast vot etim -([:mask])
+ip_o1 = int(bin_net_str[0:8],2)
+ip_o2 = int(bin_net_str[8:16],2)
+ip_o3 = int(bin_net_str[16:24],2)
+ip_o4 = int(bin_net_str[24:32],2)
+print("Network: " + output_ip.format(ip_o1, ip_o2, ip_o3,ip_o4))
+print("Mask: " + output_mask.format(mask, mask_o1, mask_o2, mask_o3, mask_o4))
