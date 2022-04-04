@@ -14,8 +14,6 @@
 """
 in_ipaddress = input("Input ip in format xx.xx.xx.xx= ")
 
-
-print(in_ipaddress)
 if 1<=int(in_ipaddress.split('.')[0])<=223:
     print('unicast')
 elif 224<=int(in_ipaddress.split('.')[0])<=239:
