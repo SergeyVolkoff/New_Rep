@@ -17,3 +17,19 @@
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+in_ipaddress = input("Input ip in format xx.xx.xx.xx= ")
+if in_ipaddress.isdigit():
+    pass
+else:
+    print('Неправильный IP-адрес')
+elif 1<=int(in_ipaddress.split('.')[0])<=223:
+    print('unicast')
+elif 224<=int(in_ipaddress.split('.')[0])<=239:
+    print('multicast')
+elif in_ipaddress == "255.255.255.255":
+    print('local broadcast')
+elif in_ipaddress == "0.0.0.0":
+    print('unassigned')
+     else:
+        print('unused')
+
