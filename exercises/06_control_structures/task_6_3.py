@@ -83,15 +83,20 @@ trunk = {
 #             print(f" {command}")
 list_keys = list(trunk.keys())
 list_value = list(trunk.values())
-do_vlan = value[0]
-print(list_keys)
-print(list_value)
-for intf in trunk:
+
+
+for intf, vlan in trunk.items():
     print("interface FastEthernet"+intf)
+
     for command in trunk_template:
-        pass
+        if command.endswith('allowed vlan'):
+            add_ecshin = vlan[0]
+            add_vlan = ','.join(vlan[1:])
+            if add_ecshin =="add":
+                print(f"{command} add {add_vlan}")
+
     else:
-        print({command})
+        pass
 
 
 
