@@ -81,3 +81,20 @@ trunk = {
 #             print(f" {command} {vlan}")
 #         else:
 #             print(f" {command}")
+list_keys = list(trunk.keys())
+list_value = list(trunk.values())
+do_vlan = value[0]
+print(list_keys)
+print(list_value)
+for intf in trunk:
+    print("interface FastEthernet"+intf)
+    for command in trunk_template:
+        pass
+    else:
+        print({command})
+
+
+
+
+
+
