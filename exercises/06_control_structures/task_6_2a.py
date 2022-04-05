@@ -18,18 +18,24 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
 in_ipaddress = input("Input ip in format xx.xx.xx.xx= ")
-if in_ipaddress.isdigit():
-    pass
-else:
-    print('Неправильный IP-адрес')
-elif 1<=int(in_ipaddress.split('.')[0])<=223:
-    print('unicast')
-elif 224<=int(in_ipaddress.split('.')[0])<=239:
-    print('multicast')
-elif in_ipaddress == "255.255.255.255":
-    print('local broadcast')
-elif in_ipaddress == "0.0.0.0":
-    print('unassigned')
-     else:
+
+all_octets = in_ipaddress.split('.')
+valid_ip = len(all_octets) == 4
+
+for o in all_octets:
+     valid_ip = o.isdigit() and 0<=int(o)<=255 and valid_ip
+
+if valid_ip == True:
+    if 1<=int(all_octets[0])<=223:
+        print('unicast')
+    elif 224<=int(all_octets[0])<=239:
+        print('multicast')
+    elif in_ipaddress == "255.255.255.255":
+        print('local broadcast')
+    elif in_ipaddress == "0.0.0.0":
+        print('unassigned')
+    else:
         print('unused')
+else:
+    print("Неправильный IP-адрес")
 
