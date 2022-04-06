@@ -65,7 +65,7 @@ trunk_template = [
     "switchport trunk allowed vlan",
 ]
 
-access = {"0/12": "10", "0/14": "11", "0/16": "17", "0/17": "150"}
+#access = {"0/12": "10", "0/14": "11", "0/16": "17", "0/17": "150"}
 trunk = {
     "0/1": ["add", "10", "20"],
     "0/2": ["only", "11", "30"],
@@ -93,10 +93,15 @@ for intf, vlan in trunk.items():
             add_ecshin = vlan[0]
             add_vlan = ','.join(vlan[1:])
             if add_ecshin =="add":
-                print(f"{command} add {add_vlan}")
+                print(f" {command} add {add_vlan}")
+            elif add_ecshin =="only":
+                print(f" {command} {add_vlan}")
+            elif add_ecshin == "del":
+                print(f" {command} remove {add_vlan}" )
 
-    else:
-        pass
+
+        else:
+            print(f" {command}")
 
 
 
