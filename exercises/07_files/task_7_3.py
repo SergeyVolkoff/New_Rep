@@ -20,3 +20,13 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+result = "{:10}{:20}{}"
+
+with open("CAM_table.txt") as f:
+    for line in f:
+        fragment = line.split()
+        #print(fragment)
+
+        if fragment and fragment[0].isdigit():
+            vlan,mac, typ,interface = fragment
+            print(result.format(vlan,mac,interface))
