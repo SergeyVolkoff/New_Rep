@@ -13,6 +13,20 @@ Outbound Interface    FastEthernet0/0
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+
+result = "\n{:25}{}"*5
 with open("ospf.txt", "r") as f:
     for line in f:
-        print(line)
+        line = line.replace("[","").replace("]", "").replace(",", "").replace("via", "")
+
+        line = line.split()
+
+
+        print (result.format(
+        "Prefix", line[1],
+        "AD/Metric", line[2],
+        "Next-Hop", line[3],
+        "Last update", line[4],
+        "Outbound Interface", line[5]
+        ))
+
