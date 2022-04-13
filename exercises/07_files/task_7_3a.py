@@ -40,3 +40,16 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+result = []
+
+with open("CAM_table.txt") as f:
+    for line in f:
+        fragment = line.split()
+        #print(fragment)
+
+        if fragment and fragment[0].isdigit():
+            vlan, mac, typ, interface = fragment
+            result.append([int(vlan), mac, interface])
+
+    for vlan, mac, intf in sorted(result):
+        print(f"{vlan:<7}{mac:18}{intf}")
