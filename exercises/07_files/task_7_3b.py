@@ -17,3 +17,21 @@ Enter VLAN number: 10
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+number_vlan = input("Input number of vlan = ")
+
+result = []
+
+with open("CAM_table.txt") as f:
+    for line in f:
+        fragment = line.split()
+        #print(fragment)
+
+        if fragment and fragment[0].isdigit() and fragment[0] == number_vlan:
+            vlan, mac, typ, interface = fragment
+            result.append([int(vlan), mac, interface])
+
+    for vlan, mac, intf in result:
+        print(f"{vlan:<9}{mac:20}{intf}")
+
+
+

@@ -17,3 +17,12 @@
 """
 
 ignore = ["duplex", "alias", "configuration"]
+
+from sys import argv
+fileo_src, fileo_dst = argv[1], argv[2]
+with open(fileo_src) as src, open(fileo_dst, 'w') as dust:
+    for line in src:
+        word = set(line.split())
+        inters = set (word) & set(ignore)
+        if not line.startswith("!") and not inters:
+            dust.write(line)
