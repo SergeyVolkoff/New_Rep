@@ -23,3 +23,10 @@
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+
+
+def get_int_vlan_map (config_filename)
+intf_acc_vlan = {}
+intf_trunk_vlan = {}
+
+
