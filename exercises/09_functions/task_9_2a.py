@@ -38,6 +38,7 @@
 
 trunk_mode_template = [
     "switchport mode trunk",
+
     "switchport trunk native vlan 999",
     "switchport trunk allowed vlan",
 ]
@@ -45,5 +46,20 @@ trunk_mode_template = [
 trunk_config = {
     "FastEthernet0/1": [10, 20, 30],
     "FastEthernet0/2": [11, 30],
+
     "FastEthernet0/4": [17],
 }
+
+def generate_trunk_config (intf_vlan_mapping, trunk_template):
+    configus_trank={}
+
+    for interfacik, vlan in intf_vlan_mapping.items():
+        configus=[]
+        for comand in trunk_template:
+            if comand.endswith("allowed vlan"):
+                vlan_obr = ",".join([str(vln)for vln in vlan])
+                configus.append(f"{comand} {vlan_obr}")
+            else:
+                configus.append(comand)
+        configus_trank[interfacik] = configus
+    return configus_trank

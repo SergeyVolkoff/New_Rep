@@ -68,7 +68,7 @@ def generate_trunk_config (intf_vlan_mapping, trunk_template):
         configus.append(f"interface {interfacik}")
         for comand in trunk_template:
             if comand.endswith("allowed vlan"):
-                vlan_obr = ",".join(str(vln)for vln in vlan)
+                vlan_obr = ",".join([str(vln)for vln in vlan])
                 configus.append(f"{comand} {vlan_obr}")
             else:
                 configus.append(comand)
