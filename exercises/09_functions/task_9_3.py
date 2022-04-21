@@ -25,8 +25,18 @@
 """
 
 
-def get_int_vlan_map (config_filename)
-intf_acc_vlan = {}
-intf_trunk_vlan = {}
+def get_int_vlan_map (config_filename):
+    intf_acc_vlan = {}
+    intf_trunk_vlan = {}
+    with open(config_filename) as conf:
+        for line in conf:
+            line = line.strip()
+            if line.startswith("interface"):
+                    interfacic = line.split()[1]
+            elif "access vlan" in line:
+                    intf_acc_vlan[interfacic]= int(line.split()[-1])
+            elif "trunk allowed" in line:
+                    intf_trunk_vlan[interfacic]=[int(val) for val in line.split()[-1].split(",")]
+        return intf_acc_vlan, intf_trunk_vlan
 
 
