@@ -39,8 +39,8 @@ import ipaddress
 def convert_ranges_to_ip_list (ip_addresses):
     ip_list =[]
     for ip_address in ip_addresses:
-        if "-" in ip_addresses:
-            start_ip, end_ip = ip_addresses.split("-")
+        if "-" in ip_address:
+            start_ip, end_ip = ip_address.split("-")
             if "." not in end_ip:
                 end_ip = ".".join(start_ip.split(".")[:-1]+[end_ip])
             start_ip = ipaddress.ip_address(start_ip)
@@ -50,5 +50,5 @@ def convert_ranges_to_ip_list (ip_addresses):
         else:
               ip_list.append(str(ip_address))
     return ip_list
-    print (start_ip, end_ip)
+
 
