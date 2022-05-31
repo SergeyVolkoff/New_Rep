@@ -24,5 +24,5 @@ from tabulate import tabulate
 
 def print_ip_table(reach, unreach):
     table = {"Reachable": reach, "Unreachable": unreach}
-    print(tabulate(table))
+    print(tabulate(table,headers="keys"))
 
