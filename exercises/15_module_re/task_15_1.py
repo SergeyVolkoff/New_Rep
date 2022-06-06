@@ -23,3 +23,11 @@
 а не ввод пользователя.
 
 """
+import re
+
+
+def get_ip_from_cfg (file_conf):
+    with open (file_conf) as f:
+        result = [match.groups() for match in re.finditer(r"ip address (\S+) (\S+)",f.read())]
+        return result
+    print (result)
