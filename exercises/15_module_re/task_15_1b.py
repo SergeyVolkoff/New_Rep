@@ -28,3 +28,56 @@ IP-адреса, диапазоны адресов и так далее, так 
 а не ввод пользователя.
 
 """
+import re
+"""
+def  get_ip_from_cfg(file_cfg):
+    result = {}
+    with open (file_cfg) as f:
+        match = re.finditer(
+            "interface (\S+)\n"
+            "(?: .*\n)*"
+            " ip address \S+ \S+\n"
+            "( ip address \S+ \S+ secondary\n)*",
+            f.read(),
+        )
+        for m in match:
+            result[m.group(1)] = re.findall("ip address(\S+) (\S+)", m.group())
+    return result
+"""
+
+def get_ip_from_cfg(filename):
+    result = {}
+    with open(filename) as f:
+        # сначала отбираем нужные куски конфигурации
+        match = re.finditer(
+            "interface (\S+)\n"
+            "(?: .*\n)*"
+            " ip address \S+ \S+\n"
+            "( ip address \S+ \S+ secondary\n)*",
+            f.read(),
+        )
+        # потом в этих частях находим все IP-адреса
+        for m in match:
+            result[m.group(1)] = re.findall("ip address (\S+) (\S+)", m.group())
+    return result
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
