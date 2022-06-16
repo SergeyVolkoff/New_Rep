@@ -40,13 +40,11 @@ def get_ip_from_cfg (file_conf):
         for line in f:
             match = re.search(regex, line)
             if match:
-                group = match.lastgroup
-                value = match.group(group)
-                if group == "intf":
-                    result[value] = {}
-                    intf = value
-                else:
-                    result[intf][group] = value
+                if match.lastgroup == "intf":
+                    intf = match.group(match.lastgroup)
+                elif match.lastgroup == "mask":
+                    result.setdefault(intf,[])
+                    result[intf].append(match.group("ip","mask"))
     return result
 
 
