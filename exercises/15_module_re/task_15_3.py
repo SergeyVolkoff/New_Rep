@@ -50,7 +50,7 @@ def convert_ios_nat_to_asa(cisco_IOS, cisco_ASA):
 
 
 if __name__ =="__main__":
-    print(convert_ios_nat_to_asa("cisco_nat_config.txt", "asa_nat.txt"))
+    convert_ios_nat_to_asa("cisco_nat_config.txt", "asa_nat.txt")
 
 
 
