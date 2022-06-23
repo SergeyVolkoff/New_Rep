@@ -39,15 +39,15 @@ import glob
 def write_dhcp_snooping_to_csv(filenames, output):
     regex = r"(\S+) +(\S+) +\d+ +\S+ +(\S+) +(\S+)"
     with open(output, "w") as pu:
-        writer=csv.writer(pu)
-        writer.writerow(["switch","mac", "ip","vlan", "interface"])
+        wr=csv.writer(pu)
+        wr.writerow(["switch","mac", "ip","vlan", "interface"])
         for files in filenames:
             sw_name = re.search("(\S+)_dhcp_snooping.txt",files).group(1)
             with open (files) as f:
                 for line in f:
                     match = re.search(regex,line)
                     if match:
-                        writer.writerow((sw_name,)+match.groups())
+                        wr.writerow((sw_name,)+match.groups())
 
 if __name__=="__main__":
     sh_dhcp_snoop_files = glob.glob("*_dhcp_snooping.txt")
