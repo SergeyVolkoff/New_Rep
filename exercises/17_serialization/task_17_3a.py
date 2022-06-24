@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+"""(
 Задание 17.3a
 
 Создать функцию generate_topology_from_cdp, которая обрабатывает вывод
@@ -36,3 +36,29 @@
 в файл topology.yaml. Он понадобится в следующем задании.
 
 """
+import yaml
+import re
+import csv
+import glob
+from task_17_3 import parse_sh_cdp_neighbors
+
+
+def generate_topology_from_cdp(list_of_files, save_to_filename=None):
+    gen_topol = {}
+    for file_name in list_of_files:
+        with open (file_name) as f:
+            gen_topol.update(parse_sh_cdp_neighbors(f.read()))
+    if save_to_filename:
+        with open(save_to_filename, "w") as f2:
+            yaml.dump(gen_topol,f2)
+    return gen_topol
+
+
+if __name__=="__main__":
+    sh_neib_files = glob.glob("sh_cdp_n_*")
+    generate_topology_from_cdp(sh_neib_files, "topology.yaml")
+    print(gen_topol)
+
+
+
+
