@@ -38,6 +38,7 @@
 """
 import yaml
 import glob
+import csv
 from task_17_3 import parse_sh_cdp_neighbors
 
 
@@ -48,13 +49,13 @@ def generate_topology_from_cdp(list_of_files, save_to_filename=None):
             gen_topol.update(parse_sh_cdp_neighbors(f.read()))
     if save_to_filename:
         with open(save_to_filename, "w") as f2:
-            yaml.dump(gen_topol,f2)
+            yaml.dump(gen_topol,f2, default_flow_style=False)
     return gen_topol
 
 
 if __name__=="__main__":
     sh_neib_list = glob.glob("sh_cdp_n_*")
-    generate_topology_from_cdp(sh_neib_list, save_to_filename="topology.yaml")
+    print(generate_topology_from_cdp(sh_neib_list, save_to_filename="topology.yaml"))
 
 
 
