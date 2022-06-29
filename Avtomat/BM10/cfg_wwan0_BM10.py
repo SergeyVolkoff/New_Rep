@@ -36,6 +36,6 @@ if __name__ == "__main__":
     "reboot"
     ]
 
-    output= cfg_wwan_BM10("root", "192.168.1.1", "root", cfg_commands)
+    output= cfg_wwan_BM10("root", "192.168.2.1", "128500", cfg_commands)
 
 

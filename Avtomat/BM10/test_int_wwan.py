@@ -7,11 +7,12 @@ from cfg_wwan0_BM10 import cfg_wwan_BM10
 
 
 
-opros=send_show_ifcof("192.168.1.1", "root", "root")
+opros=send_show_ifcof("192.168.2.1", "root", "128500")
+print("_"*10, opros)
 if "add" in opros:
     print("Interface has ip,\n start ping")
 else:
-    cfg =cfg_wwan_BM10("root", "192.168.1.1", "root",cfg_commands)
+    cfg =cfg_wwan_BM10("root", "192.168.2.1", "128500",cfg_commands)
 
 
 
