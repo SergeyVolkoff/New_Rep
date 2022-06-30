@@ -17,29 +17,34 @@ def send_show_ifcof(ip, user, password):#f-show all ifconf
             ssh.sendline("uci show network | grep 34G")
             ssh.expect("root@BWOS:~#")
             temp = ssh.before
-            if "34G.device" in temp:
-                name_intf = re.search(r'network.(\S+).device', temp).group()
-                result+=name_intf
+            for sec in temp:
+                if "34G.device" in temp:
+                    name_intf = re.search(r'network.(\S+).device', temp).group()
+                    result += name_intf
 
-            else:
-                print('_'*30, "\nNo interface on router, \nfor greate - input cfg_wwan_BM10")
-                return
+                    ssh.sendline("ifconfig |grep -A 1 wwan0")
+                    ssh.expect("root@BWOS:~#")
+                    temp = ssh.before
 
-            ssh.sendline("ifconfig |grep -A 1 wwan0")
-            ssh.expect("root@BWOS:~#")
-            temp = ssh.before
+                    if "addr:" in temp:
+                        ip_int = re.search(r'inet addr:(\S+)', temp).group()
+                        result += ip_int
+                    else:
+                        result = name_intf
+                        print("*"*30)
+                        print(name_intf," exist, but d'nt have ip addr")
+                    break
+                else:
+                    result="\nNo interface on router"
+                    break
 
-            if "addr:" in temp:
-                ip_int = re.search(r'inet addr:(\S+)', temp).group()
-                print(name_intf,"exist with", ip_int)
-                result+= ip_int
-            else:
-                print('_'*30, "\n No ip on int, \nbut int greate - maibee reboot?")
         return result
+
+
 
     except pexpect.exceptions.TIMEOUT as error:
         print(f"Error connect to {ip}")
 
 if __name__=="__main__":
-    pprint(send_show_ifcof("192.168.2.1", "root", "128500"))
+    print(send_show_ifcof("192.168.1.1", "root", "root"))
 

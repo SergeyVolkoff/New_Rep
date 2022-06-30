@@ -20,8 +20,9 @@ def cfg_wwan_BM10(user,ip, password,cfg_commands):
             ssh.sendline("uci show network | grep 34G")
             temp = ssh.before
             if "34G.pdptype" in temp:
-                pprint("3G int greate")
+                pprint("3G int greate in process")
             ssh.sendline("reboot")
+
 
 
 
@@ -36,6 +37,6 @@ if __name__ == "__main__":
     "reboot"
     ]
 
-    output= cfg_wwan_BM10("root", "192.168.2.1", "128500", cfg_commands)
+    output= cfg_wwan_BM10("root", "192.168.1.1", "root", cfg_commands)
 
 
