@@ -7,6 +7,7 @@ from cfg_wwan0_BM10 import cfg_wwan_BM10
 import time
 from ping import ping_ip_3G
 
+
 result_def_show = send_show_ifcof("192.168.1.1", "root", "root")
 
 if 'addr:' in result_def_show:
