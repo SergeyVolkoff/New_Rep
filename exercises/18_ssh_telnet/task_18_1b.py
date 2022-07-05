@@ -12,3 +12,30 @@
 
 Для проверки измените IP-адрес на устройстве или в файле devices.yaml.
 """
+from pprint import pprint
+import yaml
+import netmiko
+from netmiko import (
+    ConnectHandler,
+    NetmikoTimeoutException,
+    NetmikoAuthenticationException,
+)
+
+
+def send_show_command(device, command):
+    result = ''
+    try:
+        with ConnectHandler(**device)as ssh:
+            result = ssh.send_command(command)
+        return result
+    except (NetmikoTimeoutException, NetmikoAuthenticationException) as error:
+        print("*"*20, "error","*"*20)
+
+
+if __name__ == "__main__":
+    command = "ifconfig"
+    with open("device2.yaml") as f:
+        devices = yaml.safe_load(f)
+
+    for dev in devices:
+        print(send_show_command(dev, command))

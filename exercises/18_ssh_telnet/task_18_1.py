@@ -22,6 +22,7 @@ import yaml
 import netmiko
 from netmiko import ConnectHandler
 
+
 def send_show_command(device, command):
     result = ''
     with ConnectHandler(**device) as ssh:

@@ -20,20 +20,21 @@ from netmiko import (
     NetmikoTimeoutException,
     NetmikoAuthenticationException,
 )
+
+
 def send_show_command(device, command):
     result = ''
     try:
-        with ConnectHandler(device) as ssh:
-            ssh.enable()
+        with ConnectHandler(**device)as ssh:
             result = ssh.send_command(command)
         return result
-    except (NetmikoTimeoutException, NetmikoAuthenticationException) as error:
-        print(error)
+    except netmiko.NetmikoAuthenticationException as error:
+        print("*"*20, "AuthenticationError","*"*20)
 
 
 if __name__ == "__main__":
-    command = "sh ip int br"
-    with open("devices.yaml") as f:
+    command = "ifconfig"
+    with open("device2.yaml") as f:
         devices = yaml.safe_load(f)
 
     for dev in devices:
