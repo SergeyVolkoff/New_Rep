@@ -1,0 +1,5 @@
+- device_type: linux
+  host: 192.168.1.1
+  username: root
+  password: root
+  timeout: 5
