@@ -1,4 +1,3 @@
-
 import yaml
 import netmiko
 from netmiko import ConnectHandler
