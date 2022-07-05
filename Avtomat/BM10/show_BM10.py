@@ -4,8 +4,9 @@ import re
 import pexpect
 from pprint import pprint
 
-def send_show_ifcof(ip, user, password):#f-show all ifconf
-    print(f"Connect to {ip}...")
+def send_show_ifcof(ip, user, password, log = True):#f-show all ifconf
+    if log:
+        print(f"Connect to {ip}...")
     result=''
     try:
         with pexpect.spawn(f"ssh {user}@{ip}", timeout=10, encoding="utf-8") as ssh:
