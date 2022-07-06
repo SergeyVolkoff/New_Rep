@@ -49,15 +49,24 @@ R1#
 from pprint import pprint
 import yaml
 import netmiko
-from netmiko import ConnectHandler
-
+from netmiko import (
+    ConnectHandler,
+    NetmikoTimeoutException,
+    NetmikoAuthenticationException,
+)
 
 
 def send_config_commands(device, config_commands):
-    result = ""
-    with ConnectHandler(**device) as ssh:
-        result = ssh.send_config_set(config_commands)
-    return result
+    try:
+
+        result = ""
+        with ConnectHandler(**device) as ssh:
+            result = ssh.send_config_set(config_commands)
+        return result
+    except netmiko.NetmikoAuthenticationException as error:
+        print("*"*20, "AuthenticationError","*"*20)
+    except netmiko.NetmikoTimeoutException as error:
+        print("*"*20, "TimeoutException","*"*20)
 
 if __name__ == "__main__":
     commands = ["ifconfig","uci show"]

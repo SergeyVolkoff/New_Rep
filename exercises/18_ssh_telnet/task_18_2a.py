@@ -22,20 +22,28 @@ In [15]:
 from pprint import pprint
 import yaml
 import netmiko
-from netmiko import ConnectHandler
-
+from netmiko import (
+    ConnectHandler,
+    NetmikoTimeoutException,
+    NetmikoAuthenticationException,
+)
 
 
 def send_config_commands(device, config_commands, log = True):
     if log:
         print(f"Connect to {device['host']}...")
-    result = ""
-    with ConnectHandler(**device) as ssh:
-        result = ssh.send_config_set(config_commands)
-    return result
+    try:
+        result = ""
+        with ConnectHandler(**device) as ssh:
+            result = ssh.send_config_set(config_commands)
+        return result
+    except netmiko.NetmikoAuthenticationException as error:
+        print("*"*20, "AuthenticationError","*"*20)
+    except netmiko.NetmikoTimeoutException as error:
+        print("*"*20, "TimeoutException","*"*20)
 
 if __name__ == "__main__":
-    commands = ["ifconfig","uci show"]
+    commands = ["ifconfig | grep eth0","uci show | grep '127.0.0.1'"]
     with open ("device2.yaml") as f:
         devices = yaml.safe_load(f)
     for dev in devices:

@@ -93,8 +93,67 @@ R1(config)#a
 % Ambiguous command:  "a"
 """
 
-# списки команд с ошибками и без:
-commands_with_errors = ["logging 0255.255.1", "logging", "a"]
-correct_commands = ["logging buffered 20010", "ip http server"]
 
+import re
+import yaml
+import netmiko
+from pprint import pprint
+from netmiko import (
+    ConnectHandler,
+    NetmikoTimeoutException,
+    NetmikoAuthenticationException,
+)
+
+# списки команд с ошибками и без:
+commands_with_errors = ["uci set network", "uci set net"]
+correct_commands = ["ifconfig | grep eth0","uci show | grep '127.0.0.1'"]
 commands = commands_with_errors + correct_commands
+regex = "uci: (?P<err_msg>.+)"
+
+
+
+
+def send_config_commands(device, config_commands, log = True):
+    good={}
+    bad = {}
+    message_err = "Команда {} выполнилась с ошибкой {} на устройстве {}"
+
+    if log:
+        print(f"Connect to {device['host']}...")
+    try:
+        with ConnectHandler(**device) as ssh:
+            for command in config_commands:
+                result = ssh.send_config_set(command, exit_config_mode=False)
+                error_inresalt = re.search(regex,result)
+                if error_inresalt:
+                    print(message_err.format(command,error_inresalt.group("err_msg"),ssh.host))
+                    bad[command] = result
+                else:
+                    good[command] = result
+
+
+
+        return good, bad
+
+
+    except netmiko.NetmikoAuthenticationException as error:
+        print("*"*20, "AuthenticationError","*"*20)
+    except netmiko.NetmikoTimeoutException as error:
+        print("*"*20, "TimeoutException","*"*20)
+
+if __name__ == "__main__":
+    with open ("device2.yaml") as f:
+        devices = yaml.safe_load(f)
+    for dev in devices:
+         print(send_config_commands(dev,commands))
+
+
+
+
+
+
+
+
+
+
+
