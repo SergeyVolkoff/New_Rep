@@ -36,13 +36,9 @@ def send_show_ifcof(ip, user, password, log = True):#f-show all ifconf
                         print(name_intf," exist, but d'nt have ip addr")
                     break
                 else:
-                    result="\nNo interface on router"
+                    result="No interface on router"
                     break
-
         return result
-
-
-
     except pexpect.exceptions.TIMEOUT as error:
         print(f"Error connect to {ip}")
 
