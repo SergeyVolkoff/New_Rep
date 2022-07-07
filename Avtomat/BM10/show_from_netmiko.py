@@ -33,8 +33,6 @@ def send_show_command(device, command,log = True):
                     break
                 else:
                     result ="No interface on router"
-
-
         return result
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         print("*"*20, "ERROR", "*"*20)
