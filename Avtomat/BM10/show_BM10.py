@@ -43,5 +43,5 @@ def send_show_ifcof(ip, user, password, log = True):#f-show all ifconf
         print(f"Error connect to {ip}")
 
 if __name__=="__main__":
-    print(send_show_ifcof("192.168.1.1", "root", "root"))
+    print(send_show_ifcof("192.168.2.1", "root", ""))
 

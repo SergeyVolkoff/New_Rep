@@ -10,7 +10,7 @@ def ping_ip_3G (ip_s, ip_dest, user, password):
 
         ssh.send("ping ")
         ssh.send(ip_dest)
-        ssh.sendline(" -w 1")
+        ssh.sendline(" -w 5")
         ssh.expect("root@BWOS:~#")
         temp = ssh.before
         if "round-trip min/avg/max" in temp:
