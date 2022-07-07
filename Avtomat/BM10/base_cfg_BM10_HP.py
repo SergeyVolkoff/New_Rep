@@ -6,6 +6,7 @@ Base cfg host name, time serv, firewall, Hardware flow
 import re
 import yaml
 import netmiko
+from pprint import pprint
 from netmiko import (
     ConnectHandler,
     NetmikoTimeoutException,
@@ -15,16 +16,21 @@ from netmiko import (
 def base_cfg(device, commands,log = True):
     if log:
         print(f"Connect to {device['host']}...")
-    result = ""
+    result = {}
     try:
         with ConnectHandler(**device) as ssh:
             print(device['host'], "connected")
             for command in commands:
                 output = ssh.send_command(command)
-                result = output
+                if "" in output:
+                    output = "command passed"
+                    result[command] = output
+                else:
+                    output = "bad command"
+                    result[command] = output
         return result
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
-        print("*"*20, "ERROR", "*"*20)
+        pprint("*"*20, "ERROR", "*"*20)
 
 
 if __name__ == "__main__":
@@ -40,7 +46,7 @@ if __name__ == "__main__":
         with open("BM10_LTE.yaml") as f:
             device = yaml.safe_load(f)
             for dev in device:
-                print(base_cfg(dev, commands))
+                pprint(base_cfg(dev, commands))
 
 
 
