@@ -42,7 +42,6 @@ if __name__ == "__main__":
     command = "uci show network | grep 34G"
     with open("BM10_LTE.yaml")as f:
         device = yaml.safe_load(f)
-
         for dev in device:
             print(send_show_command(dev, command))
 
