@@ -6,6 +6,10 @@ from netmiko import (
     NetmikoTimeoutException,
     NetmikoAuthenticationException,
 )
+ip_dest = "8.8.8.8"
+promo= " -w 4"
+word_ping="ping "
+command_ping = (word_ping+ip_dest+promo)
 
 def ping_ip_3G (device,command_ping,log = True):
     if log:
@@ -26,10 +30,6 @@ def ping_ip_3G (device,command_ping,log = True):
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         print("*"*5, "Error connection to:", device['host'], "*"*5)
 if __name__ == "__main__":
-    ip_dest = "8.8.8.8"
-    promo= " -w 4"
-    word_ping="ping "
-    command_ping = (word_ping+ip_dest+promo)
     with open("BM10_LTE.yaml")as f:
         device = yaml.safe_load(f)
         for dev in device:

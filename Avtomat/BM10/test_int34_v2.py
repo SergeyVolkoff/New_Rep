@@ -24,10 +24,7 @@ command_cfg_34G = [
     "uci commit",
     "reboot"
     ]
-ip_dest = "8.8.8.8"
-promo= " -w 4"
-word_ping="ping "
-command_ping = (word_ping+ip_dest+promo)
+
 
 try:
 
@@ -36,7 +33,6 @@ try:
         for dev in device:
             result_sh_34G =  send_show_command(dev, command_sh_net)
             print("*"*5, result_sh_34G)
-
             if 'addr' or 'network.34G.device' in result_sh_34G:
                 res_ping = ping_ip_3G(dev, command_ping)
                 print(res_ping)
