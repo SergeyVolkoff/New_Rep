@@ -1,6 +1,7 @@
 import re
 import yaml
 import netmiko
+from pprint import pprint
 from netmiko import (
     ConnectHandler,
     NetmikoTimeoutException,
@@ -29,7 +30,8 @@ if __name__ == "__main__":
     commands = [
     "uci show system.@system[0].hostname",
     "uci show system.ntp.server",
-    "uci show firewall.@zone[1].forward",
+    "uci show firewall.@zone[1].input",
+    "uci show firewall.@zone[1].output",
     "uci show network.wan",
     "uci show network.lan"
     ]
@@ -37,4 +39,4 @@ if __name__ == "__main__":
         device = yaml.safe_load(f)
 
         for dev in device:
-            print(sh_base_cfg_BM10(dev, commands))
+            pprint(sh_base_cfg_BM10(dev, commands))

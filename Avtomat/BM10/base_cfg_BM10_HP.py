@@ -30,7 +30,7 @@ def base_cfg(device, commands,log = True):
                     result[command] = output
         return result
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
-        print("*"*5, "Error connection to:", device['host'], "*"*20)
+        print("*"*5, "Error connection to:", device['host'], "*"*5)
 
 
 if __name__ == "__main__":
