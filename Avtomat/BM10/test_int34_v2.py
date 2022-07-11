@@ -14,6 +14,7 @@ from netmiko import (
     NetmikoAuthenticationException,
 )
 command_sh_net = "uci show network | grep 34G"
+
 command_cfg_34G = [
     "uci set network.34G=interface",
     "uci set network.34G.proto='qmi'",
@@ -35,6 +36,7 @@ try:
         for dev in device:
             result_sh_34G =  send_show_command(dev, command_sh_net)
             print(result_sh_34G)
+
             if 'addr' in result_sh_34G:
                 ping_ip_3G(dev, command_ping)
                 print("END")
