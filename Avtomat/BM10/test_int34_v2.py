@@ -35,11 +35,11 @@ try:
         device = yaml.safe_load(f)
         for dev in device:
             result_sh_34G =  send_show_command(dev, command_sh_net)
-            print(result_sh_34G)
+            print("*"*5, result_sh_34G)
 
-            if 'addr' in result_sh_34G:
-                ping_ip_3G(dev, command_ping)
-                print("END")
+            if 'addr' or 'network.34G.device' in result_sh_34G:
+                res_ping = ping_ip_3G(dev, command_ping)
+                print(res_ping)
 
             else:
                 cfg_wwan_BM10(dev,command_cfg_34G)

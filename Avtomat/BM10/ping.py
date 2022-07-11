@@ -14,8 +14,6 @@ def ping_ip_3G (device,command_ping,log = True):
     try:
         with ConnectHandler(**device) as ssh:
             print(device['host'], "connected")
-
-
             output = ssh.send_command(command_ping)
             if "round-trip min/avg/max" in output:
                 output = re.search(r'round-trip min/avg/max = (\S+ ..)', output).group()
