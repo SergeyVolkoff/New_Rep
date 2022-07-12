@@ -15,16 +15,6 @@ from netmiko import (
 )
 command_sh_net = "uci show network | grep 34G"
 
-command_cfg_34G = [
-    "uci set network.34G=interface",
-    "uci set network.34G.proto='qmi'",
-    "uci set network.34G.device='/dev/cdc-wdm0'",
-    "uci set network.34G.apn='internet.tele2.ru'",
-    "uci set network.34G.pdptype='ipv4'",
-    "uci commit",
-    "reboot"
-    ]
-
 
 try:
 
@@ -32,14 +22,17 @@ try:
         device = yaml.safe_load(f)
         for dev in device:
             result_sh_34G =  send_show_command(dev, command_sh_net)
-            print("*"*5, result_sh_34G)
-            if 'addr' or 'network.34G.device' in result_sh_34G:
-                res_ping = ping_ip_3G(dev, command_ping)
-                print(res_ping)
-
-            else:
-                cfg_wwan_BM10(dev,command_cfg_34G)
+            print(result_sh_34G)
+            if 'addr' in result_sh_34G:
+                result_ping = ping_ip_3G(dev, command_ping)
+                print(result_ping)
+            elif 'No interface on router'in result_sh_34G:
+                result_cfg = cfg_wwan_BM10(dev,command_cfg_34G)
+                print(result_cfg)
+            elif 'network.34G.device'in result_sh_34G:
+                print("bad cfg, maybe reboot?")
 
 except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         print("*"*5, "Error connection to:", device['host'], "*"*5)
+
 

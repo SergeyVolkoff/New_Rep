@@ -32,6 +32,7 @@ def send_show_command(device, command_sh_net,log = True):
                         print(name_intf,"exist, but d'nt have ip addr")
                     break
                 else:
+                    type(temp) == 'None'
                     result ="No interface on router"
         return result
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:

@@ -11,13 +11,11 @@ promo= " -w 4"
 word_ping="ping "
 command_ping = (word_ping+ip_dest+promo)
 
-def ping_ip_3G (device,command_ping,log = True):
-    if log:
-        print(f"Connect to {device['host']}...")
+def ping_ip_3G (device,command_ping):
 
     try:
         with ConnectHandler(**device) as ssh:
-            print(device['host'], "connected")
+
             output = ssh.send_command(command_ping)
             if "round-trip min/avg/max" in output:
                 output = re.search(r'round-trip min/avg/max = (\S+ ..)', output).group()
