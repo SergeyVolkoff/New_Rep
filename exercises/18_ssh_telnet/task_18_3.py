@@ -47,7 +47,8 @@ In [16]: send_commands(r1, config=commands)
 Out[16]: 'config term\nEnter configuration commands, one per line.  End with CNTL/Z.\nR1(config)#username user5 password pass5\nR1(config)#username user6 password pass6\nR1(config)#end\nR1#'
 
 """
-from
+from task_18_1  import send_show_command
+from task_18_2 import send_config_commands
 from pprint import pprint
 import yaml
 import netmiko
@@ -57,11 +58,18 @@ from netmiko import (
     NetmikoAuthenticationException,
 )
 
-commands = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"]
-command = "sh ip int br"
+commands = [
+"uci set network.34G=interface",
+"uci set network.34G.proto='qmi'",
+"uci set network.34G.device='/dev/cdc-wdm0'",
+"uci set network.34G.apn='internet.tele2.ru'",
+"uci set network.34G.pdptype='ipv4'",
+"uci commit"
+]
+command = "uci show network | grep 34G"
 
 def send_commands(device,show = None,config = None):
-
+    try:
         if show and config:
             raise ValueError("Only one argument!(show/config")
 
@@ -70,14 +78,20 @@ def send_commands(device,show = None,config = None):
         elif config:
             return send_config_commands(device, config)
 
+    except netmiko.NetmikoAuthenticationException as error:
+        print("*"*20, "AuthenticationError","*"*20)
+    except netmiko.NetmikoTimeoutException as error:
+        print("*"*20, "TimeoutException","*"*20)
+
 if __name__ == "__main__":
 
     with open("device2.yaml") as f:
         devices = yaml.safe_load(f)
 
     for dev in devices:
-        print(send_commands(dev, show = command))
         print(send_commands(dev, config = commands))
+        print(send_commands(dev, show = command))
+
 
 
 
