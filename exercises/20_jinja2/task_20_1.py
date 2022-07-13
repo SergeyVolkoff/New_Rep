@@ -20,6 +20,16 @@
 """
 import yaml
 
+
+
+
+def generate_config(template, data_dict):
+    env = Environment(Loader=FileSystemLoader"templates/for.txt")
+    templ = env.get_template('for.txt')
+
+
+
+
 # так должен выглядеть вызов функции
 if __name__ == "__main__":
     data_file = "data_files/for.yml"
