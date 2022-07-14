@@ -24,7 +24,7 @@ import yaml
 
 
 def generate_config(template, data_dict):
-    env = Environment(Loader=FileSystemLoader"templates/for.txt")
+    env = Environment(Loader=FileSystemLoader ("templates/for.txt"))
     templ = env.get_template('for.txt')
 
 
