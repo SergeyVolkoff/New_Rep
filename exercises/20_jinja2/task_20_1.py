@@ -18,22 +18,27 @@
 Указание текущего каталога, сломает работу других заданий/тестов.
 
 """
+import os
 import yaml
+from jinja2 import Environment, FileSystemLoader
+
 
 
 
 
 def generate_config(template, data_dict):
-    env = Environment(Loader=FileSystemLoader ("templates/for.txt"))
-    templ = env.get_template('for.txt')
+    templ_dir, templ_file = os.path.split(template)
+    env = Environment(loader=FileSystemLoader (templ_dir))
+    templ = env.get_template(templ_file)
+    return templ.render(data_dict)
 
 
 
 
 # так должен выглядеть вызов функции
 if __name__ == "__main__":
-    data_file = "data_files/for.yml"
-    template_file = "templates/for.txt"
+    data_file = "data_files/router_info.yml"
+    template_file = "templates/cisco_router_base.txt"
     with open(data_file) as f:
         data = yaml.safe_load(f)
     print(generate_config(template_file, data))
