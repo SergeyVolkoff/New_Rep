@@ -11,7 +11,7 @@
 * номер процесса. Имя переменной - process
 * router-id. Имя переменной - router_id
 * reference-bandwidth. Имя переменной - ref_bw
-* интерфейсы, на которых нужно включить OSPF. Имя переменной - ospf_intf.
+* интерфейсы, на которых нужно включить OSPF. Имя переменной - ospf_intf .
   На месте этой переменной ожидается список словарей с такими ключами:
   * name - имя интерфейса, вида Fa0/1, Vlan10, Gi0/0
   * ip - IP-адрес интерфейса, вида 10.0.1.1
@@ -55,3 +55,14 @@ interface Fa0/1.100
 interface Fa0/1.200
  ip ospf hello-interval 1
 """
+
+
+import yaml
+from task_20_1 import generate_config
+
+if __name__ == "__main__":
+    with open("data_files/ospf.yml") as f:
+        data = yaml.load(f, Loader = yaml.FullLoader)
+        print(generate_config("templates/ospf.txt", data))
+
+
