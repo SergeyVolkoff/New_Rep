@@ -1,0 +1,5 @@
+base_intf:
+  - hostname: DUT
+    lan_ip: 192.168.2.1
+    lan_mask: 
+    passive: False

@@ -38,7 +38,7 @@ def base_cfg(device, commands,log = True):
 
 if __name__ == "__main__":
         commands = [
-        "uci set system.@system[0].ostname='DUT'",
+        "uci set system.@system[0].hostname='DUT'",
         "uci set system.ntp.server='0.ntp2.stratum2.ru'",
         "uci set firewall.@zone[1].forward='ACCEPT'",
         "uci set firewall.@zone[1].input='ACCEPT'",
