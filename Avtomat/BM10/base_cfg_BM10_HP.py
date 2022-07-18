@@ -7,6 +7,7 @@ import re
 import yaml
 import netmiko
 from pprint import pprint
+from sh_base_cfg_BM10 import sh_base_cfg_BM10
 from netmiko import (
     ConnectHandler,
     NetmikoTimeoutException,
@@ -25,28 +26,36 @@ def base_cfg(device, commands,log = True):
                 if "" in output:
                     output = "command passed"
                     result[command] = output
-                else:
+
+                elif "Usage: uci [<options>] <command> [<arguments>]" in output:
                     output = "bad command"
                     result[command] = output
         return result
+
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         print("*"*5, "Error connection to:", device['host'], "*"*5)
 
 
 if __name__ == "__main__":
         commands = [
-        "uci set system.@system[0].hostname='DUT'",
+        "uci set system.@system[0].ostname='DUT'",
         "uci set system.ntp.server='0.ntp2.stratum2.ru'",
         "uci set firewall.@zone[1].forward='ACCEPT'",
         "uci set firewall.@zone[1].input='ACCEPT'",
         "uci set firewall.@defaults[0].flow_offloading='1'",
         "uci set firewall.@defaults[0].flow_offloading_hw='1'",
+        "uci set network.lan.ipaddr='192.168.2.1'",
+        "uci set network.wan.proto='static'",
+        "uci set network.wan.ipaddr='200.1.1.1'",
+        "uci set network.wan.netmask='255.255.255.0'",
         "uci commit"
         ]
         with open("BM10_LTE.yaml") as f:
             device = yaml.safe_load(f)
             for dev in device:
                 pprint(base_cfg(dev, commands))
+
+
 
 
 
