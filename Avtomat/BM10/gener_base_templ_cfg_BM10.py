@@ -13,12 +13,9 @@ if __name__ == "__main__":
     template_file = "templates/base_cfg.txt"
     with open(data_fle) as f:
         data = yaml.safe_load(f)
-    print(generate_config(template_file, data))
-
-
-if __name__ == "__main__":
-    data_file = "data_file/router_net.yaml"
-    template_file = "templates/base_cfg.txt"
-    with open(data_file) as f:
-        data = yaml.safe_load(f)
-        commands = (generate_config(template_file,data))
+    #print(generate_config(template_file, data))
+       # commands = (generate_config(template_file,data))
+        for router in data:
+            dut_conf = 'dut_r1.txt'
+            with open(dut_conf, 'w') as f:
+                f.write(generate_config(template_file,data))
