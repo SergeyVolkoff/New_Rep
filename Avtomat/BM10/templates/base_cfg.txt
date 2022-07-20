@@ -10,3 +10,4 @@ uci set network.wan.proto='static',
 uci set network.wan.ipaddr= {{ wan_ip }},
 uci set network.wan.netmask={{ wan_mask }},
 uci commit
+
