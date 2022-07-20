@@ -14,3 +14,11 @@ if __name__ == "__main__":
     with open(data_fle) as f:
         data = yaml.safe_load(f)
     print(generate_config(template_file, data))
+
+
+if __name__ == "__main__":
+    data_file = "data_file/router_net.yaml"
+    template_file = "templates/base_cfg.txt"
+    with open(data_file) as f:
+        data = yaml.safe_load(f)
+        commands = (generate_config(template_file,data))
