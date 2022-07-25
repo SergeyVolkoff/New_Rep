@@ -15,6 +15,7 @@
 и шаблоне templates/sh_ip_int_br.template.
 
 """
+import textfsm
 from netmiko import ConnectHandler
 
 # вызов функции должен выглядеть так
@@ -22,8 +23,11 @@ from netmiko import ConnectHandler
 
 
 def  parse_command_output(template, command_output):
-
-
+    with open(template) as tmpl:
+        fsm = textfsm.TextFSM(tmpl)
+        header = fsm.header
+        result = fsm.ParseText(command_output )
+    return [header] + result
 if __name__ == "__main__":
     r1_params = {
         "device_type": "cisco_ios",
