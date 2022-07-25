@@ -39,5 +39,5 @@ if __name__ == "__main__":
     with ConnectHandler(**r1_params) as r1:
         r1.enable()
         output = r1.send_command("sh ip int br")
-    result = parse_command_output("templates/sh_ip_int_br.template", output)
+    result = parse_output("templates/sh_ip_int_br.template", output)
     print(result)
