@@ -1,0 +1,6 @@
+Value lan_ip (\S+)
+Value lan_mask (\S+)
+
+Start
+  ^network.lan.ipaddr ${lan_ip}
+  ^network.lan.netmask ${lan_mask} -> Record

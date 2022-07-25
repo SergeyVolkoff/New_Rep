@@ -13,16 +13,13 @@ def sh_base_cfg_BM10(device, commands,log = True):
         print(f"Connect to {device['host']}...")
 
     try:
-        result = {}
+        result = ""
         with ConnectHandler(**device) as ssh:
             print(device['host'], "connected")
             for command in commands:
-                output = ssh.send_command(command)
-                if output:
-                    print(output)
-                    print("*"*10)
-                    result = "All commands passed"
-        return result
+                output = ssh.send_config_set(command)
+                result = output
+            return result
 
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         print("*"*5, "Error connection to:", device['host'], "*"*5)
