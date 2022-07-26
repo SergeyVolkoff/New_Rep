@@ -1,8 +1,0 @@
-system.cfg01e48a.hostname='OpenWrt' system.ntp.server='0.openwrt.pool.ntp.org' '1.openwrt.pool.ntp.org' '2.openwrt.pool.ntp.org' '3.openwrt.pool.ntp.org' firewall.cfg03dc81.input='REJECT' firewall.cfg03dc81.output='ACCEPT' network.wan=interface
-network.wan.device='wan'
-network.wan.proto='dhcp' network.lan=interface
-network.lan.device='br-lan'
-network.lan.proto='static'
-network.lan.ipaddr='192.168.1.1'
-network.lan.netmask='255.255.255.0'
-network.lan.ip6assign='60' uci: Entry not found

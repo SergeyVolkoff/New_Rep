@@ -28,7 +28,6 @@ def sh_base_cfg_BM10(device, commands,log = True):
 if __name__ == "__main__":
     commands = [
     "uci show system.@system[0].hostname",
-    "uci show system.ntp.server",
     "uci show firewall.@zone[1].input",
     "uci show firewall.@zone[1].output",
     "uci show firewall.@zone[1].forward",
@@ -38,6 +37,5 @@ if __name__ == "__main__":
     ]
     with open("BM10_LTE.yaml")as f:
         device = yaml.safe_load(f)
-
         for dev in device:
             pprint(sh_base_cfg_BM10(dev, commands))

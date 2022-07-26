@@ -1,11 +1,12 @@
 - device_type: linux
-  host: 192.168.1.1
-  username: root
-  password: root
-  timeout: 1
-- device_type: linux
   host: 192.168.2.1
   username: root
   password: '!128500'
   timeout: 1
+- device_type: linux
+  host: 192.168.1.1
+  username: root
+  password: '!128500'
+  timeout: 1
+
 
