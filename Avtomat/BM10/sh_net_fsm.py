@@ -1,6 +1,7 @@
 import re
 import yaml
 import netmiko
+import sys
 import textfsm
 from sh_base_cfg_BM10 import sh_base_cfg_BM10
 
@@ -35,8 +36,10 @@ if __name__ == "__main__":
          "password": "root",
          "timeout": "1"
         }
+
     output = sh_base_cfg_BM10(dev, commands)
-    print("="*8, output)
-    result = parse_command_output("templates/sh_netw.template", output)
-    print(result)
+    with open ("data_file/sh_network.txt") as sh:
+        print(output)
+        result = parse_command_output("templates/sh_netw.template",output)
+        print(result)
 

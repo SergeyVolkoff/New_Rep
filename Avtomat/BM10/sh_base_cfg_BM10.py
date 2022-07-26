@@ -13,13 +13,13 @@ def sh_base_cfg_BM10(device, commands,log = True):
         print(f"Connect to {device['host']}...")
 
     try:
-        result = ""
+        result={}
         with ConnectHandler(**device) as ssh:
             print(device['host'], "connected")
             for command in commands:
-                output = ssh.send_config_set(command)
-                result = output
-            return result
+                output = ssh.send_command(command)
+                result[command] =  output
+        return " ".join(list(result.values()))
 
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         print("*"*5, "Error connection to:", device['host'], "*"*5)
@@ -31,6 +31,7 @@ if __name__ == "__main__":
     "uci show system.ntp.server",
     "uci show firewall.@zone[1].input",
     "uci show firewall.@zone[1].output",
+    "uci show firewall.@zone[1].forward",
     "uci show network.wan",
     "uci show network.lan",
     "uci show network.@route[0]"

@@ -47,6 +47,14 @@ if __name__ == "__main__":
     "uci set system.ntp.server='0.ntp2.stratum2.ru'",
     "uci set firewall.@zone[1].forward='ACCEPT'",
     "uci set firewall.@zone[1].input='ACCEPT'",
+
+    "uci set firewall.@defaults[0].input='ACCEPT'",
+    "uci set firewall.@defaults[0].output='ACCEPT'",
+    "uci set firewall.@defaults[0].flow_offloading='1'",
+    "uci set firewall.@defaults[0].flow_offloading_hw='1'",
+    "uci set firewall.@defaults[0].synflood_protect='1'",
+    "uci set firewall.@defaults[0].forward='ACCEPT'",
+
     "uci set firewall.@defaults[0].flow_offloading='1'",
     "uci set firewall.@defaults[0].flow_offloading_hw='1'",
     "uci set network.lan.ipaddr='192.168.1.1'",

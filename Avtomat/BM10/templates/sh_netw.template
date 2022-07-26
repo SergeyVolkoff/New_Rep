@@ -1,6 +1,4 @@
-Value lan_ip (\S+)
-Value lan_mask (\S+)
+Value lan_ip (\d+(\.\d+){3})
 
 Start
-  ^network.lan.ipaddr ${lan_ip}
-  ^network.lan.netmask ${lan_mask} -> Record
+  ^network.lan.ipaddr='${lan_ip} -> Record
