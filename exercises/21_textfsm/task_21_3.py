@@ -20,3 +20,7 @@
 
 Проверить работу функции на примере вывода команды sh ip int br.
 """
+import textfsm
+
+
+def parse_command_dynamic(command_output, atributes_dict, index_file, templ_path):
