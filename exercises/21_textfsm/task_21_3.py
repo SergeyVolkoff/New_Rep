@@ -28,8 +28,8 @@ def parse_command_dynamic(command_output, atributes_dict, index_file = "index", 
     clitable1.ParseCmd(command_output, atributes_dict)
     return [ dict(zip(clitable1.header,item)) for item in clitable1]
 if __name__ == "__main__":
-    atributes = {"Command":"sh ip int br", "Vendor":"cisco_ios"}
-    with open("output/sh_ip_int_br.txt") as f:
+    atributes = {"Command":"sh ip rou o", "Vendor":"cisco_ios"}
+    with open("output/sh_ip_route_ospf.txt") as f:
         command_output = f.read()
         print(command_output)
     result_clitable = parse_command_dynamic(command_output, atributes)
