@@ -31,6 +31,9 @@ if __name__ == "__main__":
     "uci show firewall.@zone[1].input",
     "uci show firewall.@zone[1].output",
     "uci show firewall.@zone[1].forward",
+    "uci show firewall.@defaults[0].flow_offloading",
+    "uci show firewall.@defaults[0].flow_offloading_hw"
+    "uci show wireless.default_radio0.ssid"
     "uci show network.wan",
     "uci show network.lan",
     "uci show network.@route[0]"
