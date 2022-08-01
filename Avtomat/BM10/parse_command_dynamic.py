@@ -6,7 +6,7 @@ from textfsm import clitable
 def parse_command_dynamic(command_output, atributes_dict, index_file = "index", templ_path = "templates"):
     clitable1 = clitable.CliTable(index_file, templ_path)
     clitable1.ParseCmd(command_output, atributes_dict)
-    return [ dict(zip(clitable1.header,item)) for item in clitable1]
+    return [ item for item in clitable1]
 if __name__ == "__main__":
     command = ["arp -a"]
     atributes = {"Command":"arp -a", "Vendor":"linux_os"}
