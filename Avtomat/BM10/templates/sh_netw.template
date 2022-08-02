@@ -1,14 +1,20 @@
-Value name (\S+)
-Value lan_ip (\d+(\.\d+){3})
-Value lan_mask (\d+(\.\d+){3})
-Value fire_input (\S+\b)
-Value fire_output (\S+\b)
+Value NAME (\S+)
+Value IP_LAN (\d+(\.\d+){3})
+Value MASK_LAN (\d+(\.\d+){3})
+Value IP_WAN (\d+(\.\d+){3})
+Value MASK_WAN (\d+(\.\d+){3})
+Value FW_INPUT (\S+\b)
+Value FW_OUTPUT (\S+\b)
+Value FW_FORWARD (\S+\b)
 
 
 
 Start
-  ^network.lan.ipaddr='${lan_ip}
-  ^network.lan.netmask='${lan_mask}
-  ^.*input='${fire_input}
-  ^.*output='${fire_output}
-  ^.*hostname='${name} -> Record
+  ^network.lan.ipaddr='${IP_LAN}
+  ^network.lan.netmask='${MASK_LAN}
+  ^network.wan.ipaddr='${IP_WAN}
+  ^network.wan.netmask='${MASK_WAN}
+  ^.*input='${FW_INPUT}
+  ^.*output='${FW_OUTPUT}
+  ^.*.forward='${FW_FORWARD}
+  ^.*hostname='${NAME} -> Record

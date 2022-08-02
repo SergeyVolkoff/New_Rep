@@ -19,13 +19,7 @@ def  parse_command_output(template, command_output):
         result = fsm.ParseText(command_output )
         print(tabulate(result, headers=header))
 commands = [
-    "uci show system.@system[0].hostname",
-    "uci show firewall.@zone[1].input",
-    "uci show firewall.@zone[1].output",
-    "uci show firewall.@zone[1].forward",
-    "uci show network.wan",
-    "uci show network.lan",
-    "uci show network.@route[0]"
+   "uci show"
     ]
 
 if __name__ == "__main__":
