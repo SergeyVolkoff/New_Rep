@@ -11,7 +11,7 @@ from ping import ping_ip_3G
 result_def_show = send_show_ifcof("192.168.1.1", "root", "root")
 
 if 'addr:' in result_def_show:
-    def ping_ip_3G (ip_s, ip_dest, user, password):
+    def ping_ip(ip_s, ip_dest, user, password):
         result=""
         with pexpect.spawn(f"ssh {user}@{ip_s}", timeout=10, encoding="utf-8") as ssh:
             ssh.expect("d:")
@@ -46,5 +46,5 @@ else:
     print(start_cfg_3G)
     time.sleep(30)
 if __name__ == "__main__":
-    print(ping_ip_3G("192.168.1.1","8.8.8.8", "root", "root"))
+    print(ping_ip("192.168.1.1","8.8.8.8", "root", "root"))
 

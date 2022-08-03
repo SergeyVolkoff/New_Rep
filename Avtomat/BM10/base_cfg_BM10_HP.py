@@ -65,7 +65,7 @@ if __name__ == "__main__":
     "uci set network.wan.ipaddr='200.1.1.1'",
     "uci set network.wan.netmask='255.255.255.0'",
 
-    "uci set wireless.default_radio0.ssid='DUT7621_BM10'",
+    "uci set wireless.default_radio0.ssid='DUT7620_BM10'",
     "uci set wireless.default_radio0.encryption='psk2'" ,
     "uci set wireless.default_radio0.key='12345678'" ,
     "uci set wireless.radio0.disabled=0",

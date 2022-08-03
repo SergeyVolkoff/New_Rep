@@ -1,8 +1,6 @@
 Value NAME (\S+)
 Value IP_LAN (\d+(\.\d+){3})
-Value MASK_LAN (\d+(\.\d+){3})
 Value IP_WAN (\d+(\.\d+){3})
-Value MASK_WAN (\d+(\.\d+){3})
 Value FW_INPUT (\S+\b)
 Value FW_OUTPUT (\S+\b)
 Value FW_FORWARD (\S+\b)
@@ -11,9 +9,7 @@ Value FW_FORWARD (\S+\b)
 
 Start
   ^network.lan.ipaddr='${IP_LAN}
-  ^network.lan.netmask='${MASK_LAN}
   ^network.wan.ipaddr='${IP_WAN}
-  ^network.wan.netmask='${MASK_WAN}
   ^.*input='${FW_INPUT}
   ^.*output='${FW_OUTPUT}
   ^.*.forward='${FW_FORWARD}

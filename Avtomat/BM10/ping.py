@@ -11,7 +11,7 @@ promo= " -w 4"
 word_ping="ping "
 command_ping = (word_ping+ip_dest+promo)
 
-def ping_ip_3G (device,command_ping):
+def ping_ip (device,command_ping):
 
     try:
         with ConnectHandler(**device) as ssh:
@@ -19,7 +19,7 @@ def ping_ip_3G (device,command_ping):
             output = ssh.send_command(command_ping)
             if "round-trip min/avg/max" in output:
                 output = re.search(r'round-trip min/avg/max = (\S+ ..)', output).group()
-                result = ["IP", ip_dest, "destination  available from 3G:", output]
+                result = ["IP", ip_dest, "destination  available :", output]
                 result = ' '.join(result)
             else:
                 result = ["Ip",ip_dest, "out of destination"]
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     with open("BM10_LTE.yaml")as f:
         device = yaml.safe_load(f)
         for dev in device:
-            print(ping_ip_3G(dev, command_ping))
+            print(ping_ip(dev, command_ping))
 
 
 

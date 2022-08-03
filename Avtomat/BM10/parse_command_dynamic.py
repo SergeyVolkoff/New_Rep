@@ -1,5 +1,6 @@
 import yaml
 import textfsm
+from pprint import pprint
 from sh_base_cfg_BM10 import sh_base_cfg_BM10
 from textfsm import clitable
 import netmiko
@@ -24,4 +25,4 @@ if __name__ == "__main__":
         for dev in device:
             output = sh_base_cfg_BM10(dev, command)
     result_clitable = parse_command_dynamic(output, atributes)
-    print (result_clitable)
+    pprint (result_clitable)

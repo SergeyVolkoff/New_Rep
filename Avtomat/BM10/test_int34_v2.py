@@ -4,7 +4,7 @@ import pexpect
 from pprint import pprint
 from show_int34_netmiko import *
 from cfg_int34_BM10 import *
-from ping import ping_ip_3G
+from ping import ping_ip
 from ping import *
 import time
 
@@ -24,7 +24,7 @@ try:
             result_sh_34G =  send_show_command(dev, command_sh_net)
             print(result_sh_34G)
             if 'addr' in result_sh_34G:
-                result_ping = ping_ip_3G(dev, command_ping)
+                result_ping = ping_ip(dev, command_ping)
                 print(result_ping)
             elif 'No interface on router'in result_sh_34G:
                 result_cfg = cfg_wwan_BM10(dev,command_cfg_34G)
