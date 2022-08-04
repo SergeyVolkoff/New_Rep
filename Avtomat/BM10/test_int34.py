@@ -5,7 +5,7 @@ from pprint import pprint
 from show_int34_netmiko import send_show_command
 from cfg_int34_BM10 import cfg_wwan_BM10
 import time
-from ping import ping_ip_3G
+from ping import ping_ip
 
 
 result_def_show = send_show_ifcof("192.168.1.1", "root", "root")
