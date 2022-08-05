@@ -25,12 +25,12 @@ try:
             print(result_sh_34G)
             if 'addr' in result_sh_34G:
                 result_ping = ping_ip(dev, command_ping)
-                print(result_ping)
+                print("Test 3G ok: \n",result_ping)
             elif 'No interface on router'in result_sh_34G:
                 result_cfg = cfg_wwan_BM10(dev,command_cfg_34G)
-                print(result_cfg)
+                print("Test 3G fail\n", result_cfg)
             elif 'network.34G.device'in result_sh_34G:
-                print("bad cfg, maybe reboot?")
+                print("Test 3G fail\n", "bad cfg, maybe reboot?")
 
 except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         print("*"*5, "Error connection to:", device['host'], "*"*5)
