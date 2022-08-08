@@ -7,14 +7,14 @@ from netmiko import (
     NetmikoAuthenticationException,
 )
 
-def send_sh_comm(device, command_sh, expect_string = "password:", log = True):
+def send_sh_comm(device, command_sh,log = True):
     if log:
         print(f"Connect to {device['host']}...")
     result = ""
     try:
         with ConnectHandler(**device) as ssh:
             print(device['host'], "connected")
-            temp = ssh.send_config_set(command_sh)
+            temp = ssh.send_command(command_sh, expect_string = "password:")
             result = temp
         return result
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
