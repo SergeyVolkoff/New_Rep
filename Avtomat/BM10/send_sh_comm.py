@@ -7,7 +7,7 @@ from netmiko import (
     NetmikoAuthenticationException,
 )
 
-def send_sh_comm(device, command_sh,log = True):
+def send_sh_comm(device, command_sh, expect_string = "password:", log = True):
     if log:
         print(f"Connect to {device['host']}...")
     result = ""
