@@ -8,14 +8,16 @@ from netmiko import (
 
 class BwosSSH:
     def __init__(self, device_type, host, username, password, timeout):
-        ssh = ConnectHandler(**device)
-        print(ssh)
+        self.ssh  = ConnectHandler(**device)
 
-
+    def send_sh_command(self,command):
+        temp = self.ssh.send_command(command)
+        result = temp
+        return result
 if __name__ == "__main__":
     device = {
         "device_type": "linux",
-        "host": "192.168.1.1",
+        "host": "192.168.2.1",
         "username": "root",
         "password": "!128500",
         "timeout": "1"
