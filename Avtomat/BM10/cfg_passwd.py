@@ -17,26 +17,23 @@ def cfg_pass (device, commands, log = True):
         with ConnectHandler(**device) as ssh:
             print(device['host'], "connected")
 
-            temp=ssh.send_command(command_string="passwd", expect_string=" ")
-            prompt = ssh.find_prompt()
-            pattern = ssh.read_until_pattern(prompt)
-            print("~",pattern)
-            print("!",temp)
+            temp=ssh.send_command(command_string="passwd", expect_string="New password: ",read_timeout=2)
+            print("!", temp)
 
-            temp1 = ssh.send_command(command_string="12345678", expect_string=" ")
+            temp1 = ssh.send_command(command_string="ro", expect_string="Retype password:", read_timeout=3)
             print("@",temp1)
 
-            temp2 = ssh.send_command(command_string="12345678", expect_string=" ")
+            temp2 = ssh.send_command(command_string="root22", expect_string=" ", read_timeout=1)
             print("#", temp2)
 
-            temp3 = ssh.send_command(command_string="12345678", expect_string=" ")
-            print("$", temp3)
+            #temp3 = ssh.send_command(command_string="12345678", expect_string=":")
+            #print("$", temp3)
 
 
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         print("*"*5, "Error connection to:", device['host'], "*"*5)
 if __name__== "__main__":
-    commands = ["root12","root12","root12","root12"]
+    commands = "root22"
     with open("BM10_LTE.yaml") as f:
         device = yaml.safe_load(f)
         for dev in device:

@@ -21,4 +21,4 @@ if __name__ == "__main__":
         for t in temp:
             device = dict(t)
             r1 = BwosSSH(**device)
-            print (r1.send_sh_command("uci show network"))
+            print (r1.send_sh_command("uci show network"))  
