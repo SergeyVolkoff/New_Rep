@@ -17,13 +17,13 @@ def cfg_pass (device, commands, log = True):
         with ConnectHandler(**device) as ssh:
             print(device['host'], "connected")
 
-            temp=ssh.send_command(command_string="passwd", expect_string="New password: ",read_timeout=2)
+            temp=ssh.send_command(command_string="passwd", expect_string="passwd",read_timeout=1)
             print("!", temp)
 
-            temp1 = ssh.send_command(command_string="ro", expect_string="Retype password:", read_timeout=3)
+            temp1 = ssh.send_command(command_string="Qq123456", expect_string="New password:", read_timeout=3)
             print("@",temp1)
 
-            temp2 = ssh.send_command(command_string="root22", expect_string=" ", read_timeout=1)
+            temp2 = ssh.send_command(command_string="Qq123456", expect_string=":", read_timeout=3)
             print("#", temp2)
 
             #temp3 = ssh.send_command(command_string="12345678", expect_string=":")
