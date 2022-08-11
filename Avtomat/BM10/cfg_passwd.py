@@ -12,28 +12,37 @@ from netmiko import *
 def cfg_pass (device, commands, log = True):
     if log:
         print(f"Connect to {device['host']}...")
-    result = {}
+    result = ''
     try:
         with ConnectHandler(**device) as ssh:
-            print(device['host'], "connected")
-
-            temp=ssh.send_command(command_string="passwd", expect_string="passwd",read_timeout=1)
-            print("!", temp)
-
-            temp1 = ssh.send_command(command_string="Qq123456", expect_string="New password:", read_timeout=3)
-            print("@",temp1)
-
-            temp2 = ssh.send_command(command_string="Qq123456", expect_string=":", read_timeout=3)
-            print("#", temp2)
-
-            #temp3 = ssh.send_command(command_string="12345678", expect_string=":")
-            #print("$", temp3)
-
-
+            for comm in commands:
+                prompt = ssh.find_prompt()
+                output = ssh.send_command(comm, expect_string="New password:", read_timeout=1)
+                print(output, "****")
+                if "New" in output:
+                    output = ssh.send_command_timing("Qq123456",  read_timeout=1)
+                    print(output, "****")
+                    if "Re-enter new password:" in output:
+                        output = ssh.send_command_timing("Qq123456",  read_timeout=1)
+                        print(output)
+                        while True :
+                            if "root@" not in output :
+                                output = ssh.read_until_pattern(f'{prompt}', read_timeout=0)
+                                print("Wait, the password will change now")
+                                ssh.write_channel(" ")
+                            elif "root@" in output:
+                                print("New pass OK")
+                                break
+        return output
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
-        print("*"*5, "Error connection to:", device['host'], "*"*5)
+        print("*" * 5, "Error connection to:", device['host'], "*" * 5)
+
+
+
 if __name__== "__main__":
-    commands = "root22"
+    commands = [
+        "passwd"
+    ]
     with open("BM10_LTE.yaml") as f:
         device = yaml.safe_load(f)
         for dev in device:
