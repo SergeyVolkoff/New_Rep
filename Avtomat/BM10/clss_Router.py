@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import yaml
 import netmiko
 from netmiko import (
@@ -13,13 +14,17 @@ class Router:
         self.ip = host
         self.name = username
         self.passwd = password
+        self.ip_dest = "192.168.1.1"
+        self.promo = " -w 4"
+        self.word_ping = "ping "
+        self.command_ping = self.word_ping+self.ip_dest+self.promo
 
     def send_sh_command(self, command):
         temp = self.ssh.send_command(command)
         result = temp
         return result
 
-    def cfg_pass (device, commands, log=True):
+    def cfg_pass (sel,device, commands, log=True):
         if log:
             print(f"Connect to {device['host']}...")
         result = ''
@@ -46,26 +51,27 @@ class Router:
             return output
         except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
-"""
-TODO
-"""
-    def ping_ip(device, command_ping):
-        ip_dest = "8.8.8.8"
-        promo = " -w 4"
-        word_ping = "ping "
-        self.command_ping = (word_ping + ip_dest + promo)
+
+    def ping_ip(self, device, command_ping):
+        #ip_dest = "8.8.8.8"
+        #promo = " -w 4"
+        #word_ping = "ping "
+        self.command_ping = (self.word_ping + self.ip_dest + self.promo)
         output = self.ssh.send_command(command_ping)
         if "round-trip min/avg/max" in output:
             output = re.search(r'round-trip min/avg/max = (\S+ ..)', output).group()
-            result = ["IP", ip_dest, "destination  available :", output]
+            result = ["IP", self.ip_dest, "destination  available :", output]
             result = ' '.join(result)
         else:
-            result = ["Ip", ip_dest, "out of destination"]
+            result = ["Ip", self.ip_dest, "out of destination"]
             result = ' '.join(result)
         return result
 
 if __name__ == "__main__":
     with open("BM10_LTE.yaml")as f:
-        device = yaml.safe_load(f)
-        for dev in device:
-            print(Router.ping_ip(device))
+        temp = yaml.safe_load(f)
+        for t in temp:
+            device = dict(t)
+            r1 = Router(**device)
+            command_ping = r1.command_ping
+            print(r1.ping_ip(device,command_ping ))
