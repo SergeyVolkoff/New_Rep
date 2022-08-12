@@ -20,10 +20,10 @@ def cfg_pass (device, commands, log = True):
                 output = ssh.send_command(comm, expect_string="New password:", read_timeout=1)
                 print(output, "****")
                 if "New" in output:
-                    output = ssh.send_command_timing("Qq123456",  read_timeout=1)
+                    output = ssh.send_command_timing("root",  read_timeout=1)
                     print(output, "****")
                     if "Re-enter new password:" in output:
-                        output = ssh.send_command_timing("Qq123456",  read_timeout=1)
+                        output = ssh.send_command_timing("root",  read_timeout=1)
                         print(output)
                         while True :
                             if "root@" not in output :
