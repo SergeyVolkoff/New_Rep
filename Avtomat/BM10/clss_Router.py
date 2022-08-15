@@ -14,10 +14,15 @@ class Router:
         self.ip = host
         self.name = username
         self.passwd = password
-        self.ip_dest = "192.168.1.1"
+        self.ip_dest = input("Input ip dest:")
         self.promo = " -w 4"
         self.word_ping = "ping "
         self.command_ping = self.word_ping+self.ip_dest+self.promo
+        self.commands_to_reset_conf = [
+            "rm -rf /overlay/*",
+            "sync",
+            "reboot"
+        ]
 
     def send_sh_command(self, command):
         temp = self.ssh.send_command(command)
@@ -53,9 +58,6 @@ class Router:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
 
     def ping_ip(self, device, command_ping):
-        #ip_dest = "8.8.8.8"
-        #promo = " -w 4"
-        #word_ping = "ping "
         self.command_ping = (self.word_ping + self.ip_dest + self.promo)
         output = self.ssh.send_command(command_ping)
         if "round-trip min/avg/max" in output:
@@ -67,6 +69,10 @@ class Router:
             result = ' '.join(result)
         return result
 
+    def reset_conf(self,device, comm_reset_conf):
+        result_reset=self.ssh.send_command(self.commands_to_reset_conf)
+
+
 if __name__ == "__main__":
     with open("BM10_LTE.yaml")as f:
         temp = yaml.safe_load(f)
@@ -74,4 +80,6 @@ if __name__ == "__main__":
             device = dict(t)
             r1 = Router(**device)
             command_ping = r1.command_ping
-            print(r1.ping_ip(device,command_ping ))
+            #print(r1.ping_ip(device,command_ping ))
+            commands_to_reset = r1.commands_to_reset_conf
+            print(r1.reset_conf(device,commands_to_reset))
