@@ -14,9 +14,8 @@ def send_sh_comm(device, command_sh,log = True):
     try:
         with ConnectHandler(**device) as ssh:
             print(device['host'], "connected")
-            temp = ssh.send_command(command_sh, expect_string = "password:")
-            result = temp
-        return result
+            temp = ssh.send_config_set(command_sh)
+        return temp
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         print("*"*5, "Error connection to:", device['host'], "*"*5)
 

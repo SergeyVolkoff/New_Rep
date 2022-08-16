@@ -14,10 +14,9 @@ class Router:
         self.ip = host
         self.name = username
         self.passwd = password
-        self.ip_dest = input("Input ip dest:")
         self.promo = " -w 4"
         self.word_ping = "ping "
-        self.command_ping = self.word_ping+self.ip_dest+self.promo
+        self.command_ping = self.word_ping+self.promo
         self.commands_to_reset_conf = [
             "rm -rf /overlay/*",
             "sync",
@@ -56,22 +55,26 @@ class Router:
             return output
         except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
-
+"""
+ Функция для простого пинга, сама запросит адрес назначения, формат прописан в инит, без импорта.
+"""
     def ping_ip(self, device, command_ping):
-        self.command_ping = (self.word_ping + self.ip_dest + self.promo)
+        ip_dest = input("Input ip destination: ")
+        command_ping = (self.word_ping + ip_dest + self.promo)
+        print(command_ping)
         output = self.ssh.send_command(command_ping)
         if "round-trip min/avg/max" in output:
             output = re.search(r'round-trip min/avg/max = (\S+ ..)', output).group()
-            result = ["IP", self.ip_dest, "destination  available :", output]
+            result = ["IP", ip_dest, "destination  available :", output]
             result = ' '.join(result)
         else:
-            result = ["Ip", self.ip_dest, "out of destination"]
+            result = ["Ip", ip_dest, "out of destination"]
             result = ' '.join(result)
         return result
 
     def reset_conf(self,device, comm_reset_conf):
-        result_reset=self.ssh.send_command(self.commands_to_reset_conf)
-
+        result_reset=self.ssh.send_config_set(self.commands_to_reset_conf)
+        return result_reset
 
 if __name__ == "__main__":
     with open("BM10_LTE.yaml")as f:
@@ -80,6 +83,5 @@ if __name__ == "__main__":
             device = dict(t)
             r1 = Router(**device)
             command_ping = r1.command_ping
-            #print(r1.ping_ip(device,command_ping ))
-            commands_to_reset = r1.commands_to_reset_conf
-            print(r1.reset_conf(device,commands_to_reset))
+            print(r1.ping_ip(device,command_ping ))
+           # print(r1.reset_conf(device,r1.commands_to_reset_conf))

@@ -14,7 +14,7 @@ if __name__ == "__main__":
     comm_reset_conf = [
     "rm -rf /overlay/*",
     "sync",
-    "reboot"
+    #  "reboot"
     ]
     with open ("BM10_LTE.yaml")as  f:
         device = yaml.safe_load(f)
