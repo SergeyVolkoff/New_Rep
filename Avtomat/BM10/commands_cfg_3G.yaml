@@ -1,0 +1,9 @@
+[
+"uci set network.34G=interface",
+"uci set network.34G.proto='qmi'",
+"uci set network.34G.device='/dev/cdc-wdm0'",
+"uci set network.34G.apn='internet.tele2.ru'",
+"uci set network.34G.pdptype='ipv4'",
+"uci commit",
+"reboot"
+]

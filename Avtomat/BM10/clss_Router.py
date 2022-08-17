@@ -10,24 +10,34 @@ from netmiko import (
 
 class Router:
     def __init__(self, device_type, host, username, password, timeout):
-        self.ssh = ConnectHandler(**device)
-        self.ip = host
-        self.name = username
-        self.passwd = password
-        self.promo = " -w 4"
-        self.word_ping = "ping "
-        self.command_ping = self.word_ping+self.promo
-        self.commands_to_reset_conf = [
-            "rm -rf /overlay/*",
-            "sync",
-            "reboot"
-        ]
+        try:
+            self.ssh = ConnectHandler(**device)
+            self.ip = host
+            self.name = username
+            self.passwd = password
+            self.promo = " -w 4"
+            self.word_ping = "ping "
+            self.command_ping = self.word_ping+self.promo
+            with open ("commands_reset_cfg.yaml") as f1:
+                self.commands_to_reset_conf = yaml.safe_load(f1)
+            with open("commands_cfg_3G.yaml") as f:
+                self.commands_cfg_3G = yaml.safe_load(f)
 
+
+        except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
+            print("*" * 5, "Error connection to:", device['host'], "*" * 5)
+    """
+    ф-я отправки простой команды в уст-во по ssh, без импорта
+    """
     def send_sh_command(self, command):
         temp = self.ssh.send_command(command)
         result = temp
         return result
-
+    """
+     Ф-я изменения пароля, надо поменять так, 
+     чтоб можно было вводить короткий пароль без сбоя и тащить пароль со стороны, а не из кода.
+     без импорта
+    """
     def cfg_pass (sel,device, commands, log=True):
         if log:
             print(f"Connect to {device['host']}...")
@@ -55,9 +65,10 @@ class Router:
             return output
         except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
-"""
- Функция для простого пинга, сама запросит адрес назначения, формат прописан в инит, без импорта.
-"""
+    """
+    Функция для простого пинга, сама запросит адрес назначения, формат команды прописан в инит.
+    без импорта.
+    """
     def ping_ip(self, device, command_ping):
         ip_dest = input("Input ip destination: ")
         command_ping = (self.word_ping + ip_dest + self.promo)
@@ -71,10 +82,21 @@ class Router:
             result = ["Ip", ip_dest, "out of destination"]
             result = ' '.join(result)
         return result
-
+    """
+    ф-я сброса конфига на заводской, с ребутом устр-ва. 
+    без импорта
+    """
     def reset_conf(self,device, comm_reset_conf):
         result_reset=self.ssh.send_config_set(self.commands_to_reset_conf)
         return result_reset
+    """
+    ф-я настройки 3G, с ребутом уср-ва.
+    без импорта
+    """
+    def cfg_LTE(self, device, command_cfg_3G):
+        for comm in self.commands_cfg_3G:
+            output = self.ssh.send_config_set(comm)
+            print (output)
 
 if __name__ == "__main__":
     with open("BM10_LTE.yaml")as f:
@@ -82,6 +104,9 @@ if __name__ == "__main__":
         for t in temp:
             device = dict(t)
             r1 = Router(**device)
-            command_ping = r1.command_ping
-            print(r1.ping_ip(device,command_ping ))
+            #command_ping = r1.command_ping
+            #print(r1.ping_ip(device,command_ping ))
            # print(r1.reset_conf(device,r1.commands_to_reset_conf))
+
+            print(r1.cfg_LTE(device,r1.commands_cfg_3G))
+
