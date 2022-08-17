@@ -104,9 +104,7 @@ if __name__ == "__main__":
         for t in temp:
             device = dict(t)
             r1 = Router(**device)
-            #command_ping = r1.command_ping
-            #print(r1.ping_ip(device,command_ping ))
-           # print(r1.reset_conf(device,r1.commands_to_reset_conf))
-
-            print(r1.cfg_LTE(device,r1.commands_cfg_3G))
+            print(r1.ping_ip(device,r1.command_ping ))
+            # print(r1.reset_conf(device,r1.commands_to_reset_conf)
+            #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
 
