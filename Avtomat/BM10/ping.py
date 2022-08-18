@@ -6,7 +6,7 @@ from netmiko import (
     NetmikoTimeoutException,
     NetmikoAuthenticationException,
 )
-ip_dest = "8.8.8.8"
+ip_dest = "8.8.4.4"
 promo= " -w 4"
 word_ping="ping "
 command_ping = (word_ping+ip_dest+promo)

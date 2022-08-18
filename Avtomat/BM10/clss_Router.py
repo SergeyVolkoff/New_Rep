@@ -97,6 +97,32 @@ class Router:
         for comm in self.commands_cfg_3G:
             output = self.ssh.send_config_set(comm)
             print (output)
+    """
+     Доделать!
+    """
+
+    def show_int3G(self,device, command_sh_net):
+        temp = self.ssh.send_config_set(command_sh_net)
+        result = ""
+        for sec in temp:
+            if "34G.device" in temp:
+                name_intf = re.search(r'network.(\S+).device', temp).group()
+                result += name_intf
+                temp = self.ssh.send_command("ifconfig |grep -A 1 wwan0")
+
+                if "addr:" in temp:
+                    ip_int = re.search(r'inet addr:(\S+)', temp).group()
+                    result += ip_int
+
+                else:
+                    result = name_intf
+                    print("*" * 30)
+                    print(name_intf, "exist, but d'nt have ip addr")
+                break
+            else:
+                type(temp) == 'None'
+                result = "No interface on router"
+        return result
 
 if __name__ == "__main__":
     with open("BM10_LTE.yaml")as f:
@@ -104,7 +130,7 @@ if __name__ == "__main__":
         for t in temp:
             device = dict(t)
             r1 = Router(**device)
-            print(r1.ping_ip(device,r1.command_ping ))
+            #print(r1.ping_ip(device,r1.command_ping ))
             # print(r1.reset_conf(device,r1.commands_to_reset_conf)
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
-
+            print(r1.show_int3G(device,"uci show network | grep 34G"))

@@ -14,15 +14,12 @@ from netmiko import (
     NetmikoAuthenticationException,
 )
 command_sh_net = "uci show network | grep 34G"
-
-
 try:
-
     with open("BM10_LTE.yaml")as f:
         device = yaml.safe_load(f)
         for dev in device:
             result_sh_34G =  send_show_command(dev, command_sh_net)
-            print(result_sh_34G)
+            print("*"*8,result_sh_34G)
             if 'addr' in result_sh_34G:
                 result_ping = ping_ip(dev, command_ping)
                 print("Test 3G ok: \n",result_ping)
