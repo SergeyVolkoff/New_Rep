@@ -18,6 +18,8 @@ class Router:
             self.promo = " -w 4"
             self.word_ping = "ping "
             self.command_ping = self.word_ping+self.promo
+            with open ("BM10_LTE.yaml") as f2:
+                self.device = yaml.safe_load(f2)
             with open ("commands_reset_cfg.yaml") as f1:
                 self.commands_to_reset_conf = yaml.safe_load(f1)
             with open("commands_cfg_3G.yaml") as f:
