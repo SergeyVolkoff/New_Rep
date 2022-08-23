@@ -50,3 +50,43 @@ up      \r\nEthernet0/1                192.168.200.1   YES NVRAM  up...'
 
 
 """
+
+
+import telnetlib
+import yaml
+
+class CiscoTelnet():
+    def __init__(self,ip,username,password,secret):
+        self.telnet = telnetlib.Telnet(ip)
+        self.ip = ip
+        self.read_until(b"Username:")
+        self.read_until(b"Password:")
+        self.read_until(b"Secret:")
+        self._write_line(username)
+        self._write_line(password)
+        self._write_line(secret)
+        self._write_line("enable")
+
+    def _write_line(self,line):
+        self._write_line(command)
+        self.telnet.write(line.encode("ascii") + b"\n")
+
+
+    def send_show_command(self,command,parse=True,templates,index):
+        self._write_line(command)
+        command_ouput = self.telnet.read_until(b"#").decode("utf-8")
+        return command_ouput
+
+if __name__ == "__main__":
+    r1_params = {
+      'ip': '192.168.100.1',
+        'username': 'cisco',
+        'password': 'cisco',
+        'secret': 'cisco'}
+    r1 = CiscoTelnet(**r1_params)
+    print(r1.send_show_command("sh ip int bri"))
+
+
+
+
+
