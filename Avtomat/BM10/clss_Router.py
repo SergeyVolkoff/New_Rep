@@ -107,7 +107,6 @@ class Router:
             print (output)
     """
     ФУНКЦИЯ просмотра интерфейса 3G
-     Доделать!
     """
 
     def show_int3G(self,device, command_sh_net):
