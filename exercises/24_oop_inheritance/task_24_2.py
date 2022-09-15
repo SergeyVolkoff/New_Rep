@@ -31,3 +31,9 @@ device_params = {
     "password": "cisco",
     "secret": "cisco",
 }
+
+class MyNetmiko(CiscoIosSSH):
+    def __init__(self,**device_params):
+        super.__init__(**device_params)
+        self.enable
+
