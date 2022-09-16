@@ -44,7 +44,7 @@ if __name__ == "__main__":
     #     commands = [f.read()]
     commands = [
 
-    "uci set system.@system[0].hostname='DUT_7621_rc1.1'",
+    "uci set system.@system[0].hostname='DUT_7621_rc1.2'",
     "uci set system.ntp.server='0.ntp2.stratum2.ru'",
     "uci set system.@system[0].zonename='Europe/Minsk'",
     "uci set system.@system[0].timezone='<+03>-3'",
@@ -65,14 +65,15 @@ if __name__ == "__main__":
     "uci set network.wan.ipaddr='200.1.1.1'",
     "uci set network.wan.netmask='255.255.255.0'",
 
-    "uci set wireless.default_radio0.ssid='DUT7621_RC1.1'",
+    "uci set wireless.default_radio0.ssid='DUT7621_RC1.2'",
     "uci set wireless.default_radio0.encryption='psk2'" ,
     "uci set wireless.default_radio0.key='12345678'" ,
     "uci set wireless.radio0.disabled=0",
-    "uci commit"
+    "uci commit",
+    "mwan3 stop"
+
     ]
 
-    print (commands)
     with open("BM10_LTE.yaml") as f:
         device = yaml.safe_load(f)
         for dev in device:
