@@ -26,3 +26,17 @@ ErrorInCommand                            Traceback (most recent call last)
 ErrorInCommand: При выполнении команды "lo" на устройстве 192.168.100.1 возникла ошибка "Incomplete command."
 
 """
+from netmiko.cisco.cisco_ios import CiscoIosSSH
+
+device_params = {
+    "device_type": "cisco_ios",
+    "ip": "192.168.100.1",
+    "username": "cisco",
+    "password": "cisco",
+    "secret": "cisco",
+}
+
+class MyNetmiko(CiscoIosSSH):
+    def __init__(self,**device_params):
+        super.__init__(**device_params)
+        self.enable
