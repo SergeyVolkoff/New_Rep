@@ -6,10 +6,12 @@ from netmiko import (
     ConnectHandler,
     NetmikoTimeoutException,
     NetmikoAuthenticationException,
-)
 
-class Router:
-    def __init__(self, device_type, host, username, password, timeout):
+)
+from netmiko.linux.linux_ssh import LinuxSSH
+class Router():
+    def __init__(self, device_type, host, username, password, timeout, **kwargs):
+
         try:
             self.ssh = ConnectHandler(**device)
             self.ip = host
@@ -24,8 +26,8 @@ class Router:
                 self.commands_to_reset_conf = yaml.safe_load(f1)
             with open("commands_cfg_3G.yaml") as f:
                 self.commands_cfg_3G = yaml.safe_load(f)
-
-
+            with open ("commands_base_cfg.yaml") as f3:
+                self.commands_base_cfg = yaml.safe_load(f3)
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
     """
@@ -106,7 +108,7 @@ class Router:
             output = self.ssh.send_config_set(comm)
             print (output)
     """
-    ФУНКЦИЯ просмотра интерфейса 3G
+    ФУНКЦИЯ просмотра интерфейса 3G, с проверкой выдачи адреса
     """
 
     def show_int3G(self,device, command_sh_net):
@@ -132,6 +134,40 @@ class Router:
                 result = "No interface on router"
         return result
 
+    """
+        ФУНКЦИЯ настройки базового конфига
+    """
+    def base_cfg(self, device, commands_base_cfg):
+        result = {}
+        for command in self.commands_base_cfg:
+            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            if "" in output:
+                output = "command passed"
+                result[command] = output
+
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                result[command] = output
+        return result
+    '''
+    Класс и функция проверки ошибок - дописать
+    '''
+class ErrorInCommand(Exception):
+    """
+    Исключение генерируется, если при выполнении команды на оборудовании,
+    возникла ошибка.
+    """
+    def _check_error_in_command(self, command, result):
+        regex = "Usage (?P<err>.+)"
+        message = (
+            'При выполнении команды "{cmd}" на устройстве {device} возникла ошибка "{error}"'
+        )
+        error_in_cmd = re.search(regex, result)
+        if error_in_cmd:
+            raise ErrorInCommand(message.format(cmd=command, device=self.host, error=error_in_cmd.group('err')))
+        print ()
+
+
 if __name__ == "__main__":
     with open("BM10_LTE.yaml")as f:
         temp = yaml.safe_load(f)
@@ -141,7 +177,8 @@ if __name__ == "__main__":
 
             #print(r1.ping_ip(device,r1.command_ping ))
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))
-            #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
-            print(r1.show_int3G(device,"uci show network | grep 34G"))
+            print(r1.cfg_LTE(device,r1.commands_cfg_3G))
+            #print(r1.show_int3G(device,"uci show network | grep 34G"))
             #print(r1.cfg_pass(device,commands="passwd"))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
+            #print (r1.base_cfg(device, r1.commands_base_cfg))

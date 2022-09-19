@@ -20,22 +20,19 @@ def base_cfg(device, commands,log = True):
     if log:
         print(f"Connect to {device['host']}...")
     result = {}
-    try:
-        with ConnectHandler(**device) as ssh:
-            print(device['host'], "connected")
-            for command in commands:
-                output = ssh.send_command(command, expect_string="",read_timeout=1)
-                if "" in output:
-                    output = "command passed"
-                    result[command] = output
+    with ConnectHandler(**device) as ssh:
+        print(device['host'], "connected")
+        for command in commands:
+            output = ssh.send_command(command, expect_string="",read_timeout=1)
+            if "" in output:
+                output = "command passed"
+                result[command] = output
 
-                elif "Usage: uci [<options>] <command> [<arguments>]" in output:
-                    output = "bad command"
-                    result[command] = output
-        return result
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                result[command] = output
+    return result
 
-    except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
-        print("*"*5, "Error connection to:", device['host'], "*"*5)
 
 
 if __name__ == "__main__":
