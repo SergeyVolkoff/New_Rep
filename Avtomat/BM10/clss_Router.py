@@ -42,7 +42,7 @@ class Router():
      чтоб можно было вводить короткий пароль без сбоя и тащить пароль со стороны, а не из кода.
      без импорта
     """
-    def cfg_pass (sel,device, commands, log=True):
+    def cfg_pass (self,device, commands, log=True):
         if log:
             print(f"Connect to {device['host']}...")
         result = ''
@@ -135,7 +135,7 @@ class Router():
         return result
 
     """
-        ФУНКЦИЯ настройки базового конфига
+    ФУНКЦИЯ настройки базового конфига
     """
     def base_cfg(self, device, commands_base_cfg):
         result = {}
@@ -177,8 +177,9 @@ if __name__ == "__main__":
 
             #print(r1.ping_ip(device,r1.command_ping ))
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))
-            print(r1.cfg_LTE(device,r1.commands_cfg_3G))
+            #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
             #print(r1.show_int3G(device,"uci show network | grep 34G"))
             #print(r1.cfg_pass(device,commands="passwd"))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
-            #print (r1.base_cfg(device, r1.commands_base_cfg))
+           # print (r1.base_cfg(device, r1.commands_base_cfg))
+            print(r1.send_sh_command("uci show firewall.@defaults[0].flow_offloading_hw"))
