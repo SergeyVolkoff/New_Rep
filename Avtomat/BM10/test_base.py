@@ -8,20 +8,23 @@ from netmiko import (
 )
 from clss_Router import Router
 
-def check_base_cfg():
+def check_int3G(comm):
     with open("BM10_LTE.yaml")as f:
         temp = yaml.safe_load(f)
         for t in temp:
             device = dict(t)
             r1 = Router(**device)
     try:
-        r1.send_sh_command(command="uci show firewall.@defaults[0].flow_offloading_hw")
+        r1.show_int3G(device,comm)
         return True
     except ValueError as err:
         return False
 
-def test_cfg_pass():
-    assert check_base_cfg()==True, "OK"
-    assert check_base_cfg()==False, "FAIL"
+def test_int3G():
+    assert check_int3G("uci show network | grep 34G")==True, "Test OK"
+    #assert check_int3G("dgx")==False, "test FAIL"
 
+if __name__ =="__main__":
 
+    result = check_int3G("uci show network | grep 34G")
+    print (result)

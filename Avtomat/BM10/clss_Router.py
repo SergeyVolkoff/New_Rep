@@ -13,6 +13,10 @@ class Router():
     def __init__(self, device_type, host, username, password, timeout, **kwargs):
 
         try:
+            with open("BM10_LTE.yaml") as f2:
+                temp = yaml.safe_load(f2)
+                for t in temp:
+                    device = dict(t)
             self.ssh = ConnectHandler(**device)
             self.ip = host
             self.name = username
@@ -20,8 +24,7 @@ class Router():
             self.promo = " -w 4"
             self.word_ping = "ping "
             self.command_ping = self.word_ping+self.promo
-            with open ("BM10_LTE.yaml") as f2:
-                self.device = yaml.safe_load(f2)
+
             with open ("commands_reset_cfg.yaml") as f1:
                 self.commands_to_reset_conf = yaml.safe_load(f1)
             with open("commands_cfg_3G.yaml") as f:
@@ -33,7 +36,7 @@ class Router():
     """
     ФУНКЦИЯ отправки простой команды в уст-во по ssh, без импорта
     """
-    def send_sh_command(self, command):
+    def send_sh_command(self, device, command):
         temp = self.ssh.send_command(command)
         result = temp
         return result
@@ -170,16 +173,17 @@ class ErrorInCommand(Exception):
 
 if __name__ == "__main__":
     with open("BM10_LTE.yaml")as f:
-        temp = yaml.safe_load(f)
-        for t in temp:
+         temp = yaml.safe_load(f)
+         for t in temp:
             device = dict(t)
+
             r1 = Router(**device)
 
             #print(r1.ping_ip(device,r1.command_ping ))
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
-            #print(r1.show_int3G(device,"uci show network | grep 34G"))
+            print(r1.show_int3G(device,"uci show network | grep 34G"))
             #print(r1.cfg_pass(device,commands="passwd"))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
            # print (r1.base_cfg(device, r1.commands_base_cfg))
-            print(r1.send_sh_command("uci show firewall.@defaults[0].flow_offloading_hw"))
+            #print(r1.send_sh_command("uci show firewall.@defaults[0].flow_offloading_hw"))
