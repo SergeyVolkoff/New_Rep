@@ -9,6 +9,7 @@ from netmiko import (
 from clss_Router import Router
 from check_int3G import check_int3G
 def test_int3G():
-    assert check_int3G("uci show network | grep 34G")==True, "Test OK"
-    assert check_int3G("uci show network | grep 34G")==False, "test FAIL, int exist, but d'nt have ip addr "
+    assert check_int3G("uci show network | grep 34G")==True, "Addr or inter not exist"
+
+    #assert check_int3G("uci show network | grep 34G")==False, "### test FAIL ###, int exist, but d'nt have ip addr "
 

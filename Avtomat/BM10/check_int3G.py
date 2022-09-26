@@ -16,12 +16,12 @@ def check_int3G(comm):
             r1 = Router(**device)
     try:
         temp = r1.show_int3G(device,comm)
-        if "network.34G.device" in temp:
+        if "addr" in temp:
             return True
-        if "No interface on router" in temp:
-            return False
+        if " but d'nt have ip addr" in temp:
+             return True
     except ValueError as err:
         return False
-if __name__ =="__main__":
-    result = check_int3G("uci show network | grep 34G")
-    print (result)
+# if __name__ =="__main__":
+#     result = check_int3G("uci show network | grep 34G")
+#     print (result)
