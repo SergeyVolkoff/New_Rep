@@ -7,24 +7,8 @@ from netmiko import (
     NetmikoAuthenticationException,
 )
 from clss_Router import Router
-
-def check_int3G(comm):
-    with open("BM10_LTE.yaml")as f:
-        temp = yaml.safe_load(f)
-        for t in temp:
-            device = dict(t)
-            r1 = Router(**device)
-    try:
-        r1.show_int3G(device,comm)
-        return True
-    except ValueError as err:
-        return False
-
+from check_int3G import check_int3G
 def test_int3G():
     assert check_int3G("uci show network | grep 34G")==True, "Test OK"
-    #assert check_int3G("dgx")==False, "test FAIL"
+    assert check_int3G("uci show network | grep 34G")==False, "test FAIL, int exist, but d'nt have ip addr "
 
-if __name__ =="__main__":
-
-    result = check_int3G("uci show network | grep 34G")
-    print (result)
