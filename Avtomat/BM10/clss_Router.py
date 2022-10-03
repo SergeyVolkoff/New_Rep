@@ -31,6 +31,8 @@ class Router():
                 self.commands_cfg_3G = yaml.safe_load(f)
             with open ("commands_base_cfg.yaml") as f3:
                 self.commands_base_cfg = yaml.safe_load(f3)
+            with open ("commands_802_1d_cfg.yaml") as f4:
+                self.commands_802_1d_cfg = yaml.safe_load(f4)
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
     """
@@ -142,7 +144,7 @@ class Router():
     """
     def base_cfg(self, device, commands_base_cfg):
         result = {}
-        for command in self.commands_base_cfg:
+        for command in self.commands_802_1d_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
             if "" in output:
                 output = "command passed"
@@ -185,5 +187,6 @@ if __name__ == "__main__":
             #print(r1.show_int3G(device,"uci show network | grep 34G"))
             #print(r1.cfg_pass(device,commands="passwd"))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
-            print (r1.base_cfg(device, r1.commands_base_cfg))
+            #print (r1.base_cfg(device, r1.commands_base_cfg))
             #print(r1.send_sh_command("uci show firewall.@defaults[0].flow_offloading_hw"))
+            print (r1.base_cfg(device, r1.commands_802_1d_cfg))
