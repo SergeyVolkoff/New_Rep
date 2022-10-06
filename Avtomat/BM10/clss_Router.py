@@ -2,6 +2,7 @@
 import re
 import yaml
 import netmiko
+import time
 from netmiko import (
     ConnectHandler,
     NetmikoTimeoutException,
@@ -146,10 +147,10 @@ class Router():
         result = {}
         for command in self.commands_802_1d_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            time.sleep(2)
             if "" in output:
                 output = "command passed"
                 result[command] = output
-
             elif "Usage: uci [<options>] <command> [<arguments>]" in output:
                 output = "bad command"
                 result[command] = output
@@ -190,3 +191,4 @@ if __name__ == "__main__":
             #print (r1.base_cfg(device, r1.commands_base_cfg))
             #print(r1.send_sh_command("uci show firewall.@defaults[0].flow_offloading_hw"))
             print (r1.base_cfg(device, r1.commands_802_1d_cfg))
+            #print(r1.send_sh_command("brctl stp br-lan yes"))
