@@ -7,7 +7,10 @@ from netmiko import (
     NetmikoAuthenticationException,
 )
 from clss_Router import Router
-
+"""
+Из всего базового конфига проверяется только та команда, что вводится в test.py 
+Чек заточен на проверку включен ли аппаратный ускоритель в файервол
+"""
 def check_base_cfg(comm):
     with open("BM10_LTE.yaml")as f:
         temp = yaml.safe_load(f)
