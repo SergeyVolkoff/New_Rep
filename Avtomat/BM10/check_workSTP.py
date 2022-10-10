@@ -1,4 +1,5 @@
 import re
+import time
 import yaml
 import netmiko
 from netmiko import (
@@ -8,30 +9,28 @@ from netmiko import (
 )
 from clss_Router import Router
 """
-ДОДЕЛАТЬ!!! Добавить пинг
- Проверка, что роутер отвечает и STP работает
+ДОДЕЛАТЬ!!! 
+ Проверка, что соседний роутер отвечает и STP работает,  что есть порт только в прослушивании!
 """
-def check_rootSTP(comm):
+def check_workSTP(comm):
     with open("BM10_LTE.yaml")as f:
         temp = yaml.safe_load(f)
         for t in temp:
             device = dict(t)
             r1 = Router(**device)
     try:
-
-        temp = r1.send_sh_command(device, comm)
-
-        # match1 = re.search(r'bridge id\s+(\S+)', temp)
-        # match2 = re.search(r'designated root\s+(\S+)',temp)
-        # print(match1.group(1))
-        # print(match2.group(1))
-        if "with own address as source address" in temp:
+        r1.send_sh_command(device,"/etc/init.d/log restart")         #очищаем логи
+        print(" Для проверки нужно кольцо или избыточный линк на 3 и 4 портах, ждем 10 сек")
+        time.sleep(12)
+        temp = r1.send_sh_command(device, comm)                      #вызываем логи
+        if "port 4(lan4) entered blocking state" in temp:           #если порт в блоке, значит STP работает.
             return True
         else:
-            return False
+            if " port 4(lan4) entered forwarding state" in temp:  #если порт перешел в форвард - STP не работает.
+                return False
     except ValueError as err:
         return False
 
-# if __name__ == "__main__":
-#     result = check_rootSTP("brctl showstp br-lan")
-#     print(result)
+if __name__ == "__main__":
+     result = check_workSTP("logread -l 10")
+     print(result)

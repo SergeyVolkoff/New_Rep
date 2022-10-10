@@ -1,6 +1,7 @@
 import re
 import yaml
 import netmiko
+import pytest
 from netmiko import (
     ConnectHandler,
     NetmikoTimeoutException,

@@ -98,6 +98,7 @@ class Router():
             result = ["Ip", ip_dest, "out of destination"]
             result = ' '.join(result)
         return result
+        print(output)
     """
     ФУНКЦИЯ сброса конфига на заводской, с ребутом устр-ва. 
     без импорта
@@ -182,7 +183,7 @@ if __name__ == "__main__":
 
             r1 = Router(**device)
 
-            #print(r1.ping_ip(device,r1.command_ping ))
+            print(r1.ping_ip(device,r1.command_ping ))
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
             #print(r1.show_int3G(device,"uci show network | grep 34G"))
