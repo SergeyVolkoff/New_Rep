@@ -57,7 +57,6 @@ if __name__ == "__main__":
     "uci set firewall.@defaults[0].flow_offloading='1'",
     "uci set firewall.@defaults[0].flow_offloading_hw='1'",
 
-    "uci set network.lan.ipaddr='192.168.1.1'",
     "uci set network.wan.proto='static'",
     "uci set network.wan.ipaddr='200.1.1.1'",
     "uci set network.wan.netmask='255.255.255.0'",
