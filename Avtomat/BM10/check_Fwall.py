@@ -38,6 +38,6 @@ def check_Fwall():
     except ValueError as err:
         return False
 
-# if __name__ == "__main__":
-#      result = check_Fwall("uci show")
-#      print(result)
+if __name__ == "__main__":
+     result = check_Fwall()
+     print(result)
