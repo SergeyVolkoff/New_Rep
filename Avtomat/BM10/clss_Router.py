@@ -12,6 +12,8 @@ from netmiko import (
     NetmikoTimeoutException,
     NetmikoAuthenticationException
 )
+from rich.console import Console
+from rich.table import Table
 from netmiko.linux.linux_ssh import LinuxSSH
 
 
@@ -84,17 +86,17 @@ class Router():
                         pass
                     else:
                         output = ssh.send_command_timing(new_pass, read_timeout=1)
-                        print(output)
+                        console.print(output,style="success")
                     if "Re-enter new password:" in output:
                         output = ssh.send_command_timing(new_pass, read_timeout=1)
-                        print(output)
+                        console.print(output,style="warning")
                         while True:
                             if "root@" not in output:
                                 output = ssh.read_until_pattern(f'{prompt}', read_timeout=0)
                                 print("Wait, the password will change now")
                                 ssh.write_channel(" ")
                             elif "root@" in output:
-                                print("New pass OK")
+                                console.print("New pass OK",style="success")
                                 break
 
             return output
@@ -105,7 +107,7 @@ class Router():
     без импорта.
     """
     def ping_ip(self, device, command_ping):
-        ip_dest = input("Input ip destination: ")
+        ip_dest = '200.1.1.1'
         command_ping = (self.word_ping + ip_dest + self.promo)
         print(command_ping)
         output = self.ssh.send_command(command_ping)
@@ -118,6 +120,7 @@ class Router():
             result = ' '.join(result)
         return result
         print(output)
+
     """
     ФУНКЦИЯ сброса конфига на заводской, с ребутом устр-ва. 
     без импорта
@@ -127,16 +130,45 @@ class Router():
         return result_reset
     """
     ФУНКЦИЯ настройки 3G, с ребутом уср-ва.
-    без импорта
-    """
+    без импорта    """
     def cfg_LTE(self, device, command_cfg_3G):
         for comm in self.commands_cfg_3G:
             output = self.ssh.send_config_set(comm)
             print (output)
+
+    """
+     !!!!! ДОДЕЛАТЬ!!!!
+      ФУНКЦИЯ просмотра базового конфига
+    """
+    def show_base_cfg(self, device, command_sh_net):
+        temp = self.ssh.send_config_set(command_sh_net)
+        result = {}
+        for sec in temp:
+            if "network.lan" in temp:
+                name_intf = re.search(r'network.(\S+).device', temp).group()
+                result += name_intf
+                temp = self.ssh.send_command("ifconfig |grep -A 1 wwan0")
+
+                if "addr:" in temp:
+                    ip_int = re.search(r'inet addr:(\S+)', temp).group()
+                    result += ip_int
+
+                else:
+                    result = name_intf
+                    print("*" * 30)
+                    print(name_intf, "exist, but d'nt have ip addr")
+                break
+            else:
+                type(temp) == 'None'
+                result = "No interface on router"
+        table = Table()
+        for n in result.split():
+            table.add_column(n)
+        return result
+
     """
     ФУНКЦИЯ просмотра интерфейса 3G, с проверкой выдачи адреса
     """
-
     def show_int3G(self,device, command_sh_net):
         temp = self.ssh.send_config_set(command_sh_net)
         result = ""
@@ -203,13 +235,12 @@ if __name__ == "__main__":
             #print(r1.ping_ip(device,r1.command_ping ))
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
-            #print(r1.show_int3G(device,"uci show network | grep 34G"))
+            print(r1.show_int3G(device,"uci show network | grep 34G"))
             #print(r1.cfg_pass(device,commands="passwd"))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
             #print(r1.base_cfg(device, r1.commands_base_cfg))
             # print (r1.base_cfg(device, r1.commands_802_1d_cfg))
             #print (r1.base_cfg(device, r1.commands_gre_config))
-            print (r1.base_cfg(device, r1.commands_Fwall_cfg))
-
+            #print (r1.base_cfg(device, r1.commands_Fwall_cfg))
             #print(r1.send_sh_command(device,"uci show"))
             #print(r1.send_sh_command("brctl stp br-lan yes"))

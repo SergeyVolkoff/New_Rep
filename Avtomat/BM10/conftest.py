@@ -18,3 +18,4 @@ def pytest_report_header(config):
         for i in spinner:
             print(f"\r{i}",end = "", flush = True)
             time.sleep(0.3)
+

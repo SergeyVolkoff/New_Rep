@@ -16,24 +16,26 @@ def check_Fwall():
         temp = yaml.safe_load(f)
         for t in temp:
             device = dict(t)
-
-            for val in device.values():
-                if val =='192.168.1.1':
-                    r1 = Router(**device)
-                    device1 = device
-
-                if val =='192.168.2.1':
-                    r2 = Router(**device)
-                    device2 = device
-
+            r1 = Router(**device)
     try:
         time.sleep(0)
-        temp = r1.send_sh_command(device,r1.commands_Fwall_cfg)        #отправляем конфиг фаервола
-        temp2 = r2.ping_ip(device1,r2.command_ping)                 # проверяем доступность соседа
-        if "destination  available " in temp:               #если отвечает, значит firewall зона настроена правильно.
+        res={}
+        for command in r1.commands_Fwall_cfg:  #отправляем конфиг фаервола
+            output = r1.ssh.send_command(command, expect_string="", read_timeout=1)
+            time.sleep(1)
+            if "" in output:
+                output = "command passed"
+                res[command] = output
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                res[command] = output
+        print(res)
+
+        temp2 = r1.ping_ip(device,r1.command_ping)              # проверяем доступность соседа
+        if "destination  available " in temp2:               #если отвечает, значит firewall зона настроена правильно.
             return True
         else:
-            if " out of destination" in temp:            #если не отвечает - не правльно настроена зона firewall.
+            if " out of destination" in temp2:            #если не отвечает - не правльно настроена зона firewall.
                 return False
     except ValueError as err:
         return False
