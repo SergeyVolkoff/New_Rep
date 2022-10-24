@@ -7,6 +7,8 @@ from netmiko import (
     NetmikoTimeoutException,
     NetmikoAuthenticationException,
 )
+from rich.table import Table
+from rich.console import Console
 
 def sh_base_cfg_BM10(device, commands,log = True):
     if log:
@@ -19,7 +21,15 @@ def sh_base_cfg_BM10(device, commands,log = True):
             for command in commands:
                 output = ssh.send_command(command)
                 result[command] =  output
-        return " ".join(list(result.values()))
+        #pprint(result)
+        c = Console()
+        table = Table(show_lines=True)
+        for r in "command output".split():
+            table.add_column(r)
+        for comm, output in result.items():
+            table.add_row(comm,output)
+        c.print(table)
+        #return " ".join(list(result.values()))
 
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         print("*"*5, "Error connection to:", device['host'], "*"*5)
@@ -42,3 +52,4 @@ if __name__ == "__main__":
         device = yaml.safe_load(f)
         for dev in device:
             pprint(sh_base_cfg_BM10(dev, commands))
+
