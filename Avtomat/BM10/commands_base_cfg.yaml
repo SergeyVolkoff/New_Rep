@@ -22,5 +22,6 @@
 "uci set wireless.radio0.disabled=0",
 "uci commit",
 "mwan3 stop",
-"uci commit"
+"uci commit",
+"/etc/init.d/network reload"
 ]    
