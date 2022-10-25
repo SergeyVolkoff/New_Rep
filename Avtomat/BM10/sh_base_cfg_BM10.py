@@ -20,7 +20,14 @@ def sh_base_cfg_BM10(device, commands,log = True):
             print(device['host'], "connected")
             for command in commands:
                 output = ssh.send_command(command)
-                result[command] =  output
+
+                match = re.search(r'(?P<comm_name>(\S+))=(?P<out>\S+)', output)
+                if match == None:
+                    result[command] = "bad comm\nor\nnot int"
+                else:
+                    result[match.group('comm_name')]=(match.group('out'))
+
+                #print(result)
         #pprint(result)
         c = Console()
         table = Table(show_lines=True)
@@ -52,4 +59,3 @@ if __name__ == "__main__":
         device = yaml.safe_load(f)
         for dev in device:
             pprint(sh_base_cfg_BM10(dev, commands))
-
