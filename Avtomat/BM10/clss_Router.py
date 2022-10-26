@@ -238,7 +238,7 @@ if __name__ == "__main__":
             #print(r1.show_int3G(device,"uci show network | grep 34G"))
             #print(r1.cfg_pass(device,commands="passwd"))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
-            print(r1.base_cfg(device, r1.commands_base_cfg))
+            #print(r1.base_cfg(device, r1.commands_base_cfg))
             # print (r1.base_cfg(device, r1.commands_802_1d_cfg))
             #print (r1.base_cfg(device, r1.commands_gre_config))
             #print (r1.base_cfg(device, r1.commands_Fwall_cfg))

@@ -1,6 +1,7 @@
 import re
 import yaml
 import netmiko
+
 from pprint import pprint
 from netmiko import (
     ConnectHandler,
@@ -9,7 +10,17 @@ from netmiko import (
 )
 from rich.table import Table
 from rich.console import Console
+from rich.theme import Theme
 
+
+my_colors = Theme( #добавляет цветовую градацию для rich
+    {
+        "success":"bold green",
+        "fail":"bold red",
+        "warning":"bold yellow"
+    }
+)
+console = Console(theme=my_colors)
 def sh_base_cfg_BM10(device, commands,log = True):
     if log:
         print(f"Connect to {device['host']}...")
@@ -17,7 +28,7 @@ def sh_base_cfg_BM10(device, commands,log = True):
     try:
         result={}
         with ConnectHandler(**device) as ssh:
-            print(device['host'], "connected")
+            console.print(device['host'], "connected",style='success')
             for command in commands:
                 output = ssh.send_command(command)
 
@@ -26,9 +37,7 @@ def sh_base_cfg_BM10(device, commands,log = True):
                     result[command] = "bad comm\nor\nnot int"
                 else:
                     result[match.group('comm_name')]=(match.group('out'))
-
-                #print(result)
-        #pprint(result)
+                print(result)
         c = Console()
         table = Table(show_lines=True)
         for r in "command output".split():
@@ -39,7 +48,7 @@ def sh_base_cfg_BM10(device, commands,log = True):
         #return " ".join(list(result.values()))
 
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
-        print("*"*5, "Error connection to:", device['host'], "*"*5)
+        console.print("*"*5, "Error connection to:", device['host'], "*"*5,style='fail')
 
 
 if __name__ == "__main__":
