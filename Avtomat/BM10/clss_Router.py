@@ -54,7 +54,7 @@ class Router():
                 self.commands_gre_config = yaml.safe_load(f5)
             with open("commands_Fwall_cfg.yaml") as f6:             # команды настройки firewall wan2(как замена порта)
                 self.commands_Fwall_cfg = yaml.safe_load(f6)
-            with open("commands_dmz_cfg.yaml") as f7:               # команды настройки DMZ
+            with open("commands_dmz_cfg.yaml") as f7:               # команды настройки DMZ доделать правило трафика!!!
                 self.commands_dmz_cfg = yaml.safe_load(f7)
 
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
