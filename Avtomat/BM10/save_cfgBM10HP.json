@@ -1,0 +1,1 @@
+{"network.wan": "interface", "network.wan.device": "'wan'", "network.wan.proto": "'dhcp'"}

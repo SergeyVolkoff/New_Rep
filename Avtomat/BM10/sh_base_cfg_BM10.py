@@ -1,3 +1,4 @@
+import ast
 import re
 import yaml
 import netmiko
@@ -33,28 +34,22 @@ def sh_base_cfg_BM10(device, commands,log = True):
             for command in commands:
                 result = {}
                 output = ssh.send_command(command)
+                output = output.replace('=', '":"')
+                output = output.replace('\n', '","')
+                output = ('{"' + output + '"}')         # доводим внешний вид до словаря
+                result = json.loads(output)         # переделываем строку в словарь
 
+        if "wan" in result:
 
-                output = output.replace('=', '" : "')
-                output = output.replace('\n', '",\n"')
-                output = ('"' + output+ '"')
-                print(output)
-
-
-                #result = {s.split('=')[0]: s.split()[1:] for s in output}
-
-                # for s in output:
-                #     tmp=s.split('=')
-                #     result[tmp[0]]=tmp[1:]
-                #print(result)
         c = Console()
         table = Table(show_lines=True)
         for r in "command output".split():
             table.add_column(r)
+
         for comm, output in result.items():
             table.add_row(comm,output)
         c.print(table)
-        #return " ".join(list(result.values()))
+
 
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         console.print("*"*5, "Error connection to:", device['host'], "*"*5,style='fail')
@@ -69,7 +64,7 @@ if __name__ == "__main__":
     # "uci show firewall.@defaults[0].flow_offloading",
     # "uci show firewall.@defaults[0].flow_offloading_hw",
     # "uci show wireless.default_radio0.ssid",
-    "uci show network",
+    "uci show network.wan",
     # "uci show network.lan",
     # "uci show network.@route[0]"
     ]

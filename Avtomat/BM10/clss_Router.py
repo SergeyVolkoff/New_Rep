@@ -54,6 +54,8 @@ class Router():
                 self.commands_gre_config = yaml.safe_load(f5)
             with open("commands_Fwall_cfg.yaml") as f6:             # команды настройки firewall wan2(как замена порта)
                 self.commands_Fwall_cfg = yaml.safe_load(f6)
+            with open("commands_dmz_cfg.yaml") as f7:               # команды настройки DMZ
+                self.commands_dmz_cfg = yaml.safe_load(f7)
 
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
@@ -197,9 +199,9 @@ class Router():
     """
     def base_cfg(self, device, commands_base_cfg):
         result = {}
-        for command in self.commands_base_cfg:
+        for command in self.commands_dmz_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            time.sleep(1)
+            time.sleep(2)
             if "" in output:
                 output = "command passed"
                 result[command] = output
@@ -238,7 +240,7 @@ if __name__ == "__main__":
             #print(r1.show_int3G(device,"uci show network | grep 34G"))
             #print(r1.cfg_pass(device,commands="passwd"))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
-            #print(r1.base_cfg(device, r1.commands_base_cfg))
+            print(r1.base_cfg(device, r1.commands_dmz_cfg))
             # print (r1.base_cfg(device, r1.commands_802_1d_cfg))
             #print (r1.base_cfg(device, r1.commands_gre_config))
             #print (r1.base_cfg(device, r1.commands_Fwall_cfg))

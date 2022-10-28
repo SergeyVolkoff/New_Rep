@@ -1,0 +1,88 @@
+
+[
+# /etc/config/network
+"uci del network.cfg030f15.ports",
+"uci add_list network.cfg030f15.ports='lan1'",
+"uci add_list network.cfg030f15.ports='lan2'",
+"uci add_list network.cfg030f15.ports='lan3'",
+"uci add_list network.cfg030f15.ports='lan4'",
+"uci add_list network.cfg030f15.ports='wan'",
+
+"uci add network bridge-vlan # =cfg07a1b0",
+"uci set network.@bridge-vlan[-1].device='br-lan'",
+"uci set network.@bridge-vlan[-1].vlan='1'",
+"uci add_list network.@bridge-vlan[-1].ports='lan1'",
+"uci add_list network.@bridge-vlan[-1].ports='lan2'",
+"uci add_list network.@bridge-vlan[-1].ports='lan3'",
+
+"uci add network bridge-vlan # =cfg08a1b0",
+"uci set network.@bridge-vlan[-1].device='br-lan'",
+"uci set network.@bridge-vlan[-1].vlan='2'",
+"uci add_list network.@bridge-vlan[-1].ports='lan4'",
+"uci add_list network.@bridge-vlan[-1].ports='wan:t'",
+
+
+"uci set network.lan.device='br-lan.1'",
+
+"uci set network.DMZ=interface",
+"uci set network.DMZ.proto='static'",
+"uci set network.DMZ.device='br-lan.2'",
+"uci set network.DMZ.ipaddr='100.1.1.1'",
+"uci set network.DMZ.netmask='255.255.255.0'",
+"uci del dhcp.lan.ra_slaac",
+
+
+
+# /etc/config/firewall
+"uci add firewall zone # =cfg0edc81",
+"uci set firewall.@zone[-1].name='DMZ'",
+"uci set firewall.@zone[-1].input='REJECT'",
+"uci set firewall.@zone[-1].output='ACCEPT'",
+"uci set firewall.@zone[-1].forward='REJECT'",
+"uci add_list firewall.@zone[-1].network='DMZ'",
+"uci add firewall forwarding # =cfg0fad58",
+"uci set firewall.@forwarding[-1].src='DMZ'",
+"uci set firewall.@forwarding[-1].dest='wan'",
+"uci add firewall forwarding # =cfg10ad58",
+"uci set firewall.@forwarding[-1].src='lan'",
+"uci set firewall.@forwarding[-1].dest='DMZ'",
+
+
+# /etc/config/firewall dmz+trafic rules
+"uci add firewall redirect # =cfg113837",
+"uci set firewall.@redirect[-1].dest='lan'",
+"uci set firewall.@redirect[-1].target='DNAT'",
+"uci set firewall.@redirect[-1].name='dmz-ping'",
+"uci add_list firewall.@redirect[-1].proto='icmp'",
+"uci set firewall.@redirect[-1].src='DMZ'",
+"uci set firewall.@redirect[-1].dest_ip='100.1.1.1'",
+"uci add firewall rule # =cfg1292bd",
+"uci set firewall.@rule[-1].name='dhcp-dns1'",
+"uci add_list firewall.@rule[-1].proto='udp'",
+"uci set firewall.@rule[-1].src='DMZ'",
+"uci add_list firewall.@rule[-1].dest_ip='192.168.1.1'",
+"uci set firewall.@rule[-1].dest_port='53'",
+"uci set firewall.@rule[-1].target='ACCEPT'",
+"uci set firewall.@rule[-1].dest='lan'",
+"uci add firewall rule # =cfg1392bd",
+"uci set firewall.@rule[-1].name='dhcp-dns'",
+"uci add_list firewall.@rule[-1].proto='udp'",
+"uci set firewall.@rule[-1].src='DMZ'",
+"uci add_list firewall.@rule[-1].dest_ip='192.168.1.1'",
+"uci set firewall.@rule[-1].dest_port='67'",
+"uci set firewall.@rule[-1].target='ACCEPT'",
+
+
+# /etc/config/dhcp
+"uci set dhcp.DMZ=dhcp",
+"uci set dhcp.DMZ.interface='DMZ'",
+"uci set dhcp.DMZ.start='100'",
+"uci set dhcp.DMZ.limit='150'",
+"uci set dhcp.DMZ.leasetime='12h'",
+"uci set dhcp.DMZ.start='2'",
+"uci commit",
+"mwan3 stop",
+"uci commit",
+"/etc/init.d/network reload",
+"/etc/init.d/firewall  reload",
+]
