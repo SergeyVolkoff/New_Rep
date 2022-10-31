@@ -33,21 +33,30 @@ def sh_base_cfg_BM10(device, commands,log = True):
             console.print(device['host'], "connected",style='success')
             for command in commands:
                 result = {}
-                output = ssh.send_command(command)
-                output = output.replace('=', '":"')
-                output = output.replace('\n', '","')
-                output = ('{"' + output + '"}')         # доводим внешний вид до словаря
-                result = json.loads(output)         # переделываем строку в словарь
+                output = ssh.send_command(command).split(',')
+                print(output)
+                for line in output:
+                    if 'network.lan' in line:
+                        interf = "lan"
+                        data_interf = line.split('=')
+                        result[interf]=data_interf
+            print(result)
 
-        if "wan" in result:
+
+                # output = output.replace('=', '":"')
+                # output = output.replace('\n', '","')
+                # output = ('{"' + output + '"}')         # доводим внешний вид до словаря
+                # result = json.loads(output)         # переделываем строку в словарь
+                #
+
+
 
         c = Console()
         table = Table(show_lines=True)
         for r in "command output".split():
             table.add_column(r)
-
         for comm, output in result.items():
-            table.add_row(comm,output)
+                table.add_row(comm, output)
         c.print(table)
 
 
@@ -64,7 +73,7 @@ if __name__ == "__main__":
     # "uci show firewall.@defaults[0].flow_offloading",
     # "uci show firewall.@defaults[0].flow_offloading_hw",
     # "uci show wireless.default_radio0.ssid",
-    "uci show network.wan",
+    "uci show network.lan",
     # "uci show network.lan",
     # "uci show network.@route[0]"
     ]
