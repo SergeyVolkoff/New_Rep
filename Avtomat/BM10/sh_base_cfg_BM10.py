@@ -38,13 +38,13 @@ def sh_base_cfg_BM10(device, commands,log = True):
                 for line in output:
                     if 'network.lan' in line:
                         interf = "lan"
-                        data_interf = (line.split('='))
-
-
+                        data_interf = ','.join(line.split('='))
                         result[interf]=(data_interf)
+                    if 'network.wan' in line:
+                        interf = "wan"
+                        data_interf = ','.join(line.split('='))
+                        result[interf] = (data_interf)
             print(result)
-
-
                 # output = output.replace('=', '":"')
                 # output = output.replace('\n', '","')
                 # output = ('{"' + output + '"}')         # доводим внешний вид до словаря
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     # "uci show firewall.@defaults[0].flow_offloading",
     # "uci show firewall.@defaults[0].flow_offloading_hw",
     # "uci show wireless.default_radio0.ssid",
-    "uci show network.lan",
+    "uci show network",
     # "uci show network.lan",
     # "uci show network.@route[0]"
     ]
