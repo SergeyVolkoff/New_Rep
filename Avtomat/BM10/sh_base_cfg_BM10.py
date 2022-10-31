@@ -38,8 +38,10 @@ def sh_base_cfg_BM10(device, commands,log = True):
                 for line in output:
                     if 'network.lan' in line:
                         interf = "lan"
-                        data_interf = line.split('=')
-                        result[interf]=data_interf
+                        data_interf = (line.split('='))
+
+
+                        result[interf]=(data_interf)
             print(result)
 
 
