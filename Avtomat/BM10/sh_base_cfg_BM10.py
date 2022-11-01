@@ -33,18 +33,32 @@ def sh_base_cfg_BM10(device, commands,log = True):
             console.print(device['host'], "connected",style='success')
             for command in commands:
                 result = {}
-                output = ssh.send_command(command).split(',')
+                output = ssh.send_command(command).split()
+
                 print(output)
                 for line in output:
                     if 'network.lan' in line:
+                        data_interf = (line.split('=')[1])
+                        print(data_interf)
                         interf = "lan"
-                        data_interf = ','.join(line.split('='))
-                        result[interf]=(data_interf)
-                    if 'network.wan' in line:
+                        result[data_interf] = interf
+                        #print(result)
+                    if 'network.wan.' in line:
                         interf = "wan"
-                        data_interf = ','.join(line.split('='))
-                        result[interf] = (data_interf)
-            print(result)
+                        data_interf = (line.split('=')[1])
+                        print('***',data_interf)
+                        result[data_interf] = interf
+                        #print(result)
+                    if 'network.@bridge' in line:
+                        interf = "bridge"
+                        data_interf = (line.split('=')[1])
+                        print('###', data_interf)
+                        result[data_interf] = interf
+                    # if 'firewall.@forwarding' in line:
+                    #     interf = "firewall\nforward"
+                    #     data_interf = ','.join(line.split('='))
+                    #     result[data_interf] = interf
+
                 # output = output.replace('=', '":"')
                 # output = output.replace('\n', '","')
                 # output = ('{"' + output + '"}')         # доводим внешний вид до словаря
