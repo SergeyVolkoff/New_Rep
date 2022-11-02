@@ -32,31 +32,24 @@ def sh_base_cfg_BM10(device, commands,log = True):
         with ConnectHandler(**device) as ssh:
             console.print(device['host'], "connected",style='success')
             for command in commands:
-                result = {}
-
+                temp = []
                 output = ssh.send_command(command).split('\n')
                 print(output)
                 #output = output.replace("'","")
-
                 #print(output)
                 for line in output:
-                    if 'network.lan' in line:
+
+                    if 'network.@device[0]' in line:
+                        interf = 'dev'
                         data_interf = (line.split('=')[1])
-                        print(data_interf)
-                        interf = "lan"
-                        result[data_interf] = interf
-                        #print(result)
-                    if 'network.wan.' in line:
-                        interf = "wan"
-                        data_interf = (line.split('=')[1])
-                        print('***',data_interf)
-                        result[data_interf] = interf
-                        #print(result)
-                    if 'network.@bridge' in line:
-                        interf = "bridge"
-                        data_interf = (line.split('=')[1])
-                        print('###', data_interf)
-                        result[data_interf] = interf
+                        temp.append(data_interf)
+                        temp1 = " ".join(map(str,temp))
+                        print(temp1)
+                        result = {}
+                        result[interf]=temp1
+                        print(result)
+
+
                     # if 'firewall.@forwarding' in line:
                     #     interf = "firewall\nforward"
                     #     data_interf = ','.join(line.split('='))
