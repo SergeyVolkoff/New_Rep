@@ -174,15 +174,15 @@ class Router():
     def show_int3G(self,device, command_sh_net):
         temp = self.ssh.send_config_set(command_sh_net)
         result = ""
-        for sec in temp:
-            if "34G.device" in temp:
+        for line in temp:
+            if "LTE.device" in temp:
                 name_intf = re.search(r'network.(\S+).device', temp).group()
                 result += name_intf
-                temp = self.ssh.send_command("ifconfig |grep -A 1 wwan0")
+                temp = self.ssh.send_command("ifconfig |grep -A 1 eth1")
 
                 if "addr:" in temp:
                     ip_int = re.search(r'inet addr:(\S+)', temp).group()
-                    result += ip_int
+                    result +=  ip_int
 
                 else:
                     result = name_intf
@@ -199,9 +199,9 @@ class Router():
     """
     def base_cfg(self, device, commands_base_cfg):
         result = {}
-        for command in self.commands_dmz_cfg:
+        for command in self.commands_base_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            time.sleep(2)
+            time.sleep(1)
             if "" in output:
                 output = "command passed"
                 result[command] = output
@@ -234,15 +234,14 @@ if __name__ == "__main__":
          for t in temp:
             device = dict(t)
             r1 = Router(**device)
-            #print(r1.ping_ip(device,r1.command_ping ))
-            #print(r1.reset_conf(device,r1.commands_to_reset_conf))
-            #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
-            #print(r1.show_int3G(device,"uci show network | grep 34G"))
-            #print(r1.cfg_pass(device,commands="passwd"))
-            #print(r1.cfg_LTE(device,r1.commands_cfg_3G))
-            print(r1.base_cfg(device, r1.commands_dmz_cfg))
-            # print (r1.base_cfg(device, r1.commands_802_1d_cfg))
-            #print (r1.base_cfg(device, r1.commands_gre_config))
-            #print (r1.base_cfg(device, r1.commands_Fwall_cfg))
-            #print(r1.send_sh_command(device,"uci show"))
-            #print(r1.send_sh_command("brctl stp br-lan yes"))
+            #print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
+            #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
+            #print(r1.cfg_LTE(device,r1.commands_cfg_3G))                    # Cfg LTE
+            #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
+            #print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
+            print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
+            # print (r1.base_cfg(device, r1.commands_802_1d_cfg))           # Cfg for 802d
+            #print (r1.base_cfg(device, r1.commands_gre_config))            # Cfg for test GRE
+            #print (r1.base_cfg(device, r1.commands_Fwall_cfg))             # Cfg for test firewall
+            #print(r1.send_sh_command(device,"uci show"))                   # send comm uci show"
+            #print(r1.send_sh_command("brctl stp br-lan yes"))              # send comm "brctl stp br-lan yes" ST
