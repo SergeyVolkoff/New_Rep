@@ -50,7 +50,7 @@ def sh_base_cfg_BM10(device, commands,log = True):
                         data_interf = (line.split('=')[1])     # сплитуем значение после знака равно
                         sp_wan.append(data_interf)             # добавляем полученное значение в список
                         str_wan = " ".join(map(str, sp_wan))  # объединяем список строк в строку
-                        result[interf] = str_wan              # делаем словарь из ключа и значения в строке
+                        result[interf] = str_wan +"\n"             # делаем словарь из ключа и значения в строке
 
                     """
                     Next: Firewall zone Wan and Lan
@@ -64,21 +64,21 @@ def sh_base_cfg_BM10(device, commands,log = True):
                                 data_interf = (line.split('=')[1])     # сплитуем значение после знака равно
                                 sp_fw.append(data_interf)             # добавляем полученное значение в список
                                 str_fw = " ".join(map(str, sp_fw))  # объединяем список строк в строку
-                                result[interf]= "LAN input" + str_fw              # делаем словарь из ключа и значения в строке
+                                result[interf]= "LAN input" + str_fw +"\n"             # делаем словарь из ключа и значения в строке
                             if "output" in line:
                                 data_interf = (line.split('=')[1])  # сплитуем значение после знака равно
                                 str_fw = []
                                 sp_fw = []
                                 sp_fw.append(data_interf)  # добавляем полученное значение в список
                                 str_fw = " ".join(map(str, sp_fw))  # объединяем список строк в строку
-                                result[interf] += "LAN output" + str_fw  # делаем словарь из ключа и значения в строке
+                                result[interf] += "LAN output" + str_fw +"\n" # делаем словарь из ключа и значения в строке
                             if "forward" in line:
                                 data_interf = (line.split('=')[1])     # сплитуем значение после знака равно
                                 str_fw = []
                                 sp_fw = []
                                 sp_fw.append(data_interf)             # добавляем полученное значение в список
                                 str_fw = " ".join(map(str, sp_fw))  # объединяем список строк в строку
-                                result[interf] += "LAN forward" + str_fw             # делаем словарь из ключа и значения в строке
+                                result[interf] += "LAN forward" + str_fw +"\n"            # делаем словарь из ключа и значения в строке
                     if 'firewall.@zone' in line:
                         if "[1]" in line:
                             interf = 'Firewall_zone_WAN'
@@ -88,21 +88,21 @@ def sh_base_cfg_BM10(device, commands,log = True):
                                 sp_fw = []
                                 sp_fw.append(data_interf)             # добавляем полученное значение в список
                                 str_fw = " ".join(map(str, sp_fw))  # объединяем список строк в строку
-                                result[interf]= "WAN input" + str_fw              # делаем словарь из ключа и значения в строке
+                                result[interf]= "WAN input" + str_fw+"\n"              # делаем словарь из ключа и значения в строке
                             if "output" in line:
                                 data_interf = (line.split('=')[1])  # сплитуем значение после знака равно
                                 str_fw = []
                                 sp_fw = []
                                 sp_fw.append(data_interf)  # добавляем полученное значение в список
                                 str_fw = " ".join(map(str, sp_fw))  # объединяем список строк в строку
-                                result[interf] += "WAN output" + str_fw  # делаем словарь из ключа и значения в строке
+                                result[interf] += "WAN output" + str_fw +"\n"  # делаем словарь из ключа и значения в строке
                             if "forward" in line:
                                 data_interf = (line.split('=')[1])     # сплитуем значение после знака равно
                                 str_fw = []
                                 sp_fw = []
                                 sp_fw.append(data_interf)             # добавляем полученное значение в список
                                 str_fw = " ".join(map(str, sp_fw))  # объединяем список строк в строку
-                                result[interf] += "WAN forward" + str_fw             # делаем словарь из ключа и значения в строке
+                                result[interf] += "WAN forward" + str_fw +"\n"            # делаем словарь из ключа и значения в строке
                     """
                     END Firewall zone Wan and Lan
                     """
@@ -119,7 +119,7 @@ def sh_base_cfg_BM10(device, commands,log = True):
                         data_interf = (line.split('=')[1])  # сплитуем значение после знака равно
                         sp_dev.append(data_interf)            # добавляем полученное значение в список
                         str_dev = " ".join(map(str,sp_dev))     # объединяем список строк в строку
-                        result[interf]=str_dev                # делаем словарь из ключа и значения в строке
+                        result[interf]=str_dev+"\n"                # делаем словарь из ключа и значения в строке
 
                     if 'network.@bridge-vlan[0]' in line:
                         if 'network.@bridge-vlan[0].vlan'in line:
@@ -128,7 +128,7 @@ def sh_base_cfg_BM10(device, commands,log = True):
                         data_interf = (line.split('=')[1])  # сплитуем значение после знака равно
                         sp_dev_v.append(data_interf)            # добавляем полученное значение в список
                         str_dev_v = " ".join(map(str,sp_dev_v))     # объединяем список строк в строку
-                        result[interf]=str_dev_v                # делаем словарь из ключа и значения в строке
+                        result[interf]=str_dev_v +"\n"                # делаем словарь из ключа и значения в строке
 
                     if 'network.@bridge-vlan[1]' in line:
                         if 'network.@bridge-vlan[1].vlan'in line:
@@ -137,22 +137,22 @@ def sh_base_cfg_BM10(device, commands,log = True):
                         data_interf = (line.split('=')[1])  # сплитуем значение после знака равно
                         sp_dev_v1.append(data_interf)            # добавляем полученное значение в список
                         str_dev_v1 = " ".join(map(str,sp_dev_v1))     # объединяем список строк в строку
-                        result[interf]=str_dev_v1                # делаем словарь из ключа и значения в строке
+                        result[interf]=str_dev_v1  +"\n"             # делаем словарь из ключа и значения в строке
 
-
-
+        list_key = list(result.keys())
+        print(list_key)
+        all_key = " ".join(list_key)
+        print(type(all_key))
 
         c = Console()
-        table = Table(show_lines=True)
-        for r in "Interfaces Values".split():
+        table = Table()
+        for r in all_key.split():
             table.add_column(r)
-        for comm, output in result.items():
-                table.add_row(comm, output + "\n")
+        # for comm, output in result.items():
+        #         table.add_row(comm, output )
         c.print(table)
 
-        # list_key = list(result.keys())
-        # all_key = " ".join(list_key)
-        # print(all_key)
+
         # all_val = " ".join(list(result.values()))
         # for key in all_key.split():
         #     print(key)
