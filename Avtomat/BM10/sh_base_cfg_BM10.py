@@ -139,17 +139,22 @@ def sh_base_cfg_BM10(device, commands,log = True):
                         str_dev_v1 = " ".join(map(str,sp_dev_v1))     # объединяем список строк в строку
                         result[interf]=str_dev_v1  +"\n"             # делаем словарь из ключа и значения в строке
 
+        pprint(result)
         list_key = list(result.keys())
-        print(list_key)
         all_key = " ".join(list_key)
-        print(type(all_key))
+
+        all_values = " ".join(list(result.values()))
+       # print(all_values)
 
         c = Console()
         table = Table()
-        for r in all_key.split():
-            table.add_column(r)
-        # for comm, output in result.items():
-        #         table.add_row(comm, output )
+
+        for name,date in result.items():
+            table.add_column(name)
+        for name, date in result.items():
+            table.add_row(date)
+
+
         c.print(table)
 
 
