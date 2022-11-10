@@ -140,18 +140,16 @@ def sh_base_cfg_BM10(device, commands,log = True):
                         result[interf]=str_dev_v1  +"\n"             # делаем словарь из ключа и значения в строке
 
         pprint(result)
-        # list_value = list(result.values())
-        # str_value = ','.join(list_value)
-        # pprint(list_value)
-        test = ("dfg", "sdf")
-        print(type(test))
+        list_value = list(result.values())
         c = Console()
         table = Table()
-
         for name,date in result.items():
             table.add_column(name)
-        for d in test:
-            table.add_row(d)
+        print(len(list_value))
+        table.add_row(list_value[0], list_value[1],list_value[2],list_value[3],list_value[4])
+
+
+
 
         c.print(table)
 
