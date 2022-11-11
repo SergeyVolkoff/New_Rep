@@ -145,9 +145,11 @@ def sh_base_cfg_BM10(device, commands,log = True):
         table = Table()
         for name,date in result.items():
             table.add_column(name)
-        print(len(list_value))
-        table.add_row(list_value[0], list_value[1],list_value[2],list_value[3],list_value[4])
 
+        table.add_row(list_value[0], list_value[1],list_value[2],list_value[3],list_value[4])
+        # a=0
+        # while a<len(list_value):
+        #     print(list_value[0]+[1])
 
 
 
