@@ -376,10 +376,10 @@ if __name__ == "__main__":
             r1 = Router(**device)
             #print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
-            #print(r1.cfg_LTE(device,r1.commands_cfg_3G))                    # Cfg LTE
+            print(r1.cfg_LTE(device,r1.commands_cfg_3G))                    # Cfg LTE
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
             #print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
-            print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
+            #print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
             # print (r1.base_cfg(device, r1.commands_802_1d_cfg))           # Cfg for 802d
             #print (r1.base_cfg(device, r1.commands_gre_config))            # Cfg for test GRE
             #print (r1.base_cfg(device, r1.commands_Fwall_cfg))             # Cfg for test firewall

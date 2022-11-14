@@ -22,22 +22,26 @@ my_colors = Theme( #добавляет цветовую градацию для 
         "warning":"bold yellow"
     }
 )
+
 console = Console(theme=my_colors)
+
 def sh_base_cfg_BM10(device, commands,log = True):
     if log:
-        print(f"Connect to {device['host']}...")
+        console.print(f"Connect to {device['host']}...",style = "warning")
 
     try:
 
         with ConnectHandler(**device) as ssh:
-            console.print(device['host'], "connected",style='success')
+            console.print(device['host'], "connected!",style='success')
             for command in commands:
                 sp_dev = []
                 sp_lan =[]
                 sp_wan = []
-
+                sp_lte = []
                 sp_dev_v=[]
                 sp_dev_v1=[]
+                sp_wire = []
+                sp_hn = []
                 result = {}
                 output = ssh.send_command(command).split('\n')
                 # output = output.replace('=', '":"')
@@ -45,13 +49,31 @@ def sh_base_cfg_BM10(device, commands,log = True):
                 # output = ('{"' + output + '"}')         # доводим внешний вид до словаря
                 # result = json.loads(output)         # переделываем строку в словарь
                 for line in output:
+                    if '.hostname' in line:
+                        interf = 'Host \nname'
+                        data_interf = (line.split('=')[1])     # сплитуем значение после знака равно
+                        sp_hn.append(data_interf)             # добавляем полученное значение в список
+                        str_hn = " ".join(map(str, sp_hn))  # объединяем список строк в строку
+                        result[interf] = str_hn +"\n"             # делаем словарь из ключа и значения в строке
+                    if 'network.LTE.' in line:
+                        interf = 'LTE'
+                        data_interf = (line.split('=')[1])     # сплитуем значение после знака равно
+                        sp_lte.append(data_interf)             # добавляем полученное значение в список
+                        str_lte = " ".join(map(str, sp_lte))  # объединяем список строк в строку
+                        result[interf] = str_lte +"\n"             # делаем словарь из ключа и значения в строке
                     if 'network.wan.' in line:
                         interf = 'WAN'
                         data_interf = (line.split('=')[1])     # сплитуем значение после знака равно
                         sp_wan.append(data_interf)             # добавляем полученное значение в список
                         str_wan = " ".join(map(str, sp_wan))  # объединяем список строк в строку
                         result[interf] = str_wan +"\n"             # делаем словарь из ключа и значения в строке
-
+                    if 'wireless.default_radio' in line:
+                        if "ssid" in line:
+                            interf = 'Wireless'
+                            data_interf = (line.split('=')[1])  # сплитуем значение после знака равно
+                            sp_wire.append(data_interf)  # добавляем полученное значение в список
+                            str_wire = " ".join(map(str, sp_wire))  # объединяем список строк в строку
+                            result[interf] = str_wire + "\n"  # делаем словарь из ключа и значения в строке
                     """
                     Next: Firewall zone Wan and Lan
                     """
@@ -112,7 +134,7 @@ def sh_base_cfg_BM10(device, commands,log = True):
                         data_interf = (line.split('=')[1])     # сплитуем значение после знака равно
                         sp_lan.append(data_interf)             # добавляем полученное значение в список
                         str_lan = " ".join(map(str, sp_lan))  # объединяем список строк в строку
-                        result[interf] = str_lan              # делаем словарь из ключа и значения в строке
+                        result[interf] = str_lan +"\n"             # делаем словарь из ключа и значения в строке
 
                     if 'network.@device[0].' in line:
                         interf = 'device'
@@ -139,15 +161,18 @@ def sh_base_cfg_BM10(device, commands,log = True):
                         str_dev_v1 = " ".join(map(str,sp_dev_v1))     # объединяем список строк в строку
                         result[interf]=str_dev_v1  +"\n"             # делаем словарь из ключа и значения в строке
 
-        pprint(result)
         list_value = list(result.values())
         c = Console()
         table = Table()
         for name,date in result.items():
             table.add_column(name)
 
-        table.add_row(list_value[0], list_value[1],list_value[2],list_value[3],list_value[4])
-        c.print(table)
+        table.add_row(
+            list_value[0], list_value[1],list_value[2],
+            list_value[3],list_value[4],list_value[5],
+            list_value[6],list_value[7]
+        )
+        c.print(table )
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         console.print("*"*5, "Error connection to:", device['host'], "*"*5,style='fail')
 
