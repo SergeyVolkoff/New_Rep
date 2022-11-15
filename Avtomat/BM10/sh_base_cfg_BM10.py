@@ -163,23 +163,25 @@ def sh_base_cfg_BM10(device, commands,log = True):
                         result[interf]=str_dev_v1  +"\n"             # делаем словарь из ключа и значения в строке
 
         list_value = list(result.values())
-        str_value = ", ".join(list_value)
+        str_value = ', '.join(list_value)
 
         c = Console()
         table = Table()
         for name,date in result.items():
             table.add_column(name)
-        # for name,date in result.items():
-        #     table.add_row(date)
-        table.add_row(list_value[0], list_value[1],list_value[2],list_value[3],list_value[4],list_value[5],list_value[6])
+        col_val = len(list_value)
+        # table.add_row(
+        #     list_value[0], list_value[1],list_value[2],
+        #     list_value[3],list_value[4],list_value[5],
+        #     list_value[6]
+        # )
         c.print(table )
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         console.print("*"*5, "Error connection to:", device['host'], "*"*5,style='fail')
 
 if __name__ == "__main__":
     commands = [
-    "uci show",
-    "netstat -rn"
+    "uci show"
     ]
     with open("BM10_LTE.yaml")as f:
         device = yaml.safe_load(f)
