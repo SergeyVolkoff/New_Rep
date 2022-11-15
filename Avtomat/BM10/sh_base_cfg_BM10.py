@@ -179,6 +179,7 @@ def sh_base_cfg_BM10(device, commands,log = True):
 if __name__ == "__main__":
     commands = [
     "uci show",
+    "netstat -rn"
     ]
     with open("BM10_LTE.yaml")as f:
         device = yaml.safe_load(f)
