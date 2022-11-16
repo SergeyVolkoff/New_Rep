@@ -29,17 +29,19 @@ def sh_iproute_BM10(device, commands,log = True):
         with ConnectHandler(**device) as ssh:
             console.print(device['host'], "connected!",style='success')
             for command in commands:
-                output = ssh.send_command(command)
-                result = re.finditer()
-                print(output)
+                if command == "route":
+                    output = ssh.send_command(command)
+                    console.print(output, style='success')
+                else:
+                    break
 
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         console.print("*"*5, "Error connection to:", device['host'], "*"*5,style='fail')
 
 if __name__ == "__main__":
     commands = [
-
-    "netstat -rn"
+    "route",
+    "show network"
     ]
     with open("BM10_LTE.yaml")as f:
         device = yaml.safe_load(f)
