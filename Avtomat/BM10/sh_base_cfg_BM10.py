@@ -96,12 +96,12 @@ def sh_base_cfg_BM10(device, commands,log = True):
                                     str_fw = " ".join(map(str, sp_fw))  # объединяем список строк в строку
                                     result[interf]= "LAN input" + str_fw +"\n"             # делаем словарь из ключа и значения в строке
                                 if "output" in line:
-                                    data_interf = (line.split('=')[1])  # сплитуем значение после знака равно
                                     str_fw = []
                                     sp_fw = []
+                                    data_interf = (line.split('=')[1])  # сплитуем значение после знака равно
                                     sp_fw.append(data_interf)  # добавляем полученное значение в список
                                     str_fw = " ".join(map(str, sp_fw))  # объединяем список строк в строку
-                                    result[interf] += "LAN output" + str_fw +"\n" # делаем словарь из ключа и значения в строке
+                                    result[interf] = "LAN output" + str_fw +"\n" # делаем словарь из ключа и значения в строке
                                 if "forward" in line:
                                     data_interf = (line.split('=')[1])     # сплитуем значение после знака равно
                                     str_fw = []
@@ -125,7 +125,7 @@ def sh_base_cfg_BM10(device, commands,log = True):
                                     sp_fw = []
                                     sp_fw.append(data_interf)  # добавляем полученное значение в список
                                     str_fw = " ".join(map(str, sp_fw))  # объединяем список строк в строку
-                                    result[interf] += "WAN output" + str_fw +"\n"  # делаем словарь из ключа и значения в строке
+                                    result[interf] = "WAN output" + str_fw +"\n"  # делаем словарь из ключа и значения в строке
                                 if "forward" in line:
                                     data_interf = (line.split('=')[1])     # сплитуем значение после знака равно
                                     str_fw = []
@@ -165,9 +165,9 @@ def sh_base_cfg_BM10(device, commands,log = True):
                             sp_dev_v1.append(data_interf)            # добавляем полученное значение в список
                             str_dev_v1 = " ".join(map(str,sp_dev_v1))     # объединяем список строк в строку
                             result[interf]=str_dev_v1  +"\n"             # делаем словарь из ключа и значения в строке
-            # if command == "route":
-            #     output = ssh.send_command(command)
-            #     console.print(output, style='success')
+            if command == "route":
+                output = ssh.send_command(command)
+                #console.print(output, style='success')
         list_value = list(result.values())
         str_value = ', '.join(list_value)
 
@@ -193,4 +193,4 @@ if __name__ == "__main__":
     with open("BM10_LTE.yaml")as f:
         device = yaml.safe_load(f)
         for dev in device:
-            pprint(sh_base_cfg_BM10(dev, commands))
+            print(sh_base_cfg_BM10(dev, commands))
