@@ -1,5 +1,5 @@
 [
-"uci set system.@system[0].hostname='DUT'",
+"uci set system.@system[0].hostname='DUT_7621'",
 "uci set system.ntp.server='0.ntp2.stratum2.ru'",
 "uci set system.@system[0].zonename='Europe/Minsk'",
 "uci set system.@system[0].timezone='<+03>-3'",
@@ -24,8 +24,8 @@
 "uci add_list network.cfg030f15.ports='lan2'",
 "uci add_list network.cfg030f15.ports='lan3'",
 "uci add_list network.cfg030f15.ports='lan4'",
-"uci set network.lan.ipaddr='192.168.1.4'",
-"uci set wireless.default_radio0.ssid='DUT'",
+"uci set network.lan.ipaddr='192.168.1.1'",
+"uci set wireless.default_radio0.ssid='DUT_7621'",
 "uci set wireless.default_radio0.encryption='psk2'" ,
 "uci set wireless.default_radio0.key='12345678'" ,
 "uci set wireless.radio0.disabled=0",

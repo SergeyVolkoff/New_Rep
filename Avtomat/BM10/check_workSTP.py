@@ -19,9 +19,11 @@ def check_workSTP(comm):
             device = dict(t)
             r1 = Router(**device)
             print(r1)
+
     try:
 
-        r1.send_sh_command(device,"/etc/init.d/log restart")         #очищаем логи
+        r1.send_sh_command(device, "/etc/init.d/log restart")  # очищаем логи
+        print("log clear!input cable")
         print(" Для проверки нужно кольцо или избыточный линк на 3 и 4 портах, ждем 10 сек")
         time.sleep(12)
         temp = r1.send_sh_command(device, comm)                      #вызываем логи

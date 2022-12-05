@@ -31,6 +31,6 @@ def check_rootSTP(comm):
     except ValueError as err:
         return False
 
-# if __name__ == "__main__":
-#     result = check_rootSTP("brctl showstp br-lan")
-#     print(result)
+if __name__ == "__main__":
+    result = check_rootSTP("brctl showstp br-lan")
+    print(result)
