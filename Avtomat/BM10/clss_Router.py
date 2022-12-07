@@ -58,6 +58,8 @@ class Router():
                 self.commands_Fwall_cfg = yaml.safe_load(f6)
             with open("commands_dmz_cfg.yaml") as f7:               # команды настройки DMZ доделать правило трафика!!!
                 self.commands_dmz_cfg = yaml.safe_load(f7)
+            with open("commands_reset_cfg.yaml") as f8:               # команды настройки DMZ доделать правило трафика!!!
+                self.commands_reset_cfg = yaml.safe_load(f8)
 
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
@@ -268,8 +270,10 @@ class Router():
     без импорта
     """
     def reset_conf(self,device, comm_reset_conf):
-        result_reset=self.ssh.send_config_set(self.commands_to_reset_conf)
-        return result_reset
+        output = self.ssh.send_command("system.@system[0].hostname")
+        if "DUT" in output:
+            result_reset=self.ssh.send_config_set(self.commands_to_reset_conf)
+            return result_reset
     """
     ФУНКЦИЯ настройки 3G, с ребутом уср-ва.
     без импорта    """
@@ -337,11 +341,11 @@ class Router():
     """
     ФУНКЦИЯ настройки базового конфига
     """
-    def base_cfg(self, device, commands_dmz_cfg):
+    def base_cfg(self, device, commands_base_cfg):
         result = {}
-        for command in self.commands_802_1d_cfg:
+        for command in self.commands_base_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            #time.sleep(1)
+            #time.sleep(3) # только для 802
             if "" in output:
                 output = "command passed"
                 result[command] = output
@@ -349,6 +353,10 @@ class Router():
                 output = "bad command"
                 result[command] = output
         return result
+
+
+
+
     '''
     Класс и функция проверки ошибок - дописать
     '''
@@ -378,9 +386,10 @@ if __name__ == "__main__":
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))                    # Cfg LTE
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
-            #print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
-            #print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
-            print (r1.base_cfg(device, r1.commands_802_1d_cfg))           # Cfg for 802d (STP)
+            print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
+            print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
+
+            #print (r1.base_cfg(device, r1.commands_802_1d_cfg))           # Cfg for 802d (STP)
             #print (r1.base_cfg(device, r1.commands_dmz_cfg))                # Cfg for DMZ
             #print (r1.base_cfg(device, r1.commands_gre_config))            # Cfg for test GRE
             #print (r1.base_cfg(device, r1.commands_Fwall_cfg))             # Cfg for test firewall
