@@ -345,7 +345,6 @@ class Router():
         result = {}
         for command in self.commands_base_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            #time.sleep(3) # только для 802
             if "" in output:
                 output = "command passed"
                 result[command] = output
@@ -353,7 +352,18 @@ class Router():
                 output = "bad command"
                 result[command] = output
         return result
-
+    def base_802_cfg(self, device, commands_802_1d_cfg):
+        result = {}
+        for command in self.commands_802_1d_cfg:
+            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            time.sleep(3) # только для 802
+            if "" in output:
+                output = "command passed"
+                result[command] = output
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                result[command] = output
+        return result
 
 
 
@@ -386,10 +396,9 @@ if __name__ == "__main__":
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))                    # Cfg LTE
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
-            print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
-            print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
-
-            #print (r1.base_cfg(device, r1.commands_802_1d_cfg))           # Cfg for 802d (STP)
+            #print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
+            #print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
+            print (r1.base_802_cfg(device, r1.commands_802_1d_cfg))           # Cfg for 802d (STP)
             #print (r1.base_cfg(device, r1.commands_dmz_cfg))                # Cfg for DMZ
             #print (r1.base_cfg(device, r1.commands_gre_config))            # Cfg for test GRE
             #print (r1.base_cfg(device, r1.commands_Fwall_cfg))             # Cfg for test firewall

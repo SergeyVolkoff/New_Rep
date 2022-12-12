@@ -34,5 +34,4 @@
 "uci commit",
 "mwan3 stop",
 "uci commit",
-"reboot"
 ]
