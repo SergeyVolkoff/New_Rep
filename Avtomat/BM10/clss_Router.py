@@ -29,12 +29,13 @@ my_colors = Theme( #добавляет цветовую градацию для 
 console = Console(theme=my_colors)
 
 class Router():
-    def __init__(self, device_type, host, username, password, timeout, **kwargs):
+    def __init__(self, device_type, host, username, timeout, password,  **kwargs):
         try:
             with open("BM10_LTE.yaml") as f2:
                 temp = yaml.safe_load(f2)
                 for t in temp:
                     device = dict(t)
+
             self.ssh = ConnectHandler(**device)
             self.ip = host
             self.name = username
@@ -214,6 +215,7 @@ class Router():
      без импорта
     """
     def cfg_pass (self,device, commands, log=True):
+
         if log:
             console.print(f"Connect to {device['host']}...",style="success") # style переменная rich, назначает цвет выводу
         result = ''
@@ -365,8 +367,18 @@ class Router():
                 result[command] = output
         return result
 
-
-
+    def utilCPU(self, device):
+        result = {}
+        for command in self.commands_utilCPU_cfg:
+            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            time.sleep(3)  # только для 802
+            if "" in output:
+                output = "command passed"
+                result[command] = output
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                result[command] = output
+        return result
     '''
     Класс и функция проверки ошибок - дописать
     '''
@@ -396,7 +408,7 @@ if __name__ == "__main__":
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))                    # Cfg LTE
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
-            #print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
+            print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
             #print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
             #print (r1.base_802_cfg(device, r1.commands_802_1d_cfg))           # Cfg for 802d (STP)
             #print (r1.base_cfg(device, r1.commands_dmz_cfg))                # Cfg for DMZ

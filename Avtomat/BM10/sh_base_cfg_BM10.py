@@ -60,6 +60,8 @@ def sh_base_cfg_BM10(device, commands,log = True):
                             sp_hn.append(data_interf)             # добавляем полученное значение в список
                             str_hn = " ".join(map(str, sp_hn))  # объединяем список строк в строку
                             result[interf] = str_hn +"\n"             # делаем словарь из ключа и значения в строке
+                            if 'BWOS' in data_interf:
+                                console.print("No base cfg!", style='fail')
                         # 2.LTE status
                         if 'network.LTE.' in line:
                             interf = 'LTE'
