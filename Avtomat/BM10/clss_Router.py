@@ -61,8 +61,11 @@ class Router():
                 self.commands_dmz_cfg = yaml.safe_load(f7)
             with open("commands_reset_cfg.yaml") as f8:             # команды настройки reset
                 self.commands_reset_cfg = yaml.safe_load(f8)
-            with open("commands_sh_base.yaml") as f9:                    # команды настройки base_cfg
+            with open("commands_sh_base.yaml") as f9:               # команды настройки base_cfg
                 self.commands_sh_base = yaml.safe_load(f9)
+
+            with open("commands_vlan_cfg.yaml") as f10:              # команды настройки vlan_cfg
+                self.commands_vlan_cfg = yaml.safe_load(f10)
 
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
@@ -151,10 +154,9 @@ class Router():
             print (output)
 
     """
-     !!!!! ДОДЕЛАТЬ!!!!
       ФУНКЦИЯ просмотра базового конфига,вывод в виде таблицы
     """
-    def sh_base_cfg_BM10(device, commands_sh_base, log=True):
+    def sh_base_cfg_BM10(self, device, commands_sh_base, log=True):
         if log:
             console.print(f"Connect to {device['host']}...", style="warning")
 
@@ -162,9 +164,9 @@ class Router():
 
             with ConnectHandler(**device) as ssh:
                 console.print(device['host'], "connected!", style='success')
-                for command in commands_sh_base:
+                for command in self.commands_sh_base:
                     if command == "route":
-                        output = ssh.send_command(command)
+                        output = self.ssh.send_command(command)
                         console.print(output, style='success')
                     else:
                         sp_dev = []
@@ -176,7 +178,7 @@ class Router():
                         sp_wire = []
                         sp_hn = []
                         result = {}
-                        output = ssh.send_command(command).split('\n')
+                        output = self.ssh.send_command(command).split('\n')
                         # output = output.replace('=', '":"')
                         # output = output.replace('\n', '","')
                         # output = ('{"' + output + '"}')         # доводим внешний вид до словаря
@@ -303,7 +305,7 @@ class Router():
                                 str_dev_v1 = " ".join(map(str, sp_dev_v1))  # объединяем список строк в строку
                                 result[interf] = str_dev_v1 + "\n"  # делаем словарь из ключа и значения в строке
                 if command == "route":
-                    output = ssh.send_command(command)
+                    output = self.ssh.send_command(command)
                     # console.print(output, style='success')
             list_value = list(result.values())
             str_value = ', '.join(list_value)
@@ -322,11 +324,6 @@ class Router():
         except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
             console.print("*" * 5, "Error connection to:", device['host'], "*" * 5, style='fail')
 
-
-        commands = [
-            "uci show",
-            "route"
-        ]
 
     """
     ФУНКЦИЯ просмотра интерфейса 3G, с проверкой выдачи адреса
@@ -385,6 +382,28 @@ class Router():
                 result[command] = output
         return result
 
+    """
+            ФУНКЦИЯ настройки vlan- конфига
+            """
+
+    def vlan_cfg(self, device, commands_vlan_cfg):
+        result = {}
+        for command in self.commands_vlan_cfg:
+
+            output = self.ssh.send_command(command, expect_string="", read_timeout=3)
+            # if "mwan3" in command:
+            #     time.sleep(3)  # только для vlan из-за задержки ответа
+            if "tracking is active" in output:
+                #output = self.ssh.send_command(command="mwan3 stop")
+                print("mwan active!")
+            if "" in output:
+                output = "command passed"
+                result[command] = output
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                result[command] = output
+        return result
+
     def utilCPU(self, device):
         result = {}
         for command in self.commands_utilCPU_cfg:
@@ -424,10 +443,11 @@ if __name__ == "__main__":
             r1 = Router(**device)
             #print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
-            print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg
+            print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))                   # Cfg LTE
             #print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
+            #print(r1.vlan_cfg(device,r1.commands_vlan_cfg))                # Cfg vlan
             #print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
             #print (r1.base_802_cfg(device, r1.commands_802_1d_cfg))        # Cfg for 802d (STP)
             #print (r1.base_cfg(device, r1.commands_dmz_cfg))               # Cfg for DMZ
