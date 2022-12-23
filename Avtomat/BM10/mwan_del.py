@@ -33,22 +33,26 @@ def mwan_del(device, commands,log = True):
             console.print(device['host'], "connected!", style='success')
             for command in commands:
                 result = {}
-                output = ssh.send_command(device, commands)
-                print(output)
+                output = ssh.send_config_set(commands)
 
                 if "tracking is active" in output:
                     #output = self.ssh.send_command(command="mwan3 stop")
                     print("mwan active!")
+                    output = ssh.send_command(command_string="mwan3 stop", read_timeout=10)
+                    result["mwan stop"]=output
 
                 elif "Usage: uci [<options>] <command> [<arguments>]" in output:
                     output = "bad command"
                     result = output
+                else:
+                    result=output
+                    print("not mwan")
         return result
     except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
         console.print("*"*5, "Error connection to:", device['host'], "*"*5,style='fail')
 if __name__ == "__main__":
     commands = [
-    "mwan3 status"
+    "mwan3 status",
     ]
     with open("BM10_LTE.yaml")as f:
         device = yaml.safe_load(f)
