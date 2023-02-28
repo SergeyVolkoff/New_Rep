@@ -63,7 +63,6 @@ class Router():
                 self.commands_reset_cfg = yaml.safe_load(f8)
             with open("commands_sh_base.yaml") as f9:               # команды настройки base_cfg
                 self.commands_sh_base = yaml.safe_load(f9)
-
             with open("commands_vlan_cfg.yaml") as f10:              # команды настройки vlan_cfg
                 self.commands_vlan_cfg = yaml.safe_load(f10)
 
@@ -447,11 +446,11 @@ if __name__ == "__main__":
             r1 = Router(**device)
             #print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
-            print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
+            #print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))                   # Cfg LTE
             #print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
-            #print(r1.vlan_cfg(device,r1.commands_vlan_cfg))                # Cfg vlan
+            print(r1.vlan_cfg(device,r1.commands_vlan_cfg))                # Cfg vlan
             #print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
             #print (r1.base_802_cfg(device, r1.commands_802_1d_cfg))        # Cfg for 802d (STP)
             #print (r1.base_cfg(device, r1.commands_dmz_cfg))               # Cfg for DMZ

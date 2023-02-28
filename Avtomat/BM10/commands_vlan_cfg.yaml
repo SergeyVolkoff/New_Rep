@@ -21,7 +21,7 @@
 "uci set wireless.default_radio0.key='12345678'" ,
 "uci set wireless.radio0.disabled=0",
 "uci commit",
-/etc/init.d/network reload,
+"/etc/init.d/network reload",
 "uci commit",
 "uci add network bridge-vlan # =cfg07a1b0 ",
 "uci set network.@bridge-vlan[-1].device='br-lan' ",
@@ -87,6 +87,6 @@
 "uci set firewall.@forwarding[-1].src='lan3' ",
 "uci set firewall.@forwarding[-1].dest='wan' ",
 "uci commit",
-"mwan3 status",
+"mwan3 stop",
 "reboot",
 ]
