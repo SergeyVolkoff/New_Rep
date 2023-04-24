@@ -9,7 +9,8 @@ from netmiko import (
 )
 from clss_Router import Router
 """
-Проверка зоны firewall, настраиваем 4 порт как ван, открываем инпут в firewall,  пингуем с соседа
+Проверка зоны firewall, настраиваем 4 порт как ван, 
+открываем инпут в firewall,  пингуем с соседа
 """
 def check_Fwall():
     with open("BM10_LTE.yaml")as f:
