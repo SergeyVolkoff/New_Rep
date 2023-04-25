@@ -17,10 +17,10 @@ def check_vln_cfg(comm):
             r1 =Router(**device)
     try:
         temp = r1.send_sh_command(device,comm)
-        if "bridge-vlan[1].vlan='2'" in temp:
+        if "bridge-vlan[1].ports='lan2'" in temp:
             return True
 
-        if "bridge-vlan[2].vlan='3'" in temp:
+        if "bridge-vlan[2].ports='lan3'" in temp:
             return True
         else:
             return False
