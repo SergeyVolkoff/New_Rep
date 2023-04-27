@@ -1,6 +1,8 @@
 #include <iostream>
+using namespace std;
 
 int main() {
-    std::cout << "Hello, world!" << std::endl;
+    setlocale(LC_ALL,"rus"); //Учит русскому!!
+    cout << "Hello, world  Оппа!" << endl;
     return 0;
 }
