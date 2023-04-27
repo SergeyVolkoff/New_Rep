@@ -65,6 +65,8 @@ class Router():
                 self.commands_sh_base = yaml.safe_load(f9)
             with open("commands_vlan_cfg.yaml") as f10:              # команды настройки vlan_cfg
                 self.commands_vlan_cfg = yaml.safe_load(f10)
+            with open("commands_cfg_WiFi_AP.yaml") as f11:          #  ко
+                self.commands_cfg_wifi_ap = yaml.safe_load(f11)
 
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
@@ -367,7 +369,7 @@ class Router():
 
     """
         ФУНКЦИЯ настройки stp- конфига
-        """
+    """
     def base_802_cfg(self, device, commands_802_1d_cfg):
         result = {}
         for command in self.commands_802_1d_cfg:
@@ -436,7 +438,20 @@ class ErrorInCommand(Exception):
         if error_in_cmd:
             raise ErrorInCommand(message.format(cmd=command, device=self.host, error=error_in_cmd.group('err')))
         print ()
-
+"""
+    ФУНКЦИЯ настройки Wifi_AP
+    """
+    def cfg_wifi_ap(self, device, commands_base_cfg):
+        result = {}
+        for command in self.commands_base_cfg:
+            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            if "" in output:
+                output = "command passed"
+                result[command] = output
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                result[command] = output
+        return result
 
 if __name__ == "__main__":
     with open("BM10_LTE.yaml")as f:
