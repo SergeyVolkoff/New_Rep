@@ -16,7 +16,7 @@ with open("BM10_LTE.yaml") as f:
     for t in temp:
         device = dict(t)
         r1 = Router(**device)
-def check_sup_ASIC(comm):
+def check_sup_ASIC(comm): # Проверка включена ли аппаратная обрботка трафика
     try:
         temp = r1.send_sh_command(device, comm)
         #print(temp)
@@ -24,14 +24,14 @@ def check_sup_ASIC(comm):
             return True
     except ValueError as err:
         return False
-def check_firewall(comm):
+def check_firewall(comm): # Включен ли файрвол на ван порту
     try:
         temp = r1.send_sh_command(device,comm)
         if "forward='ACCEPT'" in temp:
             return True
     except ValueError as err:
         return False
-def check_name_dev(comm):
+def check_name_dev(comm): # Проверка имени устр-ва
     try:
         temp = r1.send_sh_command(device, comm)
         if "DUT_7621" in temp:
