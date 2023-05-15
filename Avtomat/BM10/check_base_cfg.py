@@ -36,10 +36,38 @@ def check_name_dev(comm): # Проверка имени устр-ва
         temp = r1.send_sh_command(device, comm)
         if "DUT_7621" in temp:
             return True
-
-
     except ValueError as err:
         return False
-# if __name__ == "__main__":
-#      result = check_base_cfg("uci show")
-#      print(result)
+
+def check_time_zone (comm): # Проверка времени устр-ва
+    try:
+        temp= r1.send_sh_command(device,comm)
+
+        if "Europe/Moscow" in temp:
+            return True
+    except ValueError as err:
+        return False
+def check_wifi_name(comm):
+    try:
+        temp = r1.send_sh_command(device, comm)
+        if "DUT_7621" in temp:
+            return True
+    except ValueError as err:
+        return False
+
+def check_mwan3(com):
+
+        # temp=r1.send_sh_command(device,com)
+        temp= re.search(r'0.0.0.0/0',r1.send_sh_command(device,com))
+        if temp!=None:
+            temp_reg = temp.group()
+            print(temp_reg)
+            return False
+        else:
+            print(temp)
+            return True
+
+
+if __name__ == "__main__":
+     result = check_mwan3("mwan3 status")
+     print(result)
