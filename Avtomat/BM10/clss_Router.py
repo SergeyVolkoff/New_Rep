@@ -67,6 +67,8 @@ class Router():
                 self.commands_vlan_cfg = yaml.safe_load(f10)
             with open("commands_cfg_WiFi_AP.yaml") as f11:          #  команды настройки wifi_ap
                 self.commands_cfg_WiFi_AP = yaml.safe_load(f11)
+            with open("commands_cfg_WiFi_AP_KingKong.yaml") as f12:    # команды настройки wifi_ap2
+                self.commands_cfg_WiFi_AP_KingKong = yaml.safe_load(f12)
 
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
@@ -122,7 +124,8 @@ class Router():
     без импорта.
     """
     def ping_ip(self, device, command_ping):
-        ip_dest = '200.1.1.1'
+        #ip_dest = '200.1.1.1'
+        ip_dest = input("Input ip: ")
         command_ping = (self.word_ping + ip_dest + self.promo)
         print(command_ping)
         output = self.ssh.send_command(command_ping)
@@ -423,12 +426,28 @@ class Router():
         return result
 
     """
-       ФУНКЦИЯ настройки Wifi_AP
-       """
+       ФУНКЦИЯ настройки Wifi_AP 
+    """
 
     def cfg_WiFi_AP(self, device, commands_cfg_WiFi_AP):
         result = {}
         for command in self.commands_cfg_WiFi_AP:
+            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            if "" in output:
+                output = "command passed"
+                result[command] = output
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                result[command] = output
+        return result
+
+    """
+        ФУНКЦИЯ настройки Wifi_AP 2 - настраиваем мост с Bulat-Free
+    """
+
+    def cfg_WiFi_AP_KingKong(self, device, commands_cfg_WiFi_AP_KingKong):
+        result = {}
+        for command in self.commands_cfg_WiFi_AP_KingKong:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
             if "" in output:
                 output = "command passed"
@@ -464,7 +483,7 @@ if __name__ == "__main__":
          for t in temp:
             device = dict(t)
             r1 = Router(**device)
-            #print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
+            print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
@@ -478,4 +497,5 @@ if __name__ == "__main__":
             #print (r1.base_cfg(device, r1.commands_Fwall_cfg))             # Cfg for test firewall
             #print(r1.send_sh_command(device,"uci show"))                   # send comm uci show"
             #print(r1.send_sh_command("brctl stp br-lan yes"))              # send comm "brctl stp br-lan yes" ST
-            print(r1.cfg_WiFi_AP(device,r1.commands_cfg_WiFi_AP))           # Cfg wifi_ap
+            #print(r1.cfg_WiFi_AP(device,r1.commands_cfg_WiFi_AP))           # Cfg wifi_ap (1-й порт не раздает!!!)
+            #print(r1.cfg_WiFi_AP_KingKong(device,r1.commands_cfg_WiFi_AP_KingKong))    # Cfg wifi_ap_KingKong

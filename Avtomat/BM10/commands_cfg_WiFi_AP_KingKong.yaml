@@ -1,0 +1,22 @@
+[
+"uci del firewall.cfg02dc81.network",
+"uci add_list firewall.cfg02dc81.network='lan'",
+"uci del firewall.cfg03dc81.network",
+"uci add_list firewall.cfg03dc81.network='wan'",
+"uci add_list firewall.cfg03dc81.network='wan6'",
+"uci add_list firewall.cfg03dc81.network='Br_AP'",
+"uci add_list firewall.cfg03dc81.network='wwan'",
+
+"uci set network.wwan=interface",
+"uci set network.wwan.proto='dhcp'",
+
+"uci set wireless.wifinet2=wifi-iface",
+"uci set wireless.wifinet2.device='radio0'",
+"uci set wireless.wifinet2.mode='sta'",
+"uci set wireless.wifinet2.network='wwan'",
+"uci set wireless.wifinet2.ssid='KINGKONG 5 Pro'",
+"uci set wireless.wifinet2.encryption='psk2'",
+"uci set wireless.wifinet2.key='1!2850000'",
+"uci commit",
+"reboot"
+]
