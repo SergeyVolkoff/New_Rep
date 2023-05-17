@@ -39,10 +39,16 @@ def check_name_dev(comm): # Проверка имени устр-ва
     except ValueError as err:
         return False
 
+def check_ntp(comm):
+    try:
+        temp= r1.send_sh_command(device,comm)
+        if "ntp-servers" in temp:
+            return True
+    except ValueError as err:
+        return False
 def check_time_zone (comm): # Проверка времени устр-ва
     try:
         temp= r1.send_sh_command(device,comm)
-
         if "Europe/Moscow" in temp:
             return True
     except ValueError as err:

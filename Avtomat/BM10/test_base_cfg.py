@@ -8,7 +8,8 @@ from netmiko import (
     NetmikoAuthenticationException,
 )
 from clss_Router import Router
-from check_base_cfg import check_sup_ASIC, check_firewall, check_name_dev, check_time_zone,check_wifi_name,check_mwan3
+from check_base_cfg import check_sup_ASIC, check_firewall, \
+    check_name_dev, check_time_zone,check_wifi_name,check_mwan3,check_ntp
 
 def test_enable_support_ASIC():
     assert check_sup_ASIC(
@@ -22,9 +23,11 @@ def test_enable_firewall_zone_wan():
 def test_enable_name_device():
     assert check_name_dev("uci show system.@system[0].hostname") == True, "Name device is wrong"
 
-def test_check_time():
+def test_check_zone_time():
     assert check_time_zone("uci show system.@system[0].zonename") == True, "Time zone wrong"
 
+def test_check_ntp():
+    assert check_ntp("uci show system.ntp.server") == True, "NTP server not configure"
 def test_wifi_name():
     assert check_wifi_name("uci show wireless.default_radio0.ssid")==True, "Wifi name wrong"
 

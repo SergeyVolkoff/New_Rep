@@ -42,7 +42,7 @@ if __name__ == "__main__":
     commands = [
 
     "uci set system.@system[0].hostname='DUT_7621_rc1.2'",
-    "uci set system.ntp.server='0.ntp2.stratum2.ru'",
+    "uci set system.ntp.server='ntp0.ntp-servers.net'",
     "uci set system.@system[0].zonename='Europe/Minsk'",
     "uci set system.@system[0].timezone='<+03>-3'",
     "uci set firewall.@zone[1].forward='ACCEPT'",
