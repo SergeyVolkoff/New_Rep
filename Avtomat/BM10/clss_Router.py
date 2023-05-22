@@ -29,7 +29,7 @@ my_colors = Theme( #добавляет цветовую градацию для 
 console = Console(theme=my_colors)
 
 class Router():
-    def __init__(self, device_type, host, username, timeout, password,  **kwargs):
+    def __init__(self, device_type, host, username, timeout, password,ip_for_ping, **kwargs):
         try:
             with open("BM10_LTE.yaml") as f2:
                 temp = yaml.safe_load(f2)
@@ -43,7 +43,7 @@ class Router():
             self.promo = " -w 4"
             self.word_ping = "ping "
             self.command_ping = self.word_ping+self.promo
-
+            self.ip_dest = ip_for_ping
 
             with open ("commands_reset_cfg.yaml") as f1:            # команды сброса конфига
                 self.commands_to_reset_conf = yaml.safe_load(f1)
@@ -125,16 +125,16 @@ class Router():
     """
     def ping_ip(self, device, command_ping):
         #ip_dest = '200.1.1.1'
-        ip_dest = input("Input ip: ")
-        command_ping = (self.word_ping + ip_dest + self.promo)
+        #ip_dest = input("Input ip: ")
+        command_ping = (self.word_ping + self.ip_dest + self.promo)
         print(command_ping)
         output = self.ssh.send_command(command_ping)
         if "round-trip min/avg/max" in output:
             output = re.search(r'round-trip min/avg/max = (\S+ ..)', output).group()
-            result = ["IP", ip_dest, "destination  available :", output]
+            result = ["IP", self.ip_dest, "destination  available :", output]
             result = ' '.join(result)
         else:
-            result = ["Ip", ip_dest, "out of destination"]
+            result = ["Ip", self.ip_dest, "out of destination"]
             result = ' '.join(result)
         return result
         print(output)
