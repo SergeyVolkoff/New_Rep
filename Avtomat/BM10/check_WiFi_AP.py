@@ -35,12 +35,12 @@ def check_pingGW():     # Пингуем шлюз-телефон
         res_pingGW = r1.ping_ip(device,r1.command_ping)           # проверяем доступность шлюза (
         if "destination  available " in res_pingGW:               #если отвечает, значит все ок, возвращаем тру
             print("GW available!")
-            r1.ip_for_ping = '8.8.8.8'
-            res_ping_8 = r1.ping_ip(device,r1.command_ping)
-            if "destination  available" in res_ping_8:
-                print("Bridge OK")
-            else:
-                print("Bridge bad, GW - ok, but inet(8.8.8.8)- not available")
+            # r1.ip_for_ping = '8.8.8.8'
+            # res_ping_8 = r1.ping_ip(device,r1.command_ping)
+            # if "destination  available" in res_ping_8:
+            #     print("Bridge OK")
+            # else:
+            #     print("Bridge bad, GW - ok, but inet(8.8.8.8)- not available")
             return True
 
         else:
