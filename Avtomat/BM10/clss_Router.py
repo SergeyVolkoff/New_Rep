@@ -29,7 +29,7 @@ my_colors = Theme( #добавляет цветовую градацию для 
 console = Console(theme=my_colors)
 
 class Router():
-    def __init__(self, device_type, host, username, timeout, password,ip_for_ping, **kwargs):
+    def __init__(self, device_type, host, username, timeout, password,**kwargs):
         try:
             with open("BM10_LTE.yaml") as f2:
                 temp = yaml.safe_load(f2)
@@ -43,7 +43,7 @@ class Router():
             self.promo = " -w 4"
             self.word_ping = "ping "
             self.command_ping = self.word_ping+self.promo
-            self.ip_dest = ip_for_ping
+            self.ip_for_ping = '200.1.1.1'
 
             with open ("commands_reset_cfg.yaml") as f1:            # команды сброса конфига
                 self.commands_to_reset_conf = yaml.safe_load(f1)
@@ -124,17 +124,15 @@ class Router():
     без импорта.
     """
     def ping_ip(self, device, command_ping):
-        #ip_dest = '200.1.1.1'
-        #ip_dest = input("Input ip: ")
-        command_ping = (self.word_ping + self.ip_dest + self.promo)
+        command_ping = (self.word_ping + self.ip_for_ping + self.promo)
         print(command_ping)
         output = self.ssh.send_command(command_ping)
         if "round-trip min/avg/max" in output:
             output = re.search(r'round-trip min/avg/max = (\S+ ..)', output).group()
-            result = ["IP", self.ip_dest, "destination  available :", output]
+            result = ["IP", self.ip_for_ping, "destination  available :", output]
             result = ' '.join(result)
         else:
-            result = ["Ip", self.ip_dest, "out of destination"]
+            result = ["Ip", self.ip_for_ping, "out of destination"]
             result = ' '.join(result)
         return result
         print(output)
@@ -486,7 +484,7 @@ if __name__ == "__main__":
          for t in temp:
             device = dict(t)
             r1 = Router(**device)
-            #print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
+            print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
@@ -501,4 +499,4 @@ if __name__ == "__main__":
             #print(r1.send_sh_command(device,"uci show"))                   # send comm uci show"
             #print(r1.send_sh_command("brctl stp br-lan yes"))              # send comm "brctl stp br-lan yes" ST
             #print(r1.cfg_WiFi_AP(device,r1.commands_cfg_WiFi_AP))           # Cfg wifi_ap (1-й порт не раздает!!!)
-            print(r1.cfg_WiFi_AP_KingKong(device,r1.commands_cfg_WiFi_AP_KingKong))    # Cfg wifi_ap_KingKong
+            #print(r1.cfg_WiFi_AP_KingKong(device,r1.commands_cfg_WiFi_AP_KingKong))    # Cfg wifi_ap_KingKong
