@@ -484,7 +484,7 @@ if __name__ == "__main__":
          for t in temp:
             device = dict(t)
             r1 = Router(**device)
-            print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
+            #print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE

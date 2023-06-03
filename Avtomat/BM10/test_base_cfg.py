@@ -11,6 +11,7 @@ from clss_Router import Router
 from check_base_cfg import check_sup_ASIC, check_firewall, \
     check_name_dev, check_time_zone,check_wifi_name,check_mwan3,check_ntp
 
+@pytest.mark.smoke
 def test_enable_support_ASIC():
     assert check_sup_ASIC(
         "uci show firewall.@defaults[0].flow_offloading_hw") == True, "Firewall offloading_hw  disable"
@@ -19,7 +20,7 @@ def test_enable_support_ASIC():
 def test_enable_firewall_zone_wan():
     assert check_firewall("uci show firewall.@zone[1].forward") == True, "Firewall.@zone[1].forward disable"
 
-
+@pytest.mark.smoke
 def test_enable_name_device():
     assert check_name_dev("uci show system.@system[0].hostname") == True, "Name device is wrong"
 
