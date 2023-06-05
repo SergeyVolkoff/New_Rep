@@ -39,3 +39,4 @@ def test_mwan3_on():
 
 # def test_name_device():
 #     assert check_name_device("uci show system.@system[0].hostname")=True, "sdf"
+

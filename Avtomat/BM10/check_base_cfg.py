@@ -53,7 +53,7 @@ def check_time_zone (comm): # Проверка времени устр-ва
             return True
     except ValueError as err:
         return False
-def check_wifi_name(comm):
+def check_wifi_name(comm): # Проверка имени вайфай
     try:
         temp = r1.send_sh_command(device, comm)
         if "DUT_7621" in temp:
@@ -61,7 +61,7 @@ def check_wifi_name(comm):
     except ValueError as err:
         return False
 
-def check_mwan3(com):
+def check_mwan3(com):  # Проверка включен ли mwan3
 
         # temp=r1.send_sh_command(device,com)
         temp= re.search(r'0.0.0.0/0',r1.send_sh_command(device,com))
