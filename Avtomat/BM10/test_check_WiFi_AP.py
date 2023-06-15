@@ -11,7 +11,6 @@ from netmiko import (
 from clss_Router import Router
 from check_WiFi_AP import check_WiFi_AP,check_pingGW
 
-@pytest.mark.smoke
 def test_Wifi_AP():
     assert check_WiFi_AP("uci show network.Br_AP")==True, "No interface needed"
 
