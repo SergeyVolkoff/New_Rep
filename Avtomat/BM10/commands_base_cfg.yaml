@@ -12,16 +12,13 @@
 "uci set firewall.@defaults[0].synflood_protect='1'",
 "uci set firewall.@defaults[0].forward='ACCEPT'",
 "uci set firewall.@defaults[0].flow_offloading='1'",
-"uci set firewall.@defaults[0].flow_offloading_hw='1'",
-"uci set network.wan.proto='static'",
-"uci set network.wan.ipaddr='200.1.1.1'",
-"uci set network.wan.netmask='255.255.255.0'",    
+"uci set firewall.@defaults[0].flow_offloading_hw='1'",   
 "uci set wireless.default_radio0.ssid='DUT_7621'",
 "uci set wireless.default_radio0.encryption='psk2'" ,
 "uci set wireless.default_radio0.key='12345678'" ,
 "uci set wireless.radio0.disabled=0",
 "uci commit",
 "mwan3 stop",
-/etc/init.d/network reload,
 "uci commit",
+/etc/init.d/network reload
 ]    

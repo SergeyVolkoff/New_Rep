@@ -69,6 +69,8 @@ class Router():
                 self.commands_cfg_WiFi_AP = yaml.safe_load(f11)
             with open("commands_cfg_WiFi_AP_KingKong.yaml") as f12:    # команды настройки wifi_ap2
                 self.commands_cfg_WiFi_AP_KingKong = yaml.safe_load(f12)
+            with open("commands_pppoe_client_cfg.yaml") as f13:        # команды настройки РРРРоЕ-клиент
+                self.commands_pppoe_client_cfg = yaml.safe_load(f13)
 
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
@@ -360,6 +362,8 @@ class Router():
         result = {}
         for command in self.commands_base_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            if "mwan3" or "uci commit" in command:
+                time.sleep(3)
             if "" in output:
                 output = "command passed"
                 result[command] = output
@@ -458,6 +462,22 @@ class Router():
         print(temp_reboot, "i am in reboot..")
         return result
 
+    """
+    ФУНКЦИЯ настройки роутера как РРРоЕ-клиент на wan порту
+    """
+    def pppoe_client_cfg(self,  device, commands_pppoe_client_cfg):
+        result = {}
+        for command in self.commands_pppoe_client_cfg:
+            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            if "mwan3" or "uci commit" in command:
+                time.sleep(3)
+            if "" in output:
+                output = "command passed"
+                result[command] = output
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                result[command] = output
+        return result
     '''
     ПОСЛЕ этого класса не писать ф-ии для Роутер1 - object has no attribute!!!!!!
     Класс и функция проверки ошибок - дописать 
@@ -500,3 +520,4 @@ if __name__ == "__main__":
             #print(r1.send_sh_command("brctl stp br-lan yes"))              # send comm "brctl stp br-lan yes" ST
             #print(r1.cfg_WiFi_AP(device,r1.commands_cfg_WiFi_AP))           # Cfg wifi_ap (1-й порт не раздает!!!)
             #print(r1.cfg_WiFi_AP_KingKong(device,r1.commands_cfg_WiFi_AP_KingKong))    # Cfg wifi_ap_KingKong
+            print(r1.pppoe_client_cfg(device, r1.commands_pppoe_client_cfg))               # Cfg pppoe-client

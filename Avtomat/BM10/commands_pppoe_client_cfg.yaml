@@ -1,0 +1,7 @@
+[
+"uci set network.wan.proto='pppoe'",
+"uci set network.wan.username='test'",
+"uci set network.wan.password='test'",
+"uci set network.wan.ipv6='auto'",
+"uci commit"
+]
