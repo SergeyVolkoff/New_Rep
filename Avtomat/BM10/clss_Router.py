@@ -486,10 +486,17 @@ class Router():
         """
     def pppoe_serv_cfg(self,  device, commands_pppoe_server_cfg):
         result = {}
-        for command in self.commands_pppoe_client_cfg:
+
+        for command in self.commands_pppoe_server_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            if "mwan3" or "uci commit" in command:
-                time.sleep(3)
+            if "vi /etc/config/pppoe'" in command:
+                pyautogui.typewrite('i')
+            if "option interface 'test_pppoe_serv'" in command:
+                pyautogui.keyDown('esc')
+                pyautogui.keyUp('esc')
+                pyautogui.keyDown('shiftleft', ':')
+                pyautogui.press(':')
+                pyautogui.keyUp('shiftleft')
             if "" in output:
                 output = "command passed"
                 result[command] = output
