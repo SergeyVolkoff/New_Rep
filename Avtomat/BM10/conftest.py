@@ -4,12 +4,13 @@
 
 """
 import time
+import pytest
 """
  ANSI-код
 \33 - - обозначение того, что дальше идет какой-то управляющий цветом код
 [31m - это код цвета а именно красный
-
 """
+#@pytest.fixture()
 def pytest_report_header(config):
 
         print ("\33[31m{}".format("Для теста <<test_workSTP>> нужно подготовить кольцо или избыточный линк на 3 и 4 портах.\n"

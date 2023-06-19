@@ -2,8 +2,10 @@
 import re
 import yaml
 import netmiko
+import paramiko
 import time
-import pyautogui
+from paramiko import SSHClient
+from scp import SCPClient
 from rich import print
 from rich.theme import Theme
 from rich.console import Console
@@ -485,25 +487,21 @@ class Router():
         ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
         """
     def pppoe_serv_cfg(self,  device, commands_pppoe_server_cfg):
-        result = {}
+        host = '192.168.1.1'
+        user = 'root'
+        secret = 'root'
+        port = 22
+        ssh = SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        #ssh.load_system_host_keys()
+        ssh.connect(hostname=host, username=user, password=secret, port=port)
+        # SCPCLient takes a paramiko transport as an argument
+        scp = SCPClient(ssh.get_transport())
 
-        for command in self.commands_pppoe_server_cfg:
-            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            if "vi /etc/config/pppoe'" in command:
-                pyautogui.typewrite('i')
-            if "option interface 'test_pppoe_serv'" in command:
-                pyautogui.keyDown('esc')
-                pyautogui.keyUp('esc')
-                pyautogui.keyDown('shiftleft', ':')
-                pyautogui.press(':')
-                pyautogui.keyUp('shiftleft')
-            if "" in output:
-                output = "command passed"
-                result[command] = output
-            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
-                output = "bad command"
-                result[command] = output
-        return result
+        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe', recursive=True,remote_path='/etc/config/')
+        scp.close()
+
+
     '''
     ПОСЛЕ этого класса не писать ф-ии для Роутер1 - object has no attribute!!!!!!
     Класс и функция проверки ошибок - дописать 
