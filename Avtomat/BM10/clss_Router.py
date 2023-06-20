@@ -468,6 +468,7 @@ class Router():
 
     """
     ФУНКЦИЯ настройки роутера как РРРоЕ-клиент на wan порту
+    Сначала залить сервер, потом - клиент
     """
     def pppoe_client_cfg(self,  device, commands_pppoe_client_cfg):
         result = {}
@@ -485,6 +486,7 @@ class Router():
 
     """
         ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
+        Сервр льем первым!
         """
     def pppoe_serv_cfg(self,  device, commands_pppoe_server_cfg):
         host = '192.168.1.1'
@@ -492,15 +494,28 @@ class Router():
         secret = 'root'
         port = 22
         ssh = SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # ключ добавится автоматом, без этого не соединится по ссх
         #ssh.load_system_host_keys()
         ssh.connect(hostname=host, username=user, password=secret, port=port)
         # SCPCLient takes a paramiko transport as an argument
         scp = SCPClient(ssh.get_transport())
-
-        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe', recursive=True,remote_path='/etc/config/')
+        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/pppoe', remote_path='/etc/config/')
+        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/pppoe-server-options', remote_path='/etc/ppp/')
+        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/chap-secrets', remote_path='/etc/ppp/')
         scp.close()
-
+        ssh.close()
+        result = {}
+        for command in self.commands_pppoe_server_cfg:
+            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            if "mwan3" or "uci commit" in command:
+                time.sleep(3)
+            if "" in output:
+                output = "command passed"
+                result[command] = output
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                result[command] = output
+        return result
 
     '''
     ПОСЛЕ этого класса не писать ф-ии для Роутер1 - object has no attribute!!!!!!
