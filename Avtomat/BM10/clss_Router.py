@@ -488,7 +488,9 @@ class Router():
         ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
         Сервр льем первым!
         """
-    def pppoe_serv_cfg(self,  device, commands_pppoe_server_cfg):
+
+
+    def pppoe(self):
         host = '192.168.1.1'
         user = 'root'
         secret = 'root'
@@ -499,9 +501,37 @@ class Router():
         ssh.connect(hostname=host, username=user, password=secret, port=port)
         # SCPCLient takes a paramiko transport as an argument
         scp = SCPClient(ssh.get_transport())
-        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/pppoe', remote_path='/etc/config/')
-        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/pppoe-server-options', remote_path='/etc/ppp/')
-        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/chap-secrets', remote_path='/etc/ppp/')
+        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/pppoe', '/etc/config/')
+        scp.close()
+        ssh.close()
+    def pppoe_serv_opt(self):
+        host = '192.168.1.1'
+        user = 'root'
+        secret = 'root'
+        port = 22
+        ssh = SSHClient()
+        ssh.set_missing_host_key_policy(
+            paramiko.AutoAddPolicy())  # ключ добавится автоматом, без этого не соединится по ссх
+        # ssh.load_system_host_keys()
+        ssh.connect(hostname=host, username=user, password=secret, port=port)
+        # SCPCLient takes a paramiko transport as an argument
+        scp = SCPClient(ssh.get_transport())
+        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/pppoe-server-options', '/etc/ppp/')
+        scp.close()
+        ssh.close()
+    def pppoe_chap(self,  device, commands_pppoe_server_cfg):
+        host = '192.168.1.1'
+        user = 'root'
+        secret = 'root'
+        port = 22
+        ssh = SSHClient()
+        ssh.set_missing_host_key_policy(
+            paramiko.AutoAddPolicy())  # ключ добавится автоматом, без этого не соединится по ссх
+        # ssh.load_system_host_keys()
+        ssh.connect(hostname=host, username=user, password=secret, port=port)
+        # SCPCLient takes a paramiko transport as an argument
+        scp = SCPClient(ssh.get_transport())
+        scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/chap-secrets', '/etc/ppp/')
         scp.close()
         ssh.close()
         result = {}
@@ -543,6 +573,10 @@ if __name__ == "__main__":
          for t in temp:
             device = dict(t)
             r1 = Router(**device)
+            # host = '192.168.1.1'
+            # user = 'root'
+            # password = 'root'
+            # port = 22
             #print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
@@ -560,4 +594,8 @@ if __name__ == "__main__":
             #print(r1.cfg_WiFi_AP(device,r1.commands_cfg_WiFi_AP))           # Cfg wifi_ap (1-й порт не раздает!!!)
             #print(r1.cfg_WiFi_AP_KingKong(device,r1.commands_cfg_WiFi_AP_KingKong))    # Cfg wifi_ap_KingKong
             #print(r1.pppoe_client_cfg(device, r1.commands_pppoe_client_cfg))               # Cfg pppoe-client
-            print(r1.pppoe_serv_cfg(device, r1.commands_pppoe_server_cfg))
+            #print(r1.pppoe_serv_cfg(device,r1.commands_pppoe_server_cfg))
+
+            print(r1.pppoe())
+            print(r1.pppoe_serv_opt())
+            print(r1.pppoe_chap(device, r1.commands_pppoe_server_cfg))
