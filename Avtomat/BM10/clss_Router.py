@@ -485,11 +485,10 @@ class Router():
         return result
 
     """
-        ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
+        1-ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
         Сервр льем первым!
+        эта ф-я передает файл pppoe в DUT, в файле лежат настройки сервера ррре
         """
-
-
     def pppoe(self):
         host = '192.168.1.1'
         user = 'root'
@@ -504,6 +503,11 @@ class Router():
         scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/pppoe', '/etc/config/')
         scp.close()
         ssh.close()
+        """
+        2-ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
+        Сервр льем первым!
+        эта ф-я передает файл pppoe-server-options в DUT, в файле лежит require-chaр,echo-interval
+        """
     def pppoe_serv_opt(self):
         host = '192.168.1.1'
         user = 'root'
@@ -519,6 +523,11 @@ class Router():
         scp.put('/home/ssw/new/New_Rep/Avtomat/BM10/pppoe_cfg_file/pppoe-server-options', '/etc/ppp/')
         scp.close()
         ssh.close()
+        """
+        2-ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
+        Сервр льем первым!
+        эта ф-я передает файл chap-secrets в DUT, в файле лежит login-pass
+        """
     def pppoe_chap(self,  device, commands_pppoe_server_cfg):
         host = '192.168.1.1'
         user = 'root'
@@ -596,6 +605,6 @@ if __name__ == "__main__":
             #print(r1.pppoe_client_cfg(device, r1.commands_pppoe_client_cfg))               # Cfg pppoe-client
             #print(r1.pppoe_serv_cfg(device,r1.commands_pppoe_server_cfg))
 
-            print(r1.pppoe())
+            print(r1.pppoe())                                                # Cfg pppoe-serv
             print(r1.pppoe_serv_opt())
             print(r1.pppoe_chap(device, r1.commands_pppoe_server_cfg))
