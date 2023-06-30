@@ -74,8 +74,9 @@ class Router():
                 self.commands_cfg_WiFi_AP_KingKong = yaml.safe_load(f12)
             with open("commands_pppoe_client_cfg.yaml") as f13:        # команды настройки РРРРоЕ-клиент
                 self.commands_pppoe_client_cfg = yaml.safe_load(f13)
-            with open("commands_pppoe_server_cfg.yaml") as f14:
+            with open("commands_pppoe_server_cfg.yaml") as f14:         # команды настройки РРРРоЕ-server
                 self.commands_pppoe_server_cfg = yaml.safe_load(f14)
+
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
     """
@@ -474,7 +475,7 @@ class Router():
         result = {}
         for command in self.commands_pppoe_client_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            if "mwan3" or "uci commit" in command:
+            if "mwan3" or "uci commit" or"reboot" in command:
                 time.sleep(3)
             if "" in output:
                 output = "command passed"
@@ -546,7 +547,7 @@ class Router():
         result = {}
         for command in self.commands_pppoe_server_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            if "mwan3" or "uci commit" in command:
+            if "mwan3" or "uci commit" or "reboot" in command:
                 time.sleep(3)
             if "" in output:
                 output = "command passed"
@@ -603,8 +604,7 @@ if __name__ == "__main__":
             #print(r1.cfg_WiFi_AP(device,r1.commands_cfg_WiFi_AP))           # Cfg wifi_ap (1-й порт не раздает!!!)
             #print(r1.cfg_WiFi_AP_KingKong(device,r1.commands_cfg_WiFi_AP_KingKong))    # Cfg wifi_ap_KingKong
             #print(r1.pppoe_client_cfg(device, r1.commands_pppoe_client_cfg))               # Cfg pppoe-client
-            #print(r1.pppoe_serv_cfg(device,r1.commands_pppoe_server_cfg))
 
-            print(r1.pppoe())                                                # Cfg pppoe-serv
-            print(r1.pppoe_serv_opt())
-            print(r1.pppoe_chap(device, r1.commands_pppoe_server_cfg))
+            print(r1.pppoe())                                                   # Cfg pppoe-serv f1
+            print(r1.pppoe_serv_opt())                                          # Cfg pppoe-serv f2
+            print(r1.pppoe_chap(device, r1.commands_pppoe_server_cfg))          # Cfg pppoe-serv f3

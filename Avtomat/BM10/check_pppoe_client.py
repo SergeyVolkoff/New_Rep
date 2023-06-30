@@ -27,7 +27,7 @@ def check_int_pppoe_cl(comm):        # Определяем наличие на�
             return False
     except ValueError as err:
         return False
-def check_ping_inet():
+def check_ping_inet(): #
     r1.ip_for_ping = "8.8.8.8"
 
     try:

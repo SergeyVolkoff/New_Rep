@@ -23,5 +23,6 @@
 "uci set network.wan.ipv6='auto'",
 "uci commit",
 "mwan3 stop",
-"uci commit"
+"uci commit",
+reboot
 ]
