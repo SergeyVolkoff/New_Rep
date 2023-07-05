@@ -10,6 +10,9 @@ def test_add_1():
     task = Task('breathe', 'BRIAN', True)
     task_id = tasks.add(task)
     t_from_db = tasks.get(task_id)
+    print(task)
+    print(task_id)
+    print(t_from_db)
     # everything but the id should be the same
     assert equivalent(t_from_db, task)
 

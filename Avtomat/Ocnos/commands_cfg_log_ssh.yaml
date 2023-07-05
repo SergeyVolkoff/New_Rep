@@ -1,0 +1,10 @@
+[
+"logging logfile log_debug 7",
+"logging cli",
+"logging level all 7",
+"log syslog",
+"feature ssh",
+"interface ge6",
+"ip address 192.168.1.1/24",
+"no shutdown"
+]

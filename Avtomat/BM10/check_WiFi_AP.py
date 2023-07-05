@@ -31,7 +31,7 @@ def check_ping_inet():
 
     try:
         res_ping_inet = r1.ping_ip(device,r1.command_ping)
-        if "destination  available" in res_ping_inet:
+        if "destination available" in res_ping_inet:
             print("Bridge OK")
         else:
             print("Bridge bad, inet(8.8.8.8)- not available")

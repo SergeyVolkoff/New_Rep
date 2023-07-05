@@ -21,21 +21,21 @@ with open("BM10_LTE.yaml") as f:
 def check_int_pppoe_cl(comm):        # Определяем наличие настроенного интерфейса ван с РРРоЕ (есть ли конфиг вообще)
     try:
         temp = r1.send_sh_command(device, comm)
-        if "PPPoE" in temp:
+        if "pppoe" in temp:
             return True
         else:
             return False
     except ValueError as err:
         return False
-def check_ping_inet(): #
+def check_ping_inet(): # check Internet
     r1.ip_for_ping = "8.8.8.8"
-
     try:
         res_ping_inet = r1.ping_ip(device,r1.command_ping)
-        if "destination  available" in res_ping_inet:
-            print("PPPoE OK")
+        print(res_ping_inet)
+        if "destination available" in res_ping_inet:
+            print("Inet(8.8.8.8) availeble, PPPoE OK")
         else:
-            print("PPPoE bad, inet(8.8.8.8)- not available")
+            print("Inet(8.8.8.8)- not available, PPPoE bad ")
     except ValueError as err:
         return False
 
