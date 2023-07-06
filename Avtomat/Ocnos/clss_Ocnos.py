@@ -47,35 +47,28 @@ class Ocnos():
             self.command_ping = self.word_ping+self.promo
             self.ip_for_ping = '200.1.1.1'
 
-            with open ("commands_cfg_log_ssh.yaml") as f1:            # команды сброса конфига
-                self.commands_cfg_log = yaml.safe_load(f1)
+            with open ("commands_base_cfg.yaml") as f1:            # команды сброса конфига
+                self.commands_base_cfg = yaml.safe_load(f1)
 
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
-    """
-    ФУНКЦИЯ отправки команды "imish" в уст-во по ssh, без импорта
-    """
-    def send_sh_command(self, device, command):
-        temp_imish = self.ssh.send_command("imish",expect_string="bulat")
-        temp_enable=self.ssh.send_command("enable",expect_string="bulat")
-        result=self.ssh.send_command(command,expect_string="bulat")
-        return result
 
     """
         ФУНКЦИЯ настройки базового конфига
         """
 
-    def commands_cfg_log_ssh(self, device, commands_cfg_log_ssh):
+    def base_cfg(self, device, commands_base_cfg):
         result = {}
-        for command in self.commands_cfg_log:
+        for command in self.commands_base_cfg:
             print(command)
-            temp_imish = self.ssh.send_command("imish", expect_string="bulat")
-            temp_enable = self.ssh.send_command("enable", expect_string="bulat")
-            output = self.ssh.send_command(command, expect_string="bulat", read_timeout=1)
-            # if "" in command:
-            #     pass
-            # elif "" in output:
-            #     pass
+            temp_imish = self.ssh.send_command("imish", expect_string="bulat",read_timeout=1)
+            temp_enable = self.ssh.send_command("enable", expect_string="bulat",read_timeout=1)
+            temp_enable = self.ssh.send_command("conf t", expect_string="bulat",read_timeout=1)
+            result = self.ssh.send_command(command, expect_string="bulat", read_timeout=1)
+            if "already" in result:
+                console.print(command," - input already run", style="success")
+            if " Invalid input detected" in result:
+                console.print(command," - input fail",style='fail')
         return result
 
 if __name__ == "__main__":
@@ -84,5 +77,4 @@ if __name__ == "__main__":
          for t in temp:
             device = dict(t)
             ocn = Ocnos(**device)
-            #print(ocn.send_sh_command(device,"sh run"))
-            print(ocn.commands_cfg_log_ssh(device, ocn.commands_cfg_log))
+            print(ocn.base_cfg(device, ocn.commands_base_cfg))
