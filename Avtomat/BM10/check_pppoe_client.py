@@ -18,7 +18,7 @@ with open("BM10_LTE.yaml") as f:
         device = dict(t)
         r1 = Router(**device)
 
-def check_int_pppoe_cl(comm):        # Определяем наличие настроенного интерфейса ван с РРРоЕ (есть ли конфиг вообще)
+def check_int_pppoe_cl(comm):  # Определяем наличие настроенного интерфейса ван с РРРоЕ (есть ли конфиг вообще)
     try:
         temp = r1.send_sh_command(device, comm)
         if "pppoe" in temp:
@@ -27,6 +27,21 @@ def check_int_pppoe_cl(comm):        # Определяем наличие на�
             return False
     except ValueError as err:
         return False
+def check_ip_pppe(comm):
+    try:
+        temp = r1.send_sh_command(device,comm)
+        temp2 = re.search(r'\s+inet (?P<intf>\d+.\d+.\d+.\d+) peer (.{0,})pppoe-wan',temp).group()
+        output = re.search(r'\s+inet (?P<ip_int>\d+.\d+.\d+.\d+) peer (?P<ip_peer>\d+.\d+.\d+.\d+).{0,}pppoe-wan', temp)
+        if "inet" in temp2:
+            print('Tunnel ok, ip client:',output.group('ip_int'),', ip peer(serv):',output.group('ip_peer'))
+            return True
+        else:
+            if "state DOWN"in temp2:
+                print("interface exist, but state DOWN")
+                return False
+    except ValueError as err:
+        return False
+
 def check_ping_inet(): # check Internet
     r1.ip_for_ping = "8.8.8.8"
     try:
@@ -34,12 +49,14 @@ def check_ping_inet(): # check Internet
         print(res_ping_inet)
         if "destination available" in res_ping_inet:
             print("Inet(8.8.8.8) availeble, PPPoE OK")
+            return True
         else:
             print("Inet(8.8.8.8)- not available, PPPoE bad ")
+            return False
     except ValueError as err:
         return False
 
 if __name__ =="__main__":
-    result = check_ping_inet()
+    result = check_ip_pppe("ip a")
     print (result)
 
