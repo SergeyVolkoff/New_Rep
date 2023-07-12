@@ -15,5 +15,6 @@ def test_name_intPPPoE():
     assert check_int_pppoe_cl ("uci show network.wan.proto")==True, "No PPPoE on wan-interface!!!"
 def test_check_ping_inet():
     assert check_ping_inet()== True, "Inet(8.8.8.8)- not available. Wan-port bad?"
+
 def test_check_ip_pppe():
     assert check_ip_pppe('ip a')==True, "interface exist, but dont have ip, tunnel state DOWN"
