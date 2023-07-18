@@ -30,7 +30,7 @@ def check_correct_time(time):
     # функция вернет False.
     # Иначе - True
     #print(storage_data)
-    if time == None and time<=max(storage_data.keys()):
+    if storage_data and time<=max(storage_data.keys()):
         return False
     else:
         return True
@@ -40,14 +40,17 @@ def get_step_day(steps):
     # Посчитайте все шаги, записанные в словарь storage_data,
     # прибавьте к ним значение из последнего пакета
     # и верните  эту сумму.
-    steps_day=steps[1]+ sum(storage_data.values())
+    #print (storage_data)
+    #print(steps)
+    steps_day= sum(storage_data.values())+steps
+    #print(steps_day)
     return steps_day
 
 def get_distance(steps):
     """Получить дистанцию пройденного пути в км."""
     # Посчитайте дистанцию в километрах,
     # исходя из количества шагов и длины шага.
-    dist = steps+STEP_M/1000
+    dist = (steps*STEP_M)/1000
     return dist
 
 def get_spent_calories(dist, current_time):
@@ -86,11 +89,11 @@ def get_achievement(dist):
 def show_message(time, steps, dist, calories, achieve):
     #print(type(calories))
     print( f'''
-    Время:{time}.
-    Количество шагов за сегодня:{steps}.
-    Дистанция составила{dist:.2f} км.
-    Вы сожгли{calories:.2f} ккал.
-    {achieve}''')
+Время:{time}.
+Количество шагов за сегодня: {steps}.
+Дистанция составила {dist:.2f} км.
+Вы сожгли {calories:.2f} ккал.
+{achieve}''')
 def accept_package(data):
     """Обработать пакет данных."""
 
@@ -105,7 +108,7 @@ def accept_package(data):
     if check_correct_time(pack_time)==False: # Если функция проверки значения времени вернет False
         return 'Некорректное значение времени'
 
-    day_steps = get_step_day(data) # Запишите результат подсчёта пройденных шагов.
+    day_steps = get_step_day(data[1]) # Запишите результат подсчёта пройденных шагов.
 
     dist = get_distance(day_steps) # Запишите результат расчёта пройденной дистанции.
     spent_calories = get_spent_calories(dist,pack_time) # Запишите результат расчёта сожжённых калорий.
