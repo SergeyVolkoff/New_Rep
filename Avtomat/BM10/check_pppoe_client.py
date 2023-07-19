@@ -27,12 +27,12 @@ def check_int_pppoe_cl(comm):  # Определяем наличие настр�
             return False
     except ValueError as err:
         return False
-def check_ip_pppoe(comm):
+def check_ip_pppoe(comm): # check ip for client and serv
     try:
         temp = r1.send_sh_command(device,comm)
         temp2 = re.search(r'\s+inet (?P<intf>\d+.\d+.\d+.\d+) peer (.{0,})pppoe-wan',temp).group()
         output = re.search(r'\s+inet (?P<ip_int>\d+.\d+.\d+.\d+) peer (?P<ip_peer>\d+.\d+.\d+.\d+).{0,}pppoe-wan', temp)
-
+        #ip_per=output.group('ip_peer')
         if "inet" in temp2:
             print('Tunnel ok, ip client:',output.group('ip_int'),', ip peer(serv):',output.group('ip_peer'))
             return True
@@ -43,7 +43,7 @@ def check_ip_pppoe(comm):
     except ValueError as err:
         return False
 
-def check_ping_inet(): # check Internet
+def check_ping_inet(): # check ping Internet
     r1.ip_for_ping = "8.8.8.8"
     try:
         res_ping_inet = r1.ping_ip(device,r1.command_ping)
@@ -56,8 +56,15 @@ def check_ping_inet(): # check Internet
             return False
     except ValueError as err:
         return False
-
+def check_ip_peer(comm): # retutn ip serv for test with Task
+    try:
+        temp = r1.send_sh_command(device,comm)
+        output = re.search(r'\s+inet (?P<ip_int>\d+.\d+.\d+.\d+) peer (?P<ip_peer>\d+.\d+.\d+.\d+).{0,}pppoe-wan', temp)
+        ip_per=output.group('ip_peer')
+        return ip_per
+    except ValueError as err:
+        return False
 if __name__ =="__main__":
-    result = check_serv_ppoe()
+    result = check_ip_peer("ip a")
     print (result)
 
