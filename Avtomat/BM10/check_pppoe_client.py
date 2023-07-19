@@ -27,11 +27,12 @@ def check_int_pppoe_cl(comm):  # Определяем наличие настр�
             return False
     except ValueError as err:
         return False
-def check_ip_pppe(comm):
+def check_ip_pppoe(comm):
     try:
         temp = r1.send_sh_command(device,comm)
         temp2 = re.search(r'\s+inet (?P<intf>\d+.\d+.\d+.\d+) peer (.{0,})pppoe-wan',temp).group()
         output = re.search(r'\s+inet (?P<ip_int>\d+.\d+.\d+.\d+) peer (?P<ip_peer>\d+.\d+.\d+.\d+).{0,}pppoe-wan', temp)
+
         if "inet" in temp2:
             print('Tunnel ok, ip client:',output.group('ip_int'),', ip peer(serv):',output.group('ip_peer'))
             return True
@@ -57,6 +58,6 @@ def check_ping_inet(): # check Internet
         return False
 
 if __name__ =="__main__":
-    result = check_ip_pppe("ip a")
+    result = check_serv_ppoe()
     print (result)
 
