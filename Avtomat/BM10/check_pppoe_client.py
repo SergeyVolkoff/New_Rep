@@ -66,5 +66,5 @@ def check_ip_peer(comm): # retutn ip serv for test with Task
         return False
 if __name__ =="__main__":
     result = check_ip_peer("ip a")
-    print (result)
+    print (type(result))
 
