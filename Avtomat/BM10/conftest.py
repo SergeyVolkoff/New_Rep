@@ -10,9 +10,8 @@ import pytest
 \33 - - обозначение того, что дальше идет какой-то управляющий цветом код
 [31m - это код цвета а именно красный
 """
-#@pytest.fixture()
-def pytest_report_header(config):
-
+#@pytest.fixture() # фикстура не нужна так как надо вывести текст до теста, нужен репорт хедер
+def pytest_report_header(config): # pytest_report_header спец конструкция!!!
         print ("\33[31m{}".format("Для теста <<test_workSTP>> нужно подготовить кольцо или избыточный линк на 3 и 4 портах.\n"
                                    "Осталось 10 сек!/n"))
         print ("\33[33m{}".format("Кабель вставить в порт сразу ПОСЛЕ появления 'test_check_workSTP' " ))
