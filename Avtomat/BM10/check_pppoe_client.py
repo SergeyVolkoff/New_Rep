@@ -7,7 +7,6 @@ from netmiko import (
     NetmikoAuthenticationException,
 )
 from clss_Router import Router
-
 '''
 Проверяем работу роутера как РРРоЕ клиента:
 
@@ -57,9 +56,17 @@ def check_ping_inet(): # check ping Internet
     except ValueError as err:
         return False
 
-def check_tracert_through_peer():
-    pass
-def check_ip_peer(comm): # возвращает сервера (ip_per) для теста test_check_ip_peer
+def check_tracert_peer():
+    try:
+        result_tracert =  r1.tracert_ip(device)
+        if ' Tracert passes through server-peer' in result_tracert:
+            return True
+        else:
+            return False
+    except ValueError as err:
+        return False
+
+def check_ip_peer(comm): # возвращает ip сервера (ip_per) для теста test_check_ip_peer
     try:
         temp = r1.send_sh_command(device,comm)
         output = re.search(r'\s+inet (?P<ip_int>\d+.\d+.\d+.\d+) peer (?P<ip_peer>\d+.\d+.\d+.\d+).{0,}pppoe-wan', temp)
@@ -68,6 +75,6 @@ def check_ip_peer(comm): # возвращает сервера (ip_per) для �
     except ValueError as err:
         return False
 if __name__ =="__main__":
-    result = check_ip_peer("ip a")
-    print (type(result))
+    result = check_tracert_peer()
+    print (result)
 

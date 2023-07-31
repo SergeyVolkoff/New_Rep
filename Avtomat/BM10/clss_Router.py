@@ -48,7 +48,6 @@ class Router():
             self.command_ping = self.word_ping+self.promo
             self.ip_for_ping = '200.1.1.1'
 
-
             with open ("commands_reset_cfg.yaml") as f1:            # команды сброса конфига
                 self.commands_to_reset_conf = yaml.safe_load(f1)
             with open("commands_cfg_3G.yaml") as f:                 # команды настройки 3G
@@ -150,18 +149,19 @@ class Router():
         """
         ФУНКЦИЯ для простого tracert
         """
-        output_tracert = self.ssh.send_command("traceroute 8.8.8.8 -m 3")
-
+        ip_tracert = '8.8.8.8'
+        promt_tracert = '-m 3'
+        comand_tracert = f'traceroute {ip_tracert} {promt_tracert}'
+        output_tracert = self.ssh.send_command(comand_tracert)
         if "ms" in output_tracert:
-            temp = r1.send_sh_command(device, 'ip a')
+            temp = self.send_sh_command(device,'ip a')
             output1 = re.search(r'\s+inet (?P<ip_int>\d+.\d+.\d+.\d+) peer (?P<ip_peer>\d+.\d+.\d+.\d+).{0,}pppoe-wan',
                                temp)
             ip_peer = output1.group('ip_peer')
-            print (ip_peer)
-            result = f'Tracert passes through peer, {ip_peer}, {output1}'
+            result = f'### Tracert passes through server-peer, {ip_peer}! ###\n {output_tracert}'
 
         else:
-            result = f'Tracert does not pass through {ip_peer}'
+            result = f'Tracert does not pass through {output_tracert}'
 
         return result
         print(output)
