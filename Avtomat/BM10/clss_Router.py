@@ -48,6 +48,7 @@ class Router():
             self.command_ping = self.word_ping+self.promo
             self.ip_for_ping = '200.1.1.1'
 
+
             with open ("commands_reset_cfg.yaml") as f1:            # команды сброса конфига
                 self.commands_to_reset_conf = yaml.safe_load(f1)
             with open("commands_cfg_3G.yaml") as f:                 # команды настройки 3G
@@ -145,7 +146,25 @@ class Router():
         return result
         print(output)
 
+    def tracert_ip(self,device):
+        """
+        ФУНКЦИЯ для простого tracert
+        """
+        output_tracert = self.ssh.send_command("traceroute 8.8.8.8 -m 3")
 
+        if "ms" in output_tracert:
+            temp = r1.send_sh_command(device, 'ip a')
+            output1 = re.search(r'\s+inet (?P<ip_int>\d+.\d+.\d+.\d+) peer (?P<ip_peer>\d+.\d+.\d+.\d+).{0,}pppoe-wan',
+                               temp)
+            ip_peer = output1.group('ip_peer')
+            print (ip_peer)
+            result = f'Tracert passes through peer, {ip_peer}, {output1}'
+
+        else:
+            result = f'Tracert does not pass through {ip_peer}'
+
+        return result
+        print(output)
     def reset_conf(self,device, comm_reset_conf):
         """
         ФУНКЦИЯ сброса конфига на заводской, с ребутом устр-ва.
@@ -584,7 +603,7 @@ if __name__ == "__main__":
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
-            print(r1.cfg_LTE(device,r1.commands_cfg_3G))                   # Cfg LTE
+            #print(r1.cfg_LTE(device,r1.commands_cfg_3G))                   # Cfg LTE
             #print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
             #print(r1.vlan_cfg(device,r1.commands_vlan_cfg))                # Cfg vlan
             #print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
@@ -601,3 +620,4 @@ if __name__ == "__main__":
             # print(r1.pppoe())                                                   # Cfg pppoe-serv f1
             # print(r1.pppoe_serv_opt())                                          # Cfg pppoe-serv f2
             # print(r1.pppoe_chap(device, r1.commands_pppoe_server_cfg))          # Cfg pppoe-serv f3
+            print (r1.tracert_ip(device))

@@ -13,7 +13,7 @@ from clss_Router import Router
  Проверка, что соседний роутер отвечает и STP работает,  что есть порт только в прослушивании!
 """
 def check_workSTP(comm):
-    with open("BM10_LTE.yaml")as f:
+    with open("~/Documents/new/New_Rep/Avtomat/BM10/BM10_LTE.yaml")as f:
         temp = yaml.safe_load(f)
         for t in temp:
             device = dict(t)

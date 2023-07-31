@@ -11,7 +11,7 @@ from clss_Router import Router
  Проверка, что роутер рутовый в STP
 """
 def check_rootSTP(comm):
-    with open("BM10_LTE.yaml")as f:
+    with open("~/Documents/new/New_Rep/Avtomat/BM10/BM10_LTE.yaml")as f:
         temp = yaml.safe_load(f)
         for t in temp:
             device = dict(t)
