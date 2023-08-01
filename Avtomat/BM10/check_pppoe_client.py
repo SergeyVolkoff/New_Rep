@@ -43,9 +43,8 @@ def check_ip_pppoe(comm): # check ip for client and serv
         return False
 
 def check_ping_inet(): # check ping Internet
-    r1.ip_for_ping = "8.8.8.8"
     try:
-        res_ping_inet = r1.ping_ip(device,r1.command_ping)
+        res_ping_inet = r1.ping_ip(device)
         print(res_ping_inet)
         if "destination available" in res_ping_inet:
             print("Inet(8.8.8.8) availeble, PPPoE OK")
@@ -75,6 +74,6 @@ def check_ip_peer(comm): # возвращает ip сервера (ip_per) дл�
     except ValueError as err:
         return False
 if __name__ =="__main__":
-    result = check_tracert_peer()
+    result = check_ping_inet()
     print (result)
 

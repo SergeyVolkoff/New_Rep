@@ -46,7 +46,7 @@ class Router():
             self.promo = " -w 4"
             self.word_ping = "ping "
             self.command_ping = self.word_ping+self.promo
-            self.ip_for_ping = '200.1.1.1'
+
 
             with open ("commands_reset_cfg.yaml") as f1:            # команды сброса конфига
                 self.commands_to_reset_conf = yaml.safe_load(f1)
@@ -127,20 +127,21 @@ class Router():
         except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
 
-    def ping_ip(self, device, command_ping):
+    def ping_ip(self, device):
         """
         ФУНКЦИЯ для простого пинга,  запросит адрес назначения, формат команды прописан в инит.
         без импорта.
         """
-        command_ping = (self.word_ping + self.ip_for_ping + self.promo)
+        ip_for_ping = "8.8.8.8"
+        command_ping = (self.word_ping + ip_for_ping + self.promo)
         print(command_ping)
         output = self.ssh.send_command(command_ping)
         if "round-trip min/avg/max" in output:
             output = re.search(r'round-trip min/avg/max = (\S+ ..)', output).group()
-            result = ["IP", self.ip_for_ping, "destination available :", output]
+            result = ["IP", ip_for_ping, "destination available :", output]
             result = ' '.join(result)
         else:
-            result = ["Ip", self.ip_for_ping, "out of destination"]
+            result = ["Ip", ip_for_ping, "out of destination"]
             result = ' '.join(result)
         return result
         print(output)
@@ -599,7 +600,7 @@ if __name__ == "__main__":
             # user = 'root'
             # password = 'root'
             # port = 22
-            #print(r1.ping_ip(device,r1.command_ping ))                     # Ping ip
+            print(r1.ping_ip(device))                  # Ping ip
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
@@ -620,4 +621,4 @@ if __name__ == "__main__":
             # print(r1.pppoe())                                                   # Cfg pppoe-serv f1
             # print(r1.pppoe_serv_opt())                                          # Cfg pppoe-serv f2
             # print(r1.pppoe_chap(device, r1.commands_pppoe_server_cfg))          # Cfg pppoe-serv f3
-            print (r1.tracert_ip(device))
+            #print (r1.tracert_ip(device))
