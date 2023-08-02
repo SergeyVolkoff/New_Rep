@@ -1,0 +1,6 @@
+- device_type: cisco_ios
+  host: 10.27.192.119
+  username: tmpuser
+  password: tmppwd
+  port: 22
+  timeout: 1

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Avtomat/Devnet/netprog_basics" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Trident" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Yandex/sprint2/calc_and_win" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Yandex/sprint2/character_creation_module" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Yandex/sprint2/character_creation_module/graphic_arts" vcs="Git" />
+  </component>
+</project>
