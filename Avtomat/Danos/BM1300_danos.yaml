@@ -1,4 +1,4 @@
-- device_type: cisco_ios
+- device_type: vyos
   host: 10.27.192.119
   username: tmpuser
   password: tmppwd
