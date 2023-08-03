@@ -25,14 +25,15 @@ my_colors = Theme( #добавляет цветовую градацию для 
 )
 console = Console(theme=my_colors)
 class Danos():
-    def __init__(self, device_type, host, username, password,timeout, **kwargs):
+    def __init__(self,device_type, host, username, password,timeout, **kwargs):
         try:
             with open("BM1300_danos.yaml") as f1:
                 temp = yaml.safe_load(f1)
                 for t in temp:
-                    self.device = dict(t)
+                    device = dict(t)
 
-            self.ssh = ConnectHandler(**self.device)
+
+            self.ssh = ConnectHandler(**device)
             self.ip = host
             self.name = username
             self.passwd = password
@@ -40,11 +41,12 @@ class Danos():
             self.word_ping = "ping "
             self.command_ping = self.word_ping + self.promo
             self.ip_for_ping = '200.1.1.1'
+
             with open("commands_base_cfg.yaml") as f2:  # команды сброса конфига
                 self.commands_base_cfg = yaml.safe_load(f2)
 
         except(NetmikoAuthenticationException, NetmikoTimeoutException) as error:
-            print("*" * 5, "Error connection to:", self.device['host'], "*" * 5)
+            print("*" * 5, "Error connection to:", device['host'], "*" * 5)
 
     """
     ФУНКЦИЯ настройки базового конфига
@@ -71,3 +73,5 @@ if __name__ == "__main__":
             device = dict(t)
             dan = Danos(**device)
             dan.base_cfg(dan.commands_base_cfg)
+
+
