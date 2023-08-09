@@ -25,41 +25,51 @@ try:
             dan = Danos(**device)
 except(NetmikoAuthenticationException, NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
-def check_hostname(command):
+def check_ok_hostname(comm):
     try:
-        temp = dan.ssh.send_command(command)
-        if "Aggregation-switch-DUT-Aggregation-switch-DUT-Aggregation-switc" in temp:
+        ok_lens_name = dan.ssh.send_config_set(comm)
+        output_commit = dan.ssh.commit()
+        #output_discon = dan.ssh.disconnect()
+        temp = dan.ssh.send_command("sh host name")
+        if "Node exists" in ok_lens_name:
+            print("this hostname is exist")
+            return False
+        elif "Set failed" in ok_lens_name:
+            print("hostname is not valid")
+            return False
+
+        else:
             print("Hostname OK")
             return True
-        else:
-            print("Bad name host")
-            return False
     except ValueError as err:
         return False
-def check_len_hostname(command):
-    try:
-        temp = dan.ssh.send_command(command)
-        if len(temp) == 63:
-            print("Lens Hostname 63 and OK")
-            return True
-        else:
-            print("Bad lens Hostname")
-            return False
-    except ValueError as err:
-        return False
-def check_bad_len_host(command):
-    try:
-        cfg_bad_lens_name= dan.ssh.send_config_set("set system host-name A_")
-        output_commit = dan.ssh.commit()
-        output_discon = dan.ssh.disconnect()
-        temp = dan.ssh.send_command("sh host name")
-        if "AWER" in temp:
-            print(" Hostname  OK")
-            return True
-        else:
-            print("Bad  Hostname")
-            return False
-    except ValueError as err:
-        return False
+
+# def check_long_hostname(comm):
+#     try:
+#         long_name = dan.ssh.send_config_set(comm)
+#         if " is not valid" not in long_name:
+#             print("Hostname OK")
+#             return True
+#         else:
+#             print("Bad name host")
+#             return False
+#     except ValueError as err:
+#         return False
+# def check_hostname():
+#     try:
+#         short_name= dan.ssh.send_config_set("set system host-name A_")
+#         output_commit = dan.ssh.commit()
+#         output_discon = dan.ssh.disconnect()
+#         temp = dan.ssh.send_command("sh host name")
+#         print (temp)
+#         if " is not valid" not in short_name:
+#             print("Hostname OK")
+#             return True
+#         else:
+#             print("Bad name host")
+#             return False
+#     except ValueError as err:
+#         return False
 if __name__== "__main__":
-    print(check_bad_len_host("sh host name"))
+    comm = "set system host-name Aggre"
+    print(check_ok_hostname(comm))
