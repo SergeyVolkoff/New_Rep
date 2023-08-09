@@ -64,7 +64,9 @@ def check_tracert_peer():
             return False
     except ValueError as err:
         return False
-
+'''
+используется параметризация!!
+'''
 def check_ip_peer(comm): # возвращает ip сервера (ip_per) для теста test_check_ip_peer
     try:
         temp = r1.send_sh_command(device,comm)

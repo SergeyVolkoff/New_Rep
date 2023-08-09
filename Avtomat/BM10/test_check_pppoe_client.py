@@ -14,7 +14,7 @@ from clss_Router import Router
 from check_pppoe_client import check_int_pppoe_cl, check_ping_inet,check_ip_pppoe,\
     check_ip_peer,check_tracert_peer
 
-def test_name_intPPPoE():
+def test_check_int_pppoe_cl():
     assert check_int_pppoe_cl ("uci show network.wan.proto")==True, "No PPPoE on wan-interface!!!"
 def test_check_ping_inet():
     assert check_ping_inet()== True, "Inet(8.8.8.8)- not available. Wan-port bad?"
@@ -42,7 +42,8 @@ task_ids = ['ip_test({})'.format(t) # определям параметр ids ч
 @pytest.mark.parametrize("ip_test",value_to_check_ip,ids=task_ids)
             #("task",value_to_check_ip, ids=task_ids)
             # используем параметризацию,
-            # передаем в нее первый аргумент parametrize() — это строка с разделенным запятыми списком имен — "ip_test" в нашем случае,
+            # передаем в нее первый аргумент parametrize() — это строка с разделенным
+            # запятыми списком имен — "ip_test" в нашем случае,
             # переменную указывающую на данные для проверки (value_to_check_ip) и ids
 
 def test_check_ip_peer(ip_test):
