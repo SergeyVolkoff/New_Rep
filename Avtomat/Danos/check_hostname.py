@@ -25,7 +25,7 @@ try:
             dan = Danos(**device)
 except(NetmikoAuthenticationException, NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
-def check_ok_hostname(comm):
+def check_hostname(comm):
     try:
         ok_lens_name = dan.ssh.send_config_set(comm)
         output_commit = dan.ssh.commit()
@@ -44,32 +44,7 @@ def check_ok_hostname(comm):
     except ValueError as err:
         return False
 
-# def check_long_hostname(comm):
-#     try:
-#         long_name = dan.ssh.send_config_set(comm)
-#         if " is not valid" not in long_name:
-#             print("Hostname OK")
-#             return True
-#         else:
-#             print("Bad name host")
-#             return False
-#     except ValueError as err:
-#         return False
-# def check_hostname():
-#     try:
-#         short_name= dan.ssh.send_config_set("set system host-name A_")
-#         output_commit = dan.ssh.commit()
-#         output_discon = dan.ssh.disconnect()
-#         temp = dan.ssh.send_command("sh host name")
-#         print (temp)
-#         if " is not valid" not in short_name:
-#             print("Hostname OK")
-#             return True
-#         else:
-#             print("Bad name host")
-#             return False
-#     except ValueError as err:
-#         return False
+
 if __name__== "__main__":
     comm = "set system host-name Aggre"
     print(check_ok_hostname(comm))

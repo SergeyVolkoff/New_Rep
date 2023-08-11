@@ -1,5 +1,5 @@
 - device_type: vyos
-  host: 10.27.192.119
+  host: 10.27.192.29
   username: tmpuser
   password: tmppwd
   port: 22

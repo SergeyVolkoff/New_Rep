@@ -8,7 +8,7 @@ ConnectHandler,
     NetmikoAuthenticationException
 )
 from cls_Danos import Danos
-from check_base_cfg import check_ok_hostname
+from check_hostname import check_hostname
 
 
 value_check_name = (
@@ -21,6 +21,7 @@ value_check_name = (
     ('set system host-name %'),
     ('set system host-name Aggregation-switch-DUT-Aggregation-switch-DUT-Aggregation-switcH'),
     ('set system host-name Aggregation-switch-DUT-Aggregation-switch-DUT-Aggregation-switc'),
+    ('set system host-name Aver')
 )
 
 task_ids = [
@@ -36,7 +37,7 @@ task_ids = [
     # запятыми списком имен — "ip_test" в нашем случае,
     # переменную указывающую на данные для проверки (value_to_check_ip) и ids
 def test_check_base(ip_test):
-    assert (check_ok_hostname(ip_test)) == True, "Wrong name"
+    assert (check_hostname(ip_test)) == True, "Wrong name"
 
 
 
