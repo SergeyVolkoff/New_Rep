@@ -42,8 +42,10 @@ class Danos():
             self.command_ping = self.word_ping + self.promo
             self.ip_for_ping = '200.1.1.1'
 
-            with open("commands_base_cfg.yaml") as f2:  # команды сброса конфига
+            with open("commands_base_cfg.yaml") as f2:  # команды base конфига
                 self.commands_base_cfg = yaml.safe_load(f2)
+            with open("commands_ntp_cfg.yaml") as f3:
+                self.commands_ntp_cfg = yaml.safe_load(f3)
 
         except(NetmikoAuthenticationException, NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
@@ -66,12 +68,37 @@ class Danos():
         output_sh_inf=self.ssh.send_command("run show interf")
         print(output_sh_inf)
         return output_cfg
+    def cfg_ntp(self,commands_ntp_cfg):
+        for command in self.commands_ntp_cfg:
+            # output = self.ssh.send_command(command, expect_string=":", read_timeout=1)
+            # print(output)
+            output_cfg = self.ssh.send_config_set(command, exit_config_mode=False)
+            output_commit = self.ssh.commit()
+            if "Node exists" in output_cfg:
+                console.print(command, " - Node exists!!!", style="success")
+
+            if "Value validation failed" in output_commit:
+                console.print(command, " - Set failed", style='fail')
+            else:
+                console.print(command,"- executed!")
+            ex=self.ssh.exit_config_mode()
+            #print(output_cfg)
+        output_sh_date = self.ssh.send_command("show date")
+
+        if '2023' in output_sh_date:
+            print('Config date ok - ',output_sh_date)
+            return True
+        else:
+            print("Bad server ntp or no connect to service")
+            return False
+
 if __name__ == "__main__":
     with open("BM1300_danos.yaml")as f:
          temp = yaml.safe_load(f)
          for t in temp:
             device = dict(t)
             dan = Danos(**device)
-            dan.base_cfg(dan.commands_base_cfg)
+            #dan.base_cfg( dan.commands_base_cfg)
+            print(dan.cfg_ntp( dan.commands_ntp_cfg))
 
 

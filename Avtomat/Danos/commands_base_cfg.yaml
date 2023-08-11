@@ -1,4 +1,5 @@
 [
+"set service ssh",
 "set interfaces dataplane dp0p9s0f0 description 10G_1",
 "set interfaces dataplane dp0p9s0f1 description #####",
 "set interfaces dataplane dp0p10s0f0 description 10G_3",
