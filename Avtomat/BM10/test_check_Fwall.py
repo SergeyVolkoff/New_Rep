@@ -1,5 +1,6 @@
 import re
 import yaml
+import time
 import netmiko
 import pytest
 from netmiko import (
@@ -9,6 +10,8 @@ from netmiko import (
 )
 from clss_Router import Router
 from check_Fwall import  check_Fwall
+
+
 def test_check_Fwall():
 
     assert check_Fwall()==True, "Firewall zone bad config"

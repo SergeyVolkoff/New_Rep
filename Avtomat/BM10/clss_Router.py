@@ -76,6 +76,9 @@ class Router():
                 self.commands_pppoe_client_cfg = yaml.safe_load(f13)
             with open("commands_pppoe_server_cfg.yaml") as f14:         # команды настройки РРРРоЕ-server
                 self.commands_pppoe_server_cfg = yaml.safe_load(f14)
+            with open("commands_cfg_ripv2.yaml") as f15:         # команды настройки Ripv2
+                self.commands_cfg_ripv2 = yaml.safe_load(f15)
+
 
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
@@ -570,7 +573,22 @@ class Router():
                 output = "bad command"
                 result[command] = output
         return result
-
+    def cfg_RIPV2(self, device, commands_ripv2_cfg):
+        """
+        ФУНКЦИЯ настройки RIPv2
+        """
+        result = {}
+        for command in self.commands_cfg_ripv2:
+            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            if "mwan3" or "uci commit" in command:
+                time.sleep(3)
+            if "" in output:
+                output = "command passed"
+                result[command] = output
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                output = "bad command"
+                result[command] = output
+        return result
     '''
     ПОСЛЕ этого класса не писать ф-ии для Роутер1 - object has no attribute!!!!!!
     Класс и функция проверки ошибок - дописать 
