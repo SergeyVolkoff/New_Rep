@@ -395,7 +395,13 @@ class Router():
         result = {}
         for command in self.commands_base_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            if "mwan3" or "uci commit" in command:
+            if "mwan3" in command:
+                result_command = "wait, please"
+                print(command, result_command)
+                time.sleep(3)
+            if "commit" in command:
+                result_command = "wait, please"
+                print(command, result_command)
                 time.sleep(3)
             if "" in output:
                 output = "command passed"
@@ -573,22 +579,30 @@ class Router():
                 output = "bad command"
                 result[command] = output
         return result
-    def cfg_RIPV2(self, device, commands_ripv2_cfg):
+    def cfg_ripv2(self, device, commands_ripv2_cfg):
         """
         ФУНКЦИЯ настройки RIPv2
         """
         result = {}
         for command in self.commands_cfg_ripv2:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            if "mwan3" or "uci commit" in command:
+            if "mwan3" in command:
+                result_command = "wait, please"
+                print(command, result_command)
+                time.sleep(3)
+            if "commit" in command:
+                result_command = "wait, please"
+                print(command, result_command)
                 time.sleep(3)
             if "" in output:
-                output = "command passed"
-                result[command] = output
+                result_command = "command passed"
+                result[command]=output
+                print(command,result_command)
             elif "Usage: uci [<options>] <command> [<arguments>]" in output:
-                output = "bad command"
-                result[command] = output
-        return result
+                result_command = "bad command"
+                print(command, result_command)
+                result[command] = result_command
+        #return result
     '''
     ПОСЛЕ этого класса не писать ф-ии для Роутер1 - object has no attribute!!!!!!
     Класс и функция проверки ошибок - дописать 
@@ -625,7 +639,7 @@ if __name__ == "__main__":
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))                   # Cfg LTE
             #print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
             #print(r1.vlan_cfg(device,r1.commands_vlan_cfg))                # Cfg vlan
-            print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
+            #print(r1.base_cfg(device, r1.commands_base_cfg))               # Cfg base_cfg (wan-st_ip, fire,name)
             #print (r1.base_802_cfg(device, r1.commands_802_1d_cfg))        # Cfg for 802d (STP)
             #print (r1.base_cfg(device, r1.commands_dmz_cfg))               # Cfg for DMZ
             #print (r1.base_cfg(device, r1.commands_gre_config))            # Cfg for test GRE
@@ -640,3 +654,4 @@ if __name__ == "__main__":
             # print(r1.pppoe_serv_opt())                                          # Cfg pppoe-serv f2
             # print(r1.pppoe_chap(device, r1.commands_pppoe_server_cfg))          # Cfg pppoe-serv f3
             #print (r1.tracert_ip(device))
+            print(r1.cfg_ripv2(device, r1.commands_cfg_ripv2))  # Cfg RIPv2+base_cfg
