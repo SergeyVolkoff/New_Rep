@@ -78,24 +78,26 @@ class Router():
                 self.commands_pppoe_server_cfg = yaml.safe_load(f14)
             with open("commands_cfg_ripv2.yaml") as f15:         # команды настройки Ripv2
                 self.commands_cfg_ripv2 = yaml.safe_load(f15)
-
-
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
 
+
     def send_sh_command(self, device, command):
+
         """ФУНКЦИЯ отправки простой команды в уст-во по ssh, без импорта"""
+
+        self.check_connection(device)         # вызов функции проверки соединения с роутером
         temp = self.ssh.send_command(command)
         result = temp
         return result
 
 
     def cfg_pass (self,device, commands, log=True):
-        """
-         ФУНКЦИЯ изменения пароля, надо поменять так,
+
+        """ ФУНКЦИЯ изменения пароля, надо поменять так,
          чтоб можно было вводить короткий пароль без сбоя и тащить пароль со стороны, а не из кода.
-         без импорта
-        """
+         без импорта"""
+        
         if log:
             console.print(f"Connect to {device['host']}...",style="success") # style переменная rich, назначает цвет выводу
         result = ''
@@ -124,17 +126,16 @@ class Router():
                             elif "root@" in output:
                                 console.print("New pass OK",style="success")
                                 break
-
-
             return output
         except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
 
+
     def ping_ip(self, device):
-        """
-        ФУНКЦИЯ для простого пинга,  запросит адрес назначения, формат команды прописан в инит.
-        без импорта.
-        """
+
+        """ФУНКЦИЯ для простого пинга,  запросит адрес назначения, формат команды прописан в инит.
+        без импорта."""
+
         ip_for_ping = "8.8.8.8"
         command_ping = (self.word_ping + ip_for_ping + self.promo)
         print(command_ping)
@@ -149,10 +150,11 @@ class Router():
         return result
         print(output)
 
+
     def tracert_ip(self,device):
-        """
-        ФУНКЦИЯ для простого tracert
-        """
+
+        """ФУНКЦИЯ для простого tracert"""
+
         ip_tracert = '8.8.8.8'
         promt_tracert = '-m 3'
         comand_tracert = f'traceroute {ip_tracert} {promt_tracert}'
@@ -169,31 +171,37 @@ class Router():
 
         return result
         print(output)
+
+
     def reset_conf(self,device, comm_reset_conf):
-        """
-        ФУНКЦИЯ сброса конфига на заводской, с ребутом устр-ва.
+        
+        """ ФУНКЦИЯ сброса конфига на заводской, с ребутом устр-ва.
         без импорта
         """
+
         output = self.ssh.send_command("uci show system.@system[0].hostname")
         print(output)
         if "DUT" in output:
             result_reset=self.ssh.send_config_set(self.commands_to_reset_conf)
             return result_reset
 
+
     def cfg_LTE(self, device, command_cfg_3G):
-        """
-        ФУНКЦИЯ настройки 3G, с ребутом уср-ва.
-        без импорта
-        """
+        
+        """ФУНКЦИЯ настройки 3G, с ребутом уср-ва.
+        без импорта"""
+        
         for comm in self.commands_cfg_3G:
             output = self.ssh.send_config_set(comm)
             print (output)
 
 
     def sh_base_cfg_BM10(self, device, commands_sh_base, log=True):
+
         """
         ФУНКЦИЯ просмотра базового конфига,вывод в виде таблицы
         """
+
         if log:
             console.print(f"Connect to {device['host']}...", style="warning")
         try:
@@ -360,11 +368,27 @@ class Router():
             console.print("*" * 5, "Error connection to:", device['host'], "*" * 5, style='fail')
 
 
+    def check_connection(self,device,log=True):
+
+        """
+        ФУНКЦИЯ проверки установки соединения с роутером
+        """
+
+        if log:
+            console.print(f"Connect to {device['host']}...", style="warning")
+        try:
+            with ConnectHandler(**device) as ssh:
+                console.print(device['host'], "connected!", style='success')
+        except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
+            console.print("*" * 5, "Error connection to:", device['host'], "*" * 5, style='fail')
 
     def show_int3G(self,device, command_sh_net):
+
         """
         ФУНКЦИЯ просмотра интерфейса 3G, с проверкой выдачи адреса
         """
+
+        self.check_connection(device)         # вызов функции проверки соединения с роутером
         temp = self.ssh.send_config_set(command_sh_net)
         result = ""
         for line in temp:
@@ -388,32 +412,43 @@ class Router():
         return result
 
 
-    def base_cfg(self, device, commands_base_cfg):
+    def base_cfg(self, device, commands_base_cfg,log=True):
+        
         """
         ФУНКЦИЯ настройки базового конфига
         """
-        result = {}
-        for command in self.commands_base_cfg:
-            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
-            if "mwan3" in command:
-                result_command = "wait, please"
-                print(command, result_command)
-                time.sleep(3)
-            if "commit" in command:
-                result_command = "wait, please"
-                print(command, result_command)
-                time.sleep(3)
-            if "" in output:
-                output = "command passed"
-                result[command] = output
-            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
-                output = "bad command"
-                result[command] = output
-        return result
+
+        if log:
+            console.print(f"Connect to {device['host']}...", style="warning")
+        try:
+            with ConnectHandler(**device) as ssh:
+                console.print(device['host'], "connected!", style='success')
+                result = {}
+                for command in self.commands_base_cfg:
+                    output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+                    if "mwan3" in command:
+                        result_command = "wait, please"
+                        print(command, result_command)
+                        time.sleep(3)
+                    if "commit" in command:
+                        result_command = "wait, please"
+                        print(command, result_command)
+                        time.sleep(3)
+                    if "" in output:
+                        output = "command passed"
+                        result[command] = output
+                    elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                        output = "bad command"
+                        result[command] = output
+                return result
+        except (NetmikoAuthenticationException, NetmikoTimeoutException) as error:
+            console.print("*" * 5, "Error connection to:", device['host'], "*" * 5, style='fail')
 
 
     def base_802_cfg(self, device, commands_802_1d_cfg):
+
         """ФУНКЦИЯ настройки stp- конфига"""
+
         result = {}
         for command in self.commands_802_1d_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
@@ -426,8 +461,11 @@ class Router():
                 result[command] = output
         return result
 
+
     def vlan_cfg(self, device, commands_vlan_cfg):
-        """ФУНКЦИЯ настройки vlan- конфига (vlan-сабинтерфейc"""
+
+        """ФУНКЦИЯ настройки vlan- конфига (vlan-сабинтерфейc)"""
+
         result = {}
         for command in self.commands_vlan_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=2)
@@ -446,6 +484,7 @@ class Router():
                 result[command] = output
         return result
 
+
     def utilCPU(self, device):
         result = {}
         for command in self.commands_utilCPU_cfg:
@@ -459,8 +498,11 @@ class Router():
                 result[command] = output
         return result
 
+
     def cfg_WiFi_AP(self, device, commands_cfg_WiFi_AP):
+
         """ФУНКЦИЯ настройки Wifi_AP"""
+
         result = {}
         for command in self.commands_cfg_WiFi_AP:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
@@ -471,9 +513,11 @@ class Router():
                 output = "bad command"
                 result[command] = output
         return result
-
+        
     def cfg_WiFi_AP_KingKong(self, device, commands_cfg_WiFi_AP_KingKong):
+
         """ФУНКЦИЯ настройки Wifi_AP 2 - настраиваем мост с Bulat-Free"""
+
         result = {}
         for command in self.commands_cfg_WiFi_AP_KingKong:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
@@ -487,11 +531,12 @@ class Router():
         print(temp_reboot, "i am in reboot..")
         return result
 
+
     def pppoe_client_cfg(self,  device, commands_pppoe_client_cfg):
-        """
-        ФУНКЦИЯ настройки роутера как РРРоЕ-клиент на wan порту
-        Сначала залить сервер, потом - клиент
-        """
+        
+        """ФУНКЦИЯ настройки роутера как РРРоЕ-клиент на wan порту
+        Сначала залить сервер, потом - клиент"""
+        
         result = {}
         for command in self.commands_pppoe_client_cfg:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
@@ -507,11 +552,11 @@ class Router():
 
 
     def pppoe(self):
-        """
-        1-ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
+
+        """1-ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
         Сервр льем первым!
-        эта ф-я передает файл pppoe в DUT, в файле лежат настройки сервера ррре
-        """
+        эта ф-я передает файл pppoe в DUT, в файле лежат настройки сервера ррре"""
+
         host = '192.168.1.1'
         user = 'root'
         secret = 'root'
@@ -526,12 +571,13 @@ class Router():
         scp.close()
         ssh.close()
 
+
     def pppoe_serv_opt(self):
-        """
-        2-ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
+        
+        """2-ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
         Сервр льем первым!
-        эта ф-я передает файл pppoe-server-options в DUT, в файле лежит require-chaр,echo-interval
-        """
+        эта ф-я передает файл pppoe-server-options в DUT, в файле лежит require-chaр,echo-interval"""
+        
         host = '192.168.1.1'
         user = 'root'
         secret = 'root'
@@ -547,12 +593,13 @@ class Router():
         scp.close()
         ssh.close()
 
+
     def pppoe_chap(self,  device, commands_pppoe_server_cfg):
-        """
-        2-ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
+        
+        """2-ФУНКЦИЯ настройки роутера как РРРоЕ-server на wan порту
         Сервр льем первым!
-        эта ф-я передает файл chap-secrets в DUT, в файле лежит login-pass
-        """
+        эта ф-я передает файл chap-secrets в DUT, в файле лежит login-pass"""
+        
         host = '192.168.1.1'
         user = 'root'
         secret = 'root'
@@ -579,10 +626,14 @@ class Router():
                 output = "bad command"
                 result[command] = output
         return result
+
+
     def cfg_ripv2(self, device, commands_ripv2_cfg):
+        
         """
         ФУНКЦИЯ настройки RIPv2
         """
+        
         result = {}
         for command in self.commands_cfg_ripv2:
             output = self.ssh.send_command(command, expect_string="", read_timeout=1)
@@ -603,10 +654,12 @@ class Router():
                 print(command, result_command)
                 result[command] = result_command
         #return result
+
     '''
     ПОСЛЕ этого класса не писать ф-ии для Роутер1 - object has no attribute!!!!!!
     Класс и функция проверки ошибок - дописать 
     '''
+    
 class ErrorInCommand(Exception):
     """
     Исключение генерируется, если при выполнении команды на оборудовании,
@@ -636,6 +689,7 @@ if __name__ == "__main__":
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
+            #print(r1.check_connection(device))
             #print(r1.cfg_LTE(device,r1.commands_cfg_3G))                   # Cfg LTE
             #print(r1.cfg_pass(device,commands="passwd"))                   # Cfg pass
             #print(r1.vlan_cfg(device,r1.commands_vlan_cfg))                # Cfg vlan
@@ -644,7 +698,7 @@ if __name__ == "__main__":
             #print (r1.base_cfg(device, r1.commands_dmz_cfg))               # Cfg for DMZ
             #print (r1.base_cfg(device, r1.commands_gre_config))            # Cfg for test GRE
             #print (r1.base_cfg(device, r1.commands_Fwall_cfg))             # Cfg for test firewall
-            #print(r1.send_sh_command(device,"uci show"))                   # send comm uci show"
+            print(r1.send_sh_command(device,"uci show"))                   # send comm uci show"
             #print(r1.send_sh_command("brctl stp br-lan yes"))              # send comm "brctl stp br-lan yes" ST
             #print(r1.cfg_WiFi_AP(device,r1.commands_cfg_WiFi_AP))           # Cfg wifi_ap (1-й порт не раздает!!!)
             #print(r1.cfg_WiFi_AP_KingKong(device,r1.commands_cfg_WiFi_AP_KingKong))    # Cfg wifi_ap_KingKong
@@ -654,4 +708,4 @@ if __name__ == "__main__":
             # print(r1.pppoe_serv_opt())                                          # Cfg pppoe-serv f2
             # print(r1.pppoe_chap(device, r1.commands_pppoe_server_cfg))          # Cfg pppoe-serv f3
             #print (r1.tracert_ip(device))
-            print(r1.cfg_ripv2(device, r1.commands_cfg_ripv2))  # Cfg RIPv2+base_cfg
+            #print(r1.cfg_ripv2(device, r1.commands_cfg_ripv2))  # Cfg RIPv2+base_cfg
