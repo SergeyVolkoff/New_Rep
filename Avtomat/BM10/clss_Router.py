@@ -68,7 +68,7 @@ class Router():
                 self.commands_sh_base = yaml.safe_load(f9)
             with open("commands_vlan_cfg.yaml") as f10:              # команды настройки vlan_cfg
                 self.commands_vlan_cfg = yaml.safe_load(f10)
-            with open("commands_cfg_WiFi_AP.yaml") as f11:          #  команды настройки wifi_ap
+            with open("commands_cfg_WiFi_AP.yaml") as f11:            #  команды настройки wifi_ap
                 self.commands_cfg_WiFi_AP = yaml.safe_load(f11)
             with open("commands_cfg_WiFi_AP_KingKong.yaml") as f12:    # команды настройки wifi_ap2
                 self.commands_cfg_WiFi_AP_KingKong = yaml.safe_load(f12)
@@ -76,8 +76,10 @@ class Router():
                 self.commands_pppoe_client_cfg = yaml.safe_load(f13)
             with open("commands_pppoe_server_cfg.yaml") as f14:         # команды настройки РРРРоЕ-server
                 self.commands_pppoe_server_cfg = yaml.safe_load(f14)
-            with open("commands_cfg_ripv2.yaml") as f15:         # команды настройки Ripv2
+            with open("commands_cfg_ripv2.yaml") as f15:                # команды настройки Ripv2
                 self.commands_cfg_ripv2 = yaml.safe_load(f15)
+            with open("commands_cfg_ripng.yaml") as f16:                # команды настройки Ripng
+                self.commands_cfg_ripng = yaml.safe_load(f16)
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
 
@@ -655,6 +657,36 @@ class Router():
                 result[command] = result_command
         #return result
 
+
+    def cfg_ripvng(self, device, commands_cfg_ripng):
+        
+        """
+        ФУНКЦИЯ настройки RIPng
+        """
+        
+        result = {}
+        self.check_connection(device)        # вызов функции проверки соединения с роутером
+        for command in self.commands_cfg_ripng:
+            output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+            if "mwan3" in command:
+                result_command = "wait, please"
+                print(command, result_command)
+                time.sleep(3)
+            if "commit" in command:
+                result_command = "wait, please"
+                print(command, result_command)
+                time.sleep(3)
+            if "" in output:
+                result_command = "command passed"
+                result[command]=output
+                print(command,result_command)
+            elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                result_command = "bad command"
+                print(command, result_command)
+                result[command] = result_command
+        #return result
+
+
     '''
     ПОСЛЕ этого класса не писать ф-ии для Роутер1 - object has no attribute!!!!!!
     Класс и функция проверки ошибок - дописать 
@@ -698,7 +730,7 @@ if __name__ == "__main__":
             #print (r1.base_cfg(device, r1.commands_dmz_cfg))               # Cfg for DMZ
             #print (r1.base_cfg(device, r1.commands_gre_config))            # Cfg for test GRE
             #print (r1.base_cfg(device, r1.commands_Fwall_cfg))             # Cfg for test firewall
-            print(r1.send_sh_command(device,"uci show"))                   # send comm uci show"
+            #print(r1.send_sh_command(device,"uci show"))                   # send comm uci show"
             #print(r1.send_sh_command("brctl stp br-lan yes"))              # send comm "brctl stp br-lan yes" ST
             #print(r1.cfg_WiFi_AP(device,r1.commands_cfg_WiFi_AP))           # Cfg wifi_ap (1-й порт не раздает!!!)
             #print(r1.cfg_WiFi_AP_KingKong(device,r1.commands_cfg_WiFi_AP_KingKong))    # Cfg wifi_ap_KingKong
@@ -708,4 +740,5 @@ if __name__ == "__main__":
             # print(r1.pppoe_serv_opt())                                          # Cfg pppoe-serv f2
             # print(r1.pppoe_chap(device, r1.commands_pppoe_server_cfg))          # Cfg pppoe-serv f3
             #print (r1.tracert_ip(device))
-            #print(r1.cfg_ripv2(device, r1.commands_cfg_ripv2))  # Cfg RIPv2+base_cfg
+            #print(r1.cfg_ripv2(device, r1.commands_cfg_ripv2))                  # Cfg RIPv2+base_cfg
+            print(r1.cfg_ripvng(device, r1.commands_cfg_ripng))                 # Cfg RIPng+base_cfg

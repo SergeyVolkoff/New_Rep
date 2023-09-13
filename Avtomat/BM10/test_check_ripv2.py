@@ -1,8 +1,6 @@
 import re
 
 import pytest
-# import tasks
-# from tasks import Task
 import yaml
 import netmiko
 from netmiko import (
