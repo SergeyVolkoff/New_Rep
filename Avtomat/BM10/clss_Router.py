@@ -80,6 +80,8 @@ class Router():
                 self.commands_cfg_ripv2 = yaml.safe_load(f15)
             with open("commands_cfg_ripng.yaml") as f16:                # команды настройки Ripng
                 self.commands_cfg_ripng = yaml.safe_load(f16)
+            with open("commands_cfg_ospfv2.yaml") as f17:
+                self.commands_cfg_ospfv2 = yaml.safe_load(f17)
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
 
@@ -687,6 +689,35 @@ class Router():
         #return result
 
 
+    def cfg_ospfv2(self, device, commands_cfg_ripng):
+            
+            """
+            ФУНКЦИЯ настройки OSPFv2
+            """
+            
+            result = {}
+            self.check_connection(device)        # вызов функции проверки соединения с роутером
+            for command in self.commands_cfg_ospfv2:
+                output = self.ssh.send_command(command, expect_string="", read_timeout=1)
+                if "mwan3" in command:
+                    result_command = "wait, please"
+                    print(command, result_command)
+                    time.sleep(3)
+                if "commit" in command:
+                    result_command = "wait, please"
+                    print(command, result_command)
+                    time.sleep(3)
+                if "" in output:
+                    result_command = "command passed"
+                    result[command]=output
+                    print(command,result_command)
+                elif "Usage: uci [<options>] <command> [<arguments>]" in output:
+                    result_command = "bad command"
+                    print(command, result_command)
+                    result[command] = result_command
+            #return result
+
+
     '''
     ПОСЛЕ этого класса не писать ф-ии для Роутер1 - object has no attribute!!!!!!
     Класс и функция проверки ошибок - дописать 
@@ -741,4 +772,5 @@ if __name__ == "__main__":
             # print(r1.pppoe_chap(device, r1.commands_pppoe_server_cfg))          # Cfg pppoe-serv f3
             #print (r1.tracert_ip(device))
             #print(r1.cfg_ripv2(device, r1.commands_cfg_ripv2))                  # Cfg RIPv2+base_cfg
-            print(r1.cfg_ripvng(device, r1.commands_cfg_ripng))                 # Cfg RIPng+base_cfg
+            #print(r1.cfg_ripvng(device, r1.commands_cfg_ripng))                 # Cfg RIPng+base_cfg
+            print(r1.cfg_ospfv2(device,r1.commands_cfg_ospfv2))                  # Cfg Ospfv2+base_cfg
