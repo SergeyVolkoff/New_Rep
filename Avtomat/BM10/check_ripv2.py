@@ -49,7 +49,7 @@ def check_route_ripv2():
     except ValueError as err:
         return False
 
-def check_ping_interf200(ip_for_ping): # check ping Internet
+def check_ping_interf200(ip_for_ping): # check ping neighbor
     try:
 
         res_ping_inet = r1.ping_ip(device)

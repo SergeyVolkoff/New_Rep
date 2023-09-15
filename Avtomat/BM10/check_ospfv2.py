@@ -28,3 +28,29 @@ def check_enable_ospfv2():
             return False
     except ValueError as err:
         return False
+    
+
+def check_route_ospfv2_net():
+    # ф-я в цикле переберет список маршрутов, если нужного нет - вернет false
+    try:
+        return_ip_route = r1.send_sh_command(device, "ip route")
+        list_iproute=('192.168.10.0/24',
+                      '192.168.20.0/24',
+                      '200.1.10.0/24 ',
+                      '200.1.20.0/24 ',
+                     
+                      )
+        i=0
+        for ip in list_iproute:
+            if ip  in return_ip_route:
+                i+=1
+                print(f"Ip route {ip} ok!",i)
+            else:
+                if ip  not in return_ip_route:
+                    print(f"No ip route {ip} ")
+        if i==4:
+            return True
+        else:
+            return False
+    except ValueError as err:
+        return False
