@@ -51,20 +51,20 @@ def check_route_ripng_net():
         return False
     
 
-# def check_ping_interf2002(ip_for_ping): # check ping Internet
-#     try:
+def check_ping_interf(ip_for_ping): # check ping Internet
+    try:
 
-#         res_ping_inet = r1.ping_ip(device)
-#         print(res_ping_inet)
-#         if "destination available" in res_ping_inet:
-#             print("Interface 2002:10::1 availeble, RIPng OK")
-#             return True
-#         else:
-#             print("Interface 2002:10::1 is not available, RIPng bad ")
-#             return False
-#     except ValueError as err:
-#         return False
+        res_ping_inet = r1.ping_ip(device,ip_for_ping)
+        print(res_ping_inet)
+        if "destination available" in res_ping_inet:
+            print("Interface availeble, RIPng OK")
+            return True
+        else:
+            print("Interface is not available, RIPng bad ")
+            return False
+    except ValueError as err:
+        return False
     
-# if __name__ == "__main__":
-#     result = check_route_ripng_net10()
-#     print(result)
+if __name__ == "__main__":
+    result = check_ping_interf('2.2.2.2')
+    print(result)

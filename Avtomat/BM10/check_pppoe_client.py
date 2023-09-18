@@ -44,7 +44,7 @@ def check_ip_pppoe(comm): # check ip for client and serv
 
 def check_ping_inet(): # check ping Internet
     try:
-        res_ping_inet = r1.ping_ip(device)
+        res_ping_inet = r1.ping_inet(device)
         print(res_ping_inet)
         if "destination available" in res_ping_inet:
             print("Inet(8.8.8.8) availeble, PPPoE OK")

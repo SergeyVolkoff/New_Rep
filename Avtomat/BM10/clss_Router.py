@@ -135,7 +135,7 @@ class Router():
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
 
 
-    def ping_ip(self, device):
+    def ping_inet(self, device):
 
         """ФУНКЦИЯ для простого пинга,  запросит адрес назначения, формат команды прописан в инит.
         без импорта."""
@@ -153,6 +153,24 @@ class Router():
             result = ' '.join(result)
         return result
         print(output)
+
+
+    def ping_ip(self, device,ip_for_ping):
+        command_ping = (self.word_ping + ip_for_ping + self.promo)
+        print(command_ping)
+        output = self.ssh.send_command(command_ping)
+        if "round-trip min/avg/max" in output:
+            output = re.search(r'round-trip min/avg/max = (\S+ ..)', output).group()
+            result = ["IP", ip_for_ping, "destination available :", output]
+            result = ' '.join(result)
+        else:
+            result = ["Ip", ip_for_ping, "out of destination"]
+            result = ' '.join(result)
+        return result
+        print(output)
+
+        """ФУНКЦИЯ для простого пинга,  запросит адрес назначения, формат команды прописан в инит.
+        без импорта."""
 
 
     def tracert_ip(self,device):
@@ -748,7 +766,8 @@ if __name__ == "__main__":
             # user = 'root'
             # password = 'root'
             # port = 22
-            #print(r1.ping_ip(device))                                      # Ping ip
+            print(r1.ping_ip(device,ip_for_ping='2.2.2.2'))                  # Ping ip
+            #print(r1.ping_inet(device))                                      # Ping inet (8.8.8.8)
             #print(r1.reset_conf(device,r1.commands_to_reset_conf))         # Reset conf
             #print(r1.sh_base_cfg_BM10(device, r1.commands_sh_base))        # Show base_cfg TABLE!
             #print(r1.show_int3G(device,"uci show network | grep LTE"))     # Show LTE
@@ -773,4 +792,4 @@ if __name__ == "__main__":
             #print (r1.tracert_ip(device))
             #print(r1.cfg_ripv2(device, r1.commands_cfg_ripv2))                  # Cfg RIPv2+base_cfg
             #print(r1.cfg_ripvng(device, r1.commands_cfg_ripng))                 # Cfg RIPng+base_cfg
-            print(r1.cfg_ospfv2(device,r1.commands_cfg_ospfv2))                  # Cfg Ospfv2+base_cfg
+            #print(r1.cfg_ospfv2(device,r1.commands_cfg_ospfv2))                  # Cfg Ospfv2+base_cfg

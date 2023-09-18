@@ -36,7 +36,8 @@ value_to_check_ip = ( # заносим в переменную данные дл
     ('192.168.2.1'),
     ('192.168.1.1'),
 )
-task_ids = ['ip_test({})'.format(t) # определям параметр ids чтобы сделать идентификаторы для понимания вывода теста
+task_ids = ['ip_test({})'.format(t)
+             # определям параметр ids чтобы сделать идентификаторы для понимания вывода теста
             for t in value_to_check_ip
             ]
 @pytest.mark.parametrize("ip_test",value_to_check_ip,ids=task_ids)

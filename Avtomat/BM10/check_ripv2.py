@@ -17,6 +17,7 @@ with open("BM10_LTE.yaml") as f:
         device = dict(t)
         r1 = Router(**device)
 
+
 def check_enable_ripv2():
     try:
         temp = r1.send_sh_command(device, 'uci show rip.@rip[0].enabled')
@@ -28,6 +29,7 @@ def check_enable_ripv2():
     except ValueError as err:
         return False
 
+
 def check_ver_ripv2():
     try:
         temp = r1.send_sh_command(device, "uci show rip.@rip[0].version")
@@ -38,6 +40,8 @@ def check_ver_ripv2():
             return False
     except ValueError as err:
         return False
+    
+
 def check_route_ripv2():
     try:
         temp = r1.send_sh_command(device, "ip route")
@@ -48,6 +52,7 @@ def check_route_ripv2():
             return False
     except ValueError as err:
         return False
+
 
 def check_ping_interf200(ip_for_ping): # check ping neighbor
     try:
@@ -62,6 +67,21 @@ def check_ping_interf200(ip_for_ping): # check ping neighbor
             return False
     except ValueError as err:
         return False
+
+
+def check_ping_interf(ip_for_ping): # check ping Internet
+    try:
+        res_ping_inet = r1.ping_ip(device,ip_for_ping)
+        print(res_ping_inet)
+        if "destination available" in res_ping_inet:
+            print("Interface availeble, RIPv2 OK")
+            return True
+        else:
+            print("Interface is not available, RIPv2 bad ")
+            return False
+    except ValueError as err:
+        return False
+    
 if __name__ == "__main__":
     result = check_ping_interf200(ip_for_ping='200.1.10.2')
     print(result)
