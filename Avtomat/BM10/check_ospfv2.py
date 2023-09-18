@@ -25,10 +25,12 @@ def check_enable_ospfv2():
             print("OSPFv2 - enable!")
             return True
         else:
+            
             return False
     except ValueError as err:
         return False
-    
+
+
 
 def check_route_ospfv2_net():
     # ф-я в цикле переберет список маршрутов, если нужного нет - вернет false
