@@ -41,11 +41,10 @@ class BM10():
             self.promo = " -w 4"
             self.word_ping = "ping "
             self.command_ping = self.word_ping+self.promo
-            
         except(NetmikoAuthenticationException,NetmikoTimeoutException) as error:
             print("*" * 5, "Error connection to:", device['host'], "*" * 5)
 
-            
+
     def check_connection(self,device,log=True):
 
         """
@@ -61,10 +60,18 @@ class BM10():
             console.print("*" * 5, "Error connection to:", device['host'], "*" * 5, style='fail')
 
 
-# if __name__ == "__main__":
-#     with open("src/BM10_LTE.yaml")as f:
-#          temp = yaml.safe_load(f)
-#          for t in temp:
-#             device = dict(t)
-#             r1 = BM10(**device)
-#             print(r1)
+    def send_sh_command(self, device, command):
+
+        """ФУНКЦИЯ отправки простой команды в уст-во по ssh, без импорта"""
+
+        self.check_connection(device)         # вызов функции проверки соединения с роутером
+        temp = self.ssh.send_command(command)
+        result = temp
+        return result
+if __name__ == "__main__":
+    with open("src/BM10_LTE.yaml")as f:
+         temp = yaml.safe_load(f)
+         for t in temp:
+            device = dict(t)
+            r1 = BM10(**device)
+            print(r1.send_sh_command(device, "uci show"))
