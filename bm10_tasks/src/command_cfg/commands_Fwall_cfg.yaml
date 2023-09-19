@@ -1,0 +1,29 @@
+[
+"uci set system.@system[0].hostname='DUT_7621'",
+"uci set system.ntp.server='0.ntp2.stratum2.ru'",
+"uci set system.@system[0].zonename='Europe/Minsk'",
+"uci set system.@system[0].timezone='<+03>-3'",
+
+"uci add firewall zone # =cfg0edc81",
+"uci set firewall.@zone[-1].name='wan2'",
+"uci set firewall.@zone[-1].input='ACCEPT'",
+"uci set firewall.@zone[-1].output='ACCEPT'",
+"uci set firewall.@zone[-1].forward='REJECT'",
+"uci add_list firewall.@zone[-1].network='wan2'",
+"uci add firewall forwarding # =cfg0fad58",
+"uci set firewall.@forwarding[-1].src='lan'",
+"uci set firewall.@forwarding[-1].dest='wan2'",
+
+"uci del network.cfg030f15.ports",
+"uci add_list network.cfg030f15.ports='lan1'",
+"uci add_list network.cfg030f15.ports='lan2'",
+"uci add_list network.cfg030f15.ports='lan3'",
+"uci set network.wan2=interface",
+"uci set network.wan2.proto='static'",
+"uci set network.wan2.device='lan4'",
+"uci set network.wan2.ipaddr='200.1.1.1'",
+"uci set network.wan2.netmask='255.255.255.0'",
+"/etc/init.d/network reload",
+"uci commit",
+]
+

@@ -1,0 +1,9 @@
+[
+"uci set network.LTE=interface",
+"uci set network.LTE.proto='qmi'",
+"uci set network.LTE.device='/dev/cdc-wdm0'",
+"uci set network.LTE.apn='internet.tele2.ru'",
+"uci set network.LTE.pdptype='ipv4'",
+"uci commit",
+"reboot"
+]

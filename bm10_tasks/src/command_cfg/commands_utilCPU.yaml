@@ -1,0 +1,7 @@
+vi util_cpu.txt
+#! /bin/ash
+for i in $(seq 1 1 500)
+do
+        ping 192.168.1.1 &
+done
+
