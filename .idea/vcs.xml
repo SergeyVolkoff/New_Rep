@@ -4,6 +4,9 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Avtomat/Devnet/netprog_basics" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Trident" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Yandex/Dev/Temp/django_sprint1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Yandex/Dev/anfisa1sprint" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Yandex/Dev/django_sprint1" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Yandex/sprint2/calc_and_win" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Yandex/sprint2/character_creation_module" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Yandex/sprint2/character_creation_module/graphic_arts" vcs="Git" />
