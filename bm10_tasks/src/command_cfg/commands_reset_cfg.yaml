@@ -1,5 +1,0 @@
-[
-    "rm -rf /overlay/*",
-    "sync",
-    "reboot"
-    ]
