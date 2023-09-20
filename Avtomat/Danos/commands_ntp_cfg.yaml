@@ -1,9 +1,0 @@
-[
-'set system ntp server ntp0.ntp-servers.net',
-'set system ntp server ntp1.ntp-servers.net',
-'set system ntp server ntp2.ntp-servers.net',
-'set system ntp server ntp3.ntp-servers.net',
-'set system ntp server ntp4.ntp-servers.net',
-'set system  time-zone Europe/Moscow',
-
-]

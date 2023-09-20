@@ -1,3 +1,0 @@
-Template, Hostname, Vendor, Command
-linux_arp_-a.template, .*, linux_os, arp -a
-sh_netw.template, .*, linux_os, uci show

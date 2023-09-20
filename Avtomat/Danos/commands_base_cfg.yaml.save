@@ -1,8 +1,0 @@
-[
-"conf",
-"set interface dataplane dp0p9s0f0 description 10G_1",
-"set interface dataplane dp0p9s0f0 description 10G_1",
-dp0p9s0f1"set interface dataplane dp0p9s0f0 description 10G_1",
-
-
-]

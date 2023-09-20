@@ -1,6 +1,0 @@
-- device_type: cisco_ios
-  host: 192.168.1.1
-  username: root
-  password: bulatsupport
-  port: 22
-  timeout: 1

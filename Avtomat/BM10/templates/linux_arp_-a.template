@@ -1,7 +1,0 @@
-Value IP_ADDRESS (\S+)
-Value MAC_ADDRESS (\S+)
-Value DEVICE (\S+)
-
-Start
-  ^${IP_ADDRESS}\s+\w+\s+\w+\s+${MAC_ADDRESS}\s+\S+\s+${DEVICE} -> Record
- 
